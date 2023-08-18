@@ -46,10 +46,10 @@ def new_track(id):
     if form.validate_on_submit():
         track = Track(
             song_id = id,
-            instrument_id = form.instrument_id,
-            title = form.title,
-            notes = form.notes,
-            volume = form.volume
+            instrument_id = form.data["instrument_id"],
+            title = form.data["title"],
+            notes = form.data["notes"],
+            volume = form.data["volume"]
         )
 
         db.session.add(track)

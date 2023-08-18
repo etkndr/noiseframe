@@ -8,6 +8,7 @@ class Instrument(db.Model):
         __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
     title = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(255), nullable=False)
     sample = db.Column(db.String(255))
@@ -19,6 +20,7 @@ class Instrument(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
+            "user_id": self.user_id,
             "title": self.title,
             "type": self.type,
             "sample": self.sample,
