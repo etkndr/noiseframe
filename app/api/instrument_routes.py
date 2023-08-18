@@ -16,7 +16,7 @@ def user_inst():
     return {"instruments": [inst for inst in instruments]}
 
 # SAVE NEW INSTRUMENT
-@instrument_routes.route("/", method=["POST"])
+@instrument_routes.route("/", methods=["POST"])
 @login_required
 def new_inst():
     form = InstrumentForm()
