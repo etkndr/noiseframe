@@ -1,9 +1,17 @@
 const GET_SONGS = "songs/GET_SONGS"
+const GET_SONG = "songs/GET_SONG"
 
 function loadSongs(songs) {
     return {
         type: GET_SONGS,
         songs
+    }
+}
+
+function loadSong(song) {
+    return {
+        type: GET_SONG,
+        song
     }
 }
 
@@ -19,6 +27,16 @@ export const getSongs = () => async dispatch => {
     }
 }
 
+export const getSong = (id) => async dispatch => {
+    const res = await fetch(`/api/songs/${id}`)
+
+    if (res.ok) {
+        const data = await res.json()
+        dispatch(loadSong(data))
+        return data
+    }
+}
+
 const initState = {}
 
 export default function songReducer(state = initState, action) {
@@ -28,6 +46,9 @@ export default function songReducer(state = initState, action) {
             action.songs.user_songs.forEach((song) => {
                 newState[song.id] = song
             })
+            return newState
+        case GET_SONG:
+            newState[action.song.id] = action.song
             return newState
         default:
             return state
