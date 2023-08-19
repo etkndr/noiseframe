@@ -13,6 +13,10 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(40), nullable=False, unique=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
     hashed_password = db.Column(db.String(255), nullable=False)
+    
+    song = db.relationship("Song", back_populates="user")
+    instrument = db.relationship("Instrument", back_populates="user")
+
 
     @property
     def password(self):
