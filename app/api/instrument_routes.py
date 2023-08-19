@@ -1,6 +1,6 @@
 from app.models import db
-from app.models.instrument import Instrument
-from app.forms.instrument_form import InstrumentForm
+from app.models import Instrument
+from app.forms import InstrumentForm
 from flask import Blueprint, request
 from flask_login import current_user, login_required
 from .auth_routes import validation_errors_to_error_messages

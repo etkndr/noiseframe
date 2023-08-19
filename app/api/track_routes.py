@@ -1,7 +1,6 @@
 from app.models import db
-from app.models.track import Track
-from app.models.song import Song
-from app.forms.track_form import TrackForm
+from app.models import Song, Track
+from app.forms import TrackForm
 from flask import Blueprint, request
 from flask_login import current_user, login_required
 from .auth_routes import validation_errors_to_error_messages
