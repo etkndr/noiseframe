@@ -7,18 +7,6 @@ from .auth_routes import validation_errors_to_error_messages
 
 track_routes = Blueprint("track", __name__)
 
-# GET TRACKS FOR CURRENT SONG
-@track_routes.route("/")
-def song_tracks(id):
-    song = Song.query.get(id)
-    
-    if not song:
-        return {"errors": "Song not found"}, 404
-    
-    tracks = Track.query.filter(Track.song_id == id).all()
-    
-    return {"tracks": [track.to_dict() for track in tracks]}
-
 # GET TRACK BY ID
 @track_routes.route("/<int:id>")
 def get_track(id):
@@ -28,34 +16,6 @@ def get_track(id):
         return {"errors": "Track not found"}, 404
     
     return track.to_dict()
-
-# SAVE NEW TRACK
-@track_routes.route("/", methods=["POST"])
-@login_required
-def new_track(id):
-    form = TrackForm()
-    form["csrf_token"].data = request.cookies["csrf_token"]
-    
-    song = Song.query.get(id)
-    if not song:
-        return {"errors": "Song not found"}, 404
-    if song.user_id != current_user.id:
-        return {"errors": "Tracks can only be added by song creator"}, 400
-    
-    if form.validate_on_submit():
-        track = Track(
-            song_id = id,
-            instrument_id = form.data["instrument_id"],
-            title = form.data["title"],
-            notes = form.data["notes"],
-            volume = form.data["volume"]
-        )
-
-        db.session.add(track)
-        db.session.commit()
-        
-        return track.to_dict()
-    return {"errors": validation_errors_to_error_messages(form.errors)}, 401
 
 # SAVE TRACK EDITS
 @track_routes.route("/<int:id>", methods=["PUT"])

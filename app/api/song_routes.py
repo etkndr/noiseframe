@@ -1,6 +1,6 @@
 from app.models import db
-from app.models import Song
-from app.forms import SongForm
+from app.models import Song, Track
+from app.forms import SongForm, TrackForm
 from flask import Blueprint, request
 from flask_login import current_user, login_required
 from .auth_routes import validation_errors_to_error_messages
@@ -85,3 +85,43 @@ def delete_song(id):
     db.session.delete(song)
     db.session.commit()
     return {"message": "Song successfully deleted"}
+
+# GET TRACKS FOR CURRENT SONG
+@song_routes.route("/<int:id>/tracks")
+def song_tracks(id):
+    song = Song.query.get(id)
+    
+    if not song:
+        return {"errors": "Song not found"}, 404
+    
+    tracks = Track.query.filter(Track.song_id == id).all()
+    
+    return {"tracks": [track.to_dict() for track in tracks]}
+
+# SAVE NEW TRACK
+@song_routes.route("/<int:id>/tracks", methods=["POST"])
+@login_required
+def new_track(id):
+    form = TrackForm()
+    form["csrf_token"].data = request.cookies["csrf_token"]
+    
+    song = Song.query.get(id)
+    if not song:
+        return {"errors": "Song not found"}, 404
+    if song.user_id != current_user.id:
+        return {"errors": "Tracks can only be added by song creator"}, 400
+    
+    if form.validate_on_submit():
+        track = Track(
+            song_id = id,
+            instrument_id = form.data["instrument_id"],
+            title = form.data["title"],
+            notes = form.data["notes"],
+            volume = form.data["volume"]
+        )
+
+        db.session.add(track)
+        db.session.commit()
+        
+        return track.to_dict()
+    return {"errors": validation_errors_to_error_messages(form.errors)}, 401
