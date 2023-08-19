@@ -7,6 +7,7 @@ import { authenticate } from "./store/session";
 import Navigation from "./components/Navigation";
 import LandingPage from "./components/LandingPage";
 import Home from "./components/Home";
+import SongEditor from "./components/SongEditor";
 
 function App() {
   const dispatch = useDispatch();
@@ -31,6 +32,9 @@ function App() {
           </Route>
           <Route exact path="/">
             <LandingPage />
+          </Route>
+          <Route path="/songs/:id">
+            <SongEditor />
           </Route>
         </Switch>
       )}
