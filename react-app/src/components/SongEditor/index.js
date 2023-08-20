@@ -11,9 +11,6 @@ export default function SongEditor() {
     const tracks = useSelector(state => state.tracks)
     const song = useSelector(state => state.songs)
     const insts = useSelector(state => state.instruments)
-
-    const [title, setTitle] = useState()
-    const [bpm, setBpm] = useState()
     
     useEffect(() => {
         dispatch(trackActions.getTracks(id))
@@ -21,10 +18,13 @@ export default function SongEditor() {
         dispatch(getInstruments())
     }, [])
     
+    const [title, setTitle] = useState("")
+    const [bpm, setBpm] = useState("")
+    
     async function submit(e) {
         e.preventDefault()
         const newSong = {title, bpm}
-        const save = await dispatch(songActions.saveSong(newSong))
+        const save = await dispatch(songActions.editSong(id, newSong))
         console.log("success")
     }
 
@@ -32,7 +32,7 @@ export default function SongEditor() {
         <>
             song editor
             <form onSubmit={submit}>
-                <input onChange={(e) => setTitle(e.target.value)} placeholder="title"/>
+                <input onChange={(e) => setTitle(e.target.value)} placeholder="title" value={title}/>
                 <input onChange={(e) => setBpm(e.target.value)} placeholder="BPM"/>
                 <button type="submit">submit</button>
             </form>
