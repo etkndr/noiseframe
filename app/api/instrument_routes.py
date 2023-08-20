@@ -13,7 +13,17 @@ instrument_routes = Blueprint("instrument", __name__)
 def user_inst():
     instruments = Instrument.query.filter(Instrument.user_id == current_user.id).all()
     
-    return {"instruments": [inst for inst in instruments]}
+    return {"instruments": [inst.to_dict() for inst in instruments]}
+
+# GET INSTRUMENT BY ID
+@instrument_routes.route("/<int:id>")
+def get_inst(id):
+    instrument = Instrument.query.get(id)
+    
+    if not instrument:
+        return {"errors": "Instrument not found"}, 404
+    
+    return instrument.to_dict()
 
 # SAVE NEW INSTRUMENT
 @instrument_routes.route("/", methods=["POST"])
