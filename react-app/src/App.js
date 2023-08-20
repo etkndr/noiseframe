@@ -5,6 +5,10 @@ import SignupFormPage from "./components/SignupFormPage";
 import LoginFormPage from "./components/LoginFormPage";
 import { authenticate } from "./store/session";
 import Navigation from "./components/Navigation";
+import LandingPage from "./components/LandingPage";
+import Home from "./components/Home";
+import SongEditor from "./components/SongEditor";
+import InstEditor from "./components/InstEditor";
 
 function App() {
   const dispatch = useDispatch();
@@ -23,6 +27,18 @@ function App() {
           </Route>
           <Route path="/signup">
             <SignupFormPage />
+          </Route>
+          <Route path="/home">
+            <Home />
+          </Route>
+          <Route exact path="/">
+            <LandingPage />
+          </Route>
+          <Route path="/songs/:id">
+            <SongEditor />
+          </Route>
+          <Route path="/instruments/:id">
+            <InstEditor />
           </Route>
         </Switch>
       )}
