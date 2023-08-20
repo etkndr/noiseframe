@@ -28,6 +28,12 @@ export default function SongEditor() {
         console.log("success")
     }
 
+    async function dltSong(e) {
+        e.preventDefault()
+        const dlt = await dispatch(songActions.deleteSong(id))
+        console.log("success")
+    }
+
     return (
         <>
             song editor
@@ -35,6 +41,7 @@ export default function SongEditor() {
                 <input onChange={(e) => setTitle(e.target.value)} placeholder="title" value={title}/>
                 <input onChange={(e) => setBpm(e.target.value)} placeholder="BPM"/>
                 <button type="submit">submit</button>
+                <button onClick={dltSong}>delete</button>
             </form>
         </>
     )

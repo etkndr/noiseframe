@@ -2,6 +2,7 @@ const GET_SONGS = "songs/GET_SONGS"
 const GET_SONG = "songs/GET_SONG"
 const SAVE_SONG = "songs/SAVE_SONG"
 const EDIT_SONG = "songs/EDIT_SONG"
+const DELETE_SONG = "songs/DELETE_SONG"
 
 function loadSongs(songs) {
     return {
@@ -27,6 +28,13 @@ function newSong(song) {
 function saveEdit(song) {
     return {
         type: EDIT_SONG,
+        song
+    }
+}
+
+function dltSong(song) {
+    return {
+        type: DELETE_SONG,
         song
     }
 }
@@ -80,8 +88,20 @@ export const editSong = (id, song) => async dispatch => {
         return data
     }
 }
-const initState = {}
 
+export const deleteSong = (id) => async dispatch => {
+    const res = await fetch(`/api/songs/${id}`, {
+        method: "DELETE"
+    })
+
+    if (res.ok) {
+        const data = await res.json()
+        dispatch(dltSong(data))
+        return data
+    }
+}
+
+const initState = {}
 export default function songReducer(state = initState, action) {
     let newState = {...state}
     switch (action.type) {
@@ -98,6 +118,9 @@ export default function songReducer(state = initState, action) {
             return newState
         case EDIT_SONG:
             newState[action.song.id] = action.song
+            return newState
+        case DELETE_SONG:
+            delete newState[action.song.id]
             return newState
         default:
             return state
