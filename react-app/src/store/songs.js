@@ -1,5 +1,6 @@
 const GET_SONGS = "songs/GET_SONGS"
 const GET_SONG = "songs/GET_SONG"
+const SAVE_SONG = "songs/SAVE_SONG"
 
 function loadSongs(songs) {
     return {
@@ -11,6 +12,13 @@ function loadSongs(songs) {
 function loadSong(song) {
     return {
         type: GET_SONG,
+        song
+    }
+}
+
+function newSong(song) {
+    return {
+        type: SAVE_SONG,
         song
     }
 }
@@ -37,6 +45,20 @@ export const getSong = (id) => async dispatch => {
     }
 }
 
+export const saveSong = (song) => async dispatch => {
+    const res = await fetch("/api/songs/", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(song)
+    })
+
+    if (res.ok) {
+        const data = await res.json()
+        dispatch(newSong(data))
+        return data
+    }
+}
+
 const initState = {}
 
 export default function songReducer(state = initState, action) {
@@ -48,6 +70,9 @@ export default function songReducer(state = initState, action) {
             })
             return newState
         case GET_SONG:
+            newState[action.song.id] = action.song
+            return newState
+        case SAVE_SONG:
             newState[action.song.id] = action.song
             return newState
         default:
