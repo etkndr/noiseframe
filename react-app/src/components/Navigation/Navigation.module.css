@@ -5,3 +5,7 @@
 .hidden {
   display: none;
 }
+
+.logo {
+  width: 150px;
+}

@@ -67,7 +67,7 @@ export const saveTrack = (id, track) => async dispatch => {
     const res = await fetch(`/api/songs/${id}/tracks`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: json.stringify(track)
+        body: JSON.stringify(track)
     })
 
     if (res.ok) {
