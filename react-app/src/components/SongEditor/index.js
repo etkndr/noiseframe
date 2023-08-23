@@ -39,13 +39,15 @@ export default function SongEditor() {
         console.log("success")
     }
 
-    const keys = new AudioKeys()
+    const keys = new AudioKeys() // Create midi map from user keyboard
 
+    // Set note on key press
     keys.down((note) => {
         setNote(note.note)
         setPress(1)
     })
 
+    // Stop note from being added on key release 
     keys.up((note) => {
         setPress(0)
     })

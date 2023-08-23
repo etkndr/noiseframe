@@ -7,12 +7,12 @@ export default function Tracks({note, press}) {
     useEffect(() => {
         if (press === 1) {
             if (currIdx < 16) {
-                setCurrIdx(currIdx + 1)
                 setNotes((prev) => ({
                     ...prev,
                     [currIdx]: note
                 }))
-            } else {
+                setCurrIdx(currIdx + 1)
+            } if (currIdx === 16) {
                 setCurrIdx(1)
                 setNotes((prev) => ({
                     ...prev,
@@ -23,9 +23,12 @@ export default function Tracks({note, press}) {
         }
     }, [press])
 
+    let noteArr = [...Object.values(notes).slice(0,16)] // Turn note object into mappable array
     return (
         <>
-        {note}
+            {noteArr.map((note, idx) => {
+                return <div key={idx}>{idx} {note}</div>
+            })}
         </>
     )
 }
