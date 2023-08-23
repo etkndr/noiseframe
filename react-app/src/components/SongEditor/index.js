@@ -15,6 +15,7 @@ export default function SongEditor() {
     const song = useSelector(state => state.songs)
     const insts = useSelector(state => state.instruments)
     const [note, setNote] = useState("")
+    const [press, setPress] = useState(0)
     
     useEffect(() => {
         dispatch(trackActions.getTracks(id))
@@ -42,6 +43,11 @@ export default function SongEditor() {
 
     keys.down((note) => {
         setNote(note.note)
+        setPress(1)
+    })
+
+    keys.up((note) => {
+        setPress(0)
     })
 
     return (
@@ -53,7 +59,7 @@ export default function SongEditor() {
                 <button type="submit">save</button>
                 <button onClick={dltSong}>delete</button>
             </form>
-            <Tracks note={note}/>
+            <Tracks note={note} press={press}/>
         </>
     )
 }
