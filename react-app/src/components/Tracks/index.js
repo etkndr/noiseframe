@@ -2,18 +2,24 @@ import { useState, useEffect } from "react"
 
 export default function Tracks({note}) {
     const [currIdx, setCurrIdx] = useState(0)
+    const notes = {
+    }
+
 
     useEffect(() => {
-        if (currIdx < 15) {
+        if (currIdx < 16) {
             setCurrIdx(currIdx + 1)
+            notes[currIdx] = note
         } else {
-            setCurrIdx(0)
+            setCurrIdx(1)
+            notes[currIdx] = note
         }
-        console.log(currIdx, note)
+        console.log(notes)
     }, [note])
 
     return (
         <>
+        {note}
         </>
     )
 }
