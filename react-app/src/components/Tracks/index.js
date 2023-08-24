@@ -10,7 +10,7 @@ export default function Tracks({note, press, songId}) {
     const [notes, setNotes] = useState({})
     const [inst, setInst] = useState("")
     const [title, setTitle] = useState("")
-    const [volume, setVolume] = useState("")
+    const [volume, setVolume] = useState(-3)
     const dispatch = useDispatch()
 
     useEffect(() => {
