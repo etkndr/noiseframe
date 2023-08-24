@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import Note from "midi-note"
 
 export default function Tracks({note, press}) {
     const [currIdx, setCurrIdx] = useState(0)
@@ -9,21 +10,20 @@ export default function Tracks({note, press}) {
             if (currIdx < 16) {
                 setNotes((prev) => ({
                     ...prev,
-                    [currIdx]: note
+                    [currIdx]: Note(note)
                 }))
                 setCurrIdx(currIdx + 1)
             } if (currIdx === 16) {
                 setCurrIdx(1)
                 setNotes((prev) => ({
                     ...prev,
-                    [currIdx]: note
+                    [currIdx]: Note(note)
                 }))
             }
-            console.log(notes)
         }
     }, [press])
 
-    let noteArr = [...Object.values(notes).slice(0,16)] // Turn note object into mappable array
+    let noteArr = [...Object.values(notes).slice(1,17)] // Turn note object into mappable array
     return (
         <>
             {noteArr.map((note, idx) => {
