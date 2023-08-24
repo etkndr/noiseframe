@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react"
 import Note from "midi-note"
 import { Instrument, Track } from "reactronica"
+import styles from "./Tracks.module.css"
 
 export default function Tracks({note, press}) {
-    const [currIdx, setCurrIdx] = useState(0)
+    const [currIdx, setCurrIdx] = useState(1)
     const [notes, setNotes] = useState({})
     // let env = bpm/1000
 
@@ -25,12 +26,16 @@ export default function Tracks({note, press}) {
         }
     }, [press])
 
-    let noteArr = [...Object.values(notes).slice(1,17)] // Turn note object into mappable array
+    let noteArr = [...Object.values(notes)] // Turn note object into mappable array
+    console.log("obj", notes)
+    console.log("arr", noteArr)
     return (
         <>
-            {noteArr.map((note, idx) => {
-                return <div key={idx}>{idx} {note}</div>
-            })}
+            <div className={styles.notes}>
+                {noteArr.map((note, idx) => {
+                    return <div key={idx}>{note}</div>
+                })}
+            </div>
 
             <Track steps={noteArr}>
                 <Instrument type="synth" envelope={{decay: 1, sustain: 0, release: 0.3}}/>
