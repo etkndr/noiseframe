@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import * as trackActions from "../../store/tracks"
 import * as songActions from "../../store/songs"
 import {getInstruments} from "../../store/instruments"
-import {Song, Track} from "reactronica"
+import {Instrument, Song, Track} from "reactronica"
 import Tracks from "../Tracks"
 import AudioKeys from "audiokeys"
 
@@ -14,8 +14,9 @@ export default function SongEditor() {
     const tracks = useSelector(state => state.tracks)
     const song = useSelector(state => state.songs)
     const insts = useSelector(state => state.instruments)
-    const [note, setNote] = useState("")
-    const [press, setPress] = useState(0)
+    const [note, setNote] = useState("") // send note to track
+    const [press, setPress] = useState(0) // send keypress to track
+    const [play, setPlay] = useState(false)
     
     useEffect(() => {
         dispatch(trackActions.getTracks(id))
@@ -24,7 +25,7 @@ export default function SongEditor() {
     }, [])
     
     const [title, setTitle] = useState("")
-    const [bpm, setBpm] = useState("")
+    const [bpm, setBpm] = useState(120)
     
     function save(e) {
         e.preventDefault()
@@ -55,13 +56,16 @@ export default function SongEditor() {
     return (
         <>
             song editor
+            <button onClick={() => setPlay(!play)}>start/stop</button>
+            <Song isPlaying={play} bpm={bpm}>
+                <Tracks note={note} press={press}/>
+            </Song>
             <form onSubmit={save}>
                 <input onChange={(e) => setTitle(e.target.value)} placeholder="title" value={title}/>
                 <input onChange={(e) => setBpm(e.target.value)} placeholder="BPM"/>
                 <button type="submit">save</button>
                 <button onClick={dltSong}>delete</button>
             </form>
-            <Tracks note={note} press={press}/>
         </>
     )
 }
