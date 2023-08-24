@@ -57,15 +57,15 @@ export default function SongEditor() {
         <>
             song editor
             <button onClick={() => setPlay(!play)}>start/stop</button>
-            <Song isPlaying={play} bpm={bpm}>
-                <Tracks note={note} press={press}/>
-            </Song>
             <form onSubmit={save}>
                 <input onChange={(e) => setTitle(e.target.value)} placeholder="title" value={title}/>
                 <input onChange={(e) => setBpm(e.target.value)} placeholder="BPM"/>
                 <button type="submit">save</button>
                 <button onClick={dltSong}>delete</button>
             </form>
+            <Song isPlaying={play} bpm={bpm}>
+                <Tracks note={note} press={press} songId={id}/>
+            </Song>
         </>
     )
 }
