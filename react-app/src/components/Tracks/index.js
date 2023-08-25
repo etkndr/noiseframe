@@ -4,17 +4,33 @@ import { Instrument, Track } from "reactronica"
 import styles from "./Tracks.module.css"
 import * as trackActions from "../../store/tracks"
 import { useSelector, useDispatch } from "react-redux"
+import AudioKeys from "audiokeys"
 
-export default function Tracks({note, press, songId}) {
+export default function Tracks({songId, focus}) {
+    const dispatch = useDispatch()
     const [currIdx, setCurrIdx] = useState(1)
     const [notes, setNotes] = useState({})
     const [inst, setInst] = useState("")
     const [title, setTitle] = useState("")
     const [volume, setVolume] = useState(-3)
-    const dispatch = useDispatch()
+    const [note, setNote] = useState("")
+    const keys = new AudioKeys() // Create midi map from user keyboard
+
+    
+    // add note on key press
+    if (!focus) {
+        keys.down((note) => {
+                setNote(note.note)
+            })
+    } else {
+        keys.down((note) => {
+            note = ""
+            console.log(note)
+        })
+    }
 
     useEffect(() => {
-        if (press === 1) {
+        if (note) {
             if (currIdx < 16) {
                 setNotes((prev) => ({
                     ...prev,
@@ -29,7 +45,7 @@ export default function Tracks({note, press, songId}) {
                 }))
             }
         }
-    }, [press])
+    }, [note])
 
     let noteArr = [...Object.values(notes)] // Turn note object into mappable array
 
@@ -45,6 +61,7 @@ export default function Tracks({note, press, songId}) {
         console.log("success", newTrack)
     }
 
+
     return (
         <>
             <div className={styles.notes}>
@@ -59,7 +76,7 @@ export default function Tracks({note, press, songId}) {
             <form onSubmit={save}>
                 <input onChange={(e) => setInst(e.target.value)} placeholder="instrument id"/>
                 <input onChange={(e) => setTitle(e.target.value)} placeholder="title" value={title}/>
-                <input type="range" min={-10} max={-1} onChange={(e) => setVolume(e.target.value)}/> {volume}
+                <input type="range" defaultValue={volume} min={-10} max={-1} onChange={(e) => setVolume(e.target.value)}/> {volume}
                 <button type="submit">save</button>
             </form>
         </>
