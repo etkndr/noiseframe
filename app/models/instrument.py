@@ -13,7 +13,7 @@ class Instrument(db.Model):
     type = db.Column(db.String(255), nullable=False)
     sample = db.Column(db.String(255))
     osc = db.Column(db.String(255))
-    env = db.Column(db.String(255), nullable=False)
+    env = db.Column(db.Float, nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
     

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SubmitField
+from wtforms import StringField, IntegerField, SubmitField, FloatField
 from wtforms.validators import DataRequired, NumberRange
 
 class InstrumentForm(FlaskForm):
@@ -7,5 +7,5 @@ class InstrumentForm(FlaskForm):
     type = StringField("Instrument type", validators=[DataRequired()])
     sample = StringField("Sample")
     osc = StringField("Oscillator")
-    env = StringField("Envelope", validators=[DataRequired()])
+    env = FloatField("Envelope", validators=[DataRequired(), NumberRange(0.5, 1)])
     submit = SubmitField("Submit")

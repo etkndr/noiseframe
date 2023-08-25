@@ -10,7 +10,7 @@ export default function InstEditor() {
     const dispatch = useDispatch()
     const currUser = useSelector(state => state.session.user)
     const {id} = useParams()
-    const inst = useSelector(state => state.instruments)
+    const inst = useSelector(state => state.instruments[id])
     const [playing, setPlaying] = useState(false)
     const typeArr = ["amSynth" , "duoSynth" , "fmSynth" , "membraneSynth", "monoSynth" , "pluckSynth" , "sampler"]
     
@@ -30,8 +30,6 @@ export default function InstEditor() {
         setPlaying(false)
     }
 
-    console.log(env)
-
     return (
         <>
             {inst && inst?.title}
@@ -48,7 +46,7 @@ export default function InstEditor() {
                         type={type}
                         samples={sample && sample}
                         oscillator={osc && osc}
-                        envelope={{decay: env, sustain: 0}} />
+                        envelope={{decay: {env}, sustain: 0}} />
                 </Track>
             </Song>
         </>
