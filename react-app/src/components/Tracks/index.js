@@ -14,20 +14,19 @@ export default function Tracks({songId, focus}) {
     const [title, setTitle] = useState("")
     const [volume, setVolume] = useState(-3)
     const [note, setNote] = useState("")
-    const keys = new AudioKeys() // Create midi map from user keyboard
+    let keys // Create midi map from user keyboard
 
     
     // add note on key press
     if (!focus) {
+        keys = new AudioKeys()
         keys.down((note) => {
                 setNote(note.note)
             })
     } else {
-        keys.down((note) => {
-            note = ""
-            console.log(note)
-        })
+        keys = null
     }
+    console.log(focus)
 
     useEffect(() => {
         if (note) {
