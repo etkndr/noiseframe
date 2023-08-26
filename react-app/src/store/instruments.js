@@ -77,7 +77,7 @@ export const saveInstrument = (inst) => async dispatch => {
     }
 }
 
-const editInstrument = (id, inst) => async dispatch => {
+export const editInstrument = (id, inst) => async dispatch => {
     const res = await fetch(`/api/instruments/${id}`, {
         method: "PUT",
         headers: {"Content-Type": "application/json"},
@@ -91,7 +91,7 @@ const editInstrument = (id, inst) => async dispatch => {
     }
 }
 
-const deleteInstrument = (id) => async dispatch => {
+export const deleteInstrument = (id) => async dispatch => {
     const res = await fetch(`/api/instruments/${id}`, {
         method: "DELETE"
     })

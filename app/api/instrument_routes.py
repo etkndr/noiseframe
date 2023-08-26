@@ -49,7 +49,7 @@ def new_inst():
     return {"errors": validation_errors_to_error_messages(form.errors)}, 401
 
 # SAVE INSTRUMENT CHANGES
-@instrument_routes.route("<int:id>", methods=["PUT"])
+@instrument_routes.route("/<int:id>", methods=["PUT"])
 @login_required
 def edit_inst(id):
     form = InstrumentForm()
@@ -69,7 +69,7 @@ def edit_inst(id):
         inst.osc = form.data["osc"]
         inst.env = form.data["env"]
         
-        db.commit()
+        db.session.commit()
         
         return inst.to_dict()
     return {"errors": validation_errors_to_error_messages(form.errors)}, 401
