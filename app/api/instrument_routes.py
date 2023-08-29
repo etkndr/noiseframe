@@ -95,6 +95,7 @@ def delete_inst(id):
 @login_required
 def upload_sample(id):
     form = SampleForm()
+    form["csrf_token"].data = request.cookies["csrf_token"]
  
     if form.validate_on_submit():
           
@@ -114,7 +115,7 @@ def upload_sample(id):
         db.session.add(new_sample)
         db.session.commit()
 
-        return sample.to_dict()
+        return new_sample.to_dict()
 
     if form.errors:
         return {"errors": validation_errors_to_error_messages(form.errors)}, 401
@@ -128,4 +129,4 @@ def get_samples(id):
     if not inst:
         return {"errors": "Instrument not found"}, 404
     
-    return samples.to_dict()
+    return [sample.to_dict() for sample in samples]

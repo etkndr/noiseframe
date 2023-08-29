@@ -3,11 +3,11 @@ from sqlalchemy.sql import text
 
 def seed_instruments():
     test1 = Instrument(
-        user_id=1, title="test1", type="sampler", sample="", osc="", env=1)
+        user_id=1, title="test1", type="sampler", sample=[], osc="", env=1)
     test2 = Instrument(
-        user_id=2, title="test2", type="sampler", sample="", osc="", env=1)
+        user_id=2, title="test2", type="sampler", sample=[], osc="", env=1)
     test3 = Instrument(
-        user_id=3, title="test3", type="sampler", sample="", osc="", env=1)
+        user_id=3, title="test3", type="sampler", sample=[], osc="", env=1)
 
     db.session.add(test1)
     db.session.add(test2)

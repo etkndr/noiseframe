@@ -56,7 +56,7 @@ export default function InstEditor() {
 
         setSampleLoading(true)
 
-        await dispatch(instrumentActions.newSample(formData))
+        await dispatch(instrumentActions.newSample(id, formData))
         console.log(formData)
     }
 

@@ -112,9 +112,12 @@ export const deleteInstrument = (id) => async dispatch => {
 }
 
 export const newSample = (id, sample) => async dispatch => {
-    const res = await (`/api/instruments/${id}/samples`, {
+    const res = await fetch(`/api/instruments/${id}/samples/`, {
         method: "POST",
-        body: sample
+        body: {
+            instrument_id: id,
+            url: sample
+        }
     })
 
     if (res.ok) {
