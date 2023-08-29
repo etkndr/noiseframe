@@ -52,13 +52,15 @@ export default function InstEditor() {
     return (
         <>
             {inst?.title}
-            {samples}
-            <button onClick={() => setPlaying(!playing)}>Test</button>
+            <div>
+                sample: {samples}
+            </div>
+            <button onClick={() => setPlaying(!playing)}>play/pause</button>
                 <Song bpm={120} isPlaying={playing}>
                     {sampleArr.map((sample, idx) => {
                         return (
                             <div key={idx} onClick={() => handleFocus(idx)}>
-                                Track {idx}
+                                sample {idx+1}
                                 <Track steps={[{name: "C3", duration: 1}]} mute={idx !== currInst}>
                                     <Inst sample={sample} />
                                 </Track>
