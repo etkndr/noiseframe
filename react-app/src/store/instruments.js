@@ -3,6 +3,7 @@ const GET_INSTRUMENT = "instruments/GET_INSTRUMENT"
 const SAVE_INSTRUMENT = "instruments/SAVE_INSTRUMENT"
 const EDIT_INSTRUMENT = "instruments/EDIT_INSTRUMENT"
 const DELETE_INSTRUMENT = "instruments/DELETE_INSTRUMENTS"
+const NEW_SAMPLE = "instruments/NEW_SAMPLE"
 
 function loadInstruments(insts) {
     return {
@@ -36,6 +37,13 @@ function dltInstrument(inst) {
     return {
         type: DELETE_INSTRUMENT,
         inst
+    }
+}
+
+function addSample(sample) {
+    return {
+        type: NEW_SAMPLE,
+        sample
     }
 }
 
@@ -103,6 +111,19 @@ export const deleteInstrument = (id) => async dispatch => {
     }
 }
 
+export const newSample = (id, sample) => async dispatch => {
+    const res = await (`/api/instruments/${id}/samples`, {
+        method: "POST",
+        body: sample
+    })
+
+    if (res.ok) {
+        const data = await res.json()
+        dispatch(addSample(data))
+        return data
+    }
+}
+
 const initState = {}
 
 export default function instruments(state = initState, action) {
@@ -122,6 +143,8 @@ export default function instruments(state = initState, action) {
         case DELETE_INSTRUMENT:
             delete newState[action.inst.id]
             return newState
+        case NEW_SAMPLE:
+            newState[action.sample.id] = action.sample
         default:
             return state
     }
