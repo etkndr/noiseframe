@@ -116,7 +116,8 @@ export const newSample = (id, sample) => async dispatch => {
         method: "POST",
         body: {
             instrument_id: id,
-            url: sample
+            url: sample,
+            pitch: "C3"
         }
     })
 

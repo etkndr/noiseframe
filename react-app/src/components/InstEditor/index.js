@@ -22,10 +22,18 @@ export default function InstEditor() {
     
     // load settings from instrument
     const [title, setTitle] = useState("Loading")
-    const sampleArr = [clap, synth, kick]
+    const sampleArr = inst?.Samples
+    const sampleNames = []
     const [sample, setSample] = useState("")
     const [sampleLoading, setSampleLoading] = useState(false)
     const [currInst, setCurrInst] = useState("")
+
+    useEffect(() => {
+        sampleArr?.forEach((sample) => {
+            sampleNames?.push(sample.url.slice(46,sample.url.length))
+        })
+        console.log(sampleNames)
+    }, [sampleArr])
     
     useEffect(() => {
         const getTitle = inst?.title
@@ -51,36 +59,30 @@ export default function InstEditor() {
 
     const addSample = async (e) => {
         e.preventDefault()
-        const formData = new FormData()
-        formData.append("sample", sample)
-
+        let formData = new FormData()
+        formData.append("Sample file", sample)
         setSampleLoading(true)
-
+        
         await dispatch(instrumentActions.newSample(id, formData))
-        console.log(formData)
     }
 
-    console.log(inst)
+    if (inst?.user_id !== currUser?.id || !currUser) {
+        return "Unauthorized"
+    }
 
     return (
         <>
             {inst?.title}
             <div>
-                sample: {sample.url}
+                samples: 
+                {sampleArr?.map((file, idx) => {
+                    return <li key={idx}>{file.url}</li>
+                })}
             </div>
             <button onClick={() => setPlaying(!playing)}>play/pause</button>
                 <Song bpm={120} isPlaying={playing}>
-                    {/* {sampleArr.map((sample, idx) => {
-                        return (
-                            <div key={idx} onClick={() => handleFocus(idx)}>
-                                sample {idx+1}
-                                <Track steps={[{name: "C3", duration: 1}]} mute={idx !== currInst}>
-                                    <Inst sample={sample} />
-                                </Track>
-                            </div>
-                        )})} */}
                         <Track steps={["C3"]}>
-                            <Inst sample={sample.url} />
+                            <Inst sample={sample} />
                         </Track>
                 </Song>
                 <form onSubmit={save}>
