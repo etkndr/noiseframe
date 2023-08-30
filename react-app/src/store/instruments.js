@@ -3,6 +3,7 @@ const GET_INSTRUMENT = "instruments/GET_INSTRUMENT"
 const SAVE_INSTRUMENT = "instruments/SAVE_INSTRUMENT"
 const EDIT_INSTRUMENT = "instruments/EDIT_INSTRUMENT"
 const DELETE_INSTRUMENT = "instruments/DELETE_INSTRUMENTS"
+const NEW_SAMPLE = "instruments/NEW_SAMPLE"
 
 function loadInstruments(insts) {
     return {
@@ -36,6 +37,13 @@ function dltInstrument(inst) {
     return {
         type: DELETE_INSTRUMENT,
         inst
+    }
+}
+
+function addSample(sample) {
+    return {
+        type: NEW_SAMPLE,
+        sample
     }
 }
 
@@ -77,7 +85,7 @@ export const saveInstrument = (inst) => async dispatch => {
     }
 }
 
-const editInstrument = (id, inst) => async dispatch => {
+export const editInstrument = (id, inst) => async dispatch => {
     const res = await fetch(`/api/instruments/${id}`, {
         method: "PUT",
         headers: {"Content-Type": "application/json"},
@@ -91,7 +99,7 @@ const editInstrument = (id, inst) => async dispatch => {
     }
 }
 
-const deleteInstrument = (id) => async dispatch => {
+export const deleteInstrument = (id) => async dispatch => {
     const res = await fetch(`/api/instruments/${id}`, {
         method: "DELETE"
     })
@@ -99,6 +107,22 @@ const deleteInstrument = (id) => async dispatch => {
     if (res.ok) {
         const data = await res.json()
         dispatch(dltInstrument(data))
+        return data
+    }
+}
+
+export const newSample = (id, sample) => async dispatch => {
+    const res = await fetch(`/api/instruments/${id}/samples/`, {
+        method: "POST",
+        body: {
+            instrument_id: id,
+            url: sample
+        }
+    })
+
+    if (res.ok) {
+        const data = await res.json()
+        dispatch(addSample(data))
         return data
     }
 }
@@ -122,6 +146,8 @@ export default function instruments(state = initState, action) {
         case DELETE_INSTRUMENT:
             delete newState[action.inst.id]
             return newState
+        case NEW_SAMPLE:
+            newState[action.sample.id] = action.sample
         default:
             return state
     }

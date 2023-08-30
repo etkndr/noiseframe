@@ -1,9 +1,10 @@
-from app.models import db
-from app.models import Instrument
-from app.forms import InstrumentForm
+from app.models import db, Instrument, Sample
+from app.forms import InstrumentForm, SampleForm
 from flask import Blueprint, request
 from flask_login import current_user, login_required
 from .auth_routes import validation_errors_to_error_messages
+from app.api.aws_helpers import (
+    upload_file_to_s3, get_unique_filename)
 
 instrument_routes = Blueprint("instrument", __name__)
 
@@ -49,7 +50,7 @@ def new_inst():
     return {"errors": validation_errors_to_error_messages(form.errors)}, 401
 
 # SAVE INSTRUMENT CHANGES
-@instrument_routes.route("<int:id>", methods=["PUT"])
+@instrument_routes.route("/<int:id>", methods=["PUT"])
 @login_required
 def edit_inst(id):
     form = InstrumentForm()
@@ -69,7 +70,7 @@ def edit_inst(id):
         inst.osc = form.data["osc"]
         inst.env = form.data["env"]
         
-        db.commit()
+        db.session.commit()
         
         return inst.to_dict()
     return {"errors": validation_errors_to_error_messages(form.errors)}, 401
@@ -88,3 +89,45 @@ def delete_inst(id):
     db.session.commit()
     
     return {"message": "Instrument successfully deleted"}
+
+# UPLOAD SAMPLE FOR INSTRUMENT
+@instrument_routes.route("/<int:id>/samples", methods=["POST"])
+@login_required
+def upload_sample(id):
+    form = SampleForm()
+    form["csrf_token"].data = request.cookies["csrf_token"]
+ 
+    if form.validate_on_submit():
+          
+        sample = form.data["sample"]
+        sample.filename = get_unique_filename(sample.filename)
+        upload = upload_file_to_s3(sample)
+        print(upload)
+
+        if "url" not in upload:
+        # if the dictionary doesn't have a url key
+        # it means that there was an error when you tried to upload
+        # so you send back that error message (and you printed it above)
+            return {"errors": upload}, 401
+
+        url = upload["url"]
+        pitch = form.data["pitch"]
+        new_sample = Sample(instrument_id=id, url=url, pitch=pitch)
+        db.session.add(new_sample)
+        db.session.commit()
+
+        return new_sample.to_dict()
+
+    if form.errors:
+        return {"errors": validation_errors_to_error_messages(form.errors)}, 401
+    
+# GET ALL SAMPLES FOR INSTRUMENT
+@instrument_routes.route("/<int:id>/samples")
+def get_samples(id):
+    samples = Sample.query.filter(Sample.instrument_id == id).all()
+    
+    inst = Instrument.query.get(id)  
+    if not inst:
+        return {"errors": "Instrument not found"}, 404
+    
+    return [sample.to_dict() for sample in samples]
