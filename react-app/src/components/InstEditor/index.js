@@ -60,6 +60,8 @@ export default function InstEditor() {
         console.log(formData)
     }
 
+    console.log(inst)
+
     return (
         <>
             {inst?.title}

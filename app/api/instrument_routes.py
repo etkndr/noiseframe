@@ -8,6 +8,14 @@ from app.api.aws_helpers import (
 
 instrument_routes = Blueprint("instrument", __name__)
 
+# HELPER TO SHOW SAMPLES FOR INSTRUMENT
+def inst_samples(inst):
+    samples = Sample.query.filter(Sample.instrument_id == inst.id).all()
+    inst_dict = inst.to_dict()
+    samples_dict = [sample.to_dict() for sample in samples]
+    inst_dict["Samples"] = samples_dict
+    return inst_dict
+
 # GET USER INSTRUMENTS
 @instrument_routes.route("/")
 @login_required
@@ -20,11 +28,13 @@ def user_inst():
 @instrument_routes.route("/<int:id>")
 def get_inst(id):
     instrument = Instrument.query.get(id)
-    
     if not instrument:
         return {"errors": "Instrument not found"}, 404
     
-    return instrument.to_dict()
+    inst = instrument.to_dict()
+    samples = inst_samples(instrument)
+    
+    return samples
 
 # SAVE NEW INSTRUMENT
 @instrument_routes.route("/", methods=["POST"])
