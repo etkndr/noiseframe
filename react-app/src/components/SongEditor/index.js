@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux"
 import * as trackActions from "../../store/tracks"
 import * as songActions from "../../store/songs"
 import {getInstruments} from "../../store/instruments"
+import {Instrument, Song, Track} from "reactronica"
+import Tracks from "../Tracks"
 
 export default function SongEditor() {
     const dispatch = useDispatch()
@@ -11,6 +13,9 @@ export default function SongEditor() {
     const tracks = useSelector(state => state.tracks)
     const song = useSelector(state => state.songs)
     const insts = useSelector(state => state.instruments)
+    const [play, setPlay] = useState(false)
+    const [focus, setFocus] = useState(false)
+
     
     useEffect(() => {
         dispatch(trackActions.getTracks(id))
@@ -19,30 +24,34 @@ export default function SongEditor() {
     }, [])
     
     const [title, setTitle] = useState("")
-    const [bpm, setBpm] = useState("")
+    const [bpm, setBpm] = useState(120)
     
-    async function submit(e) {
+    function save(e) {
         e.preventDefault()
         const newSong = {title, bpm}
-        const save = await dispatch(songActions.editSong(id, newSong))
+        const save = dispatch(songActions.editSong(id, newSong))
         console.log("success")
     }
-
-    async function dltSong(e) {
+    
+    function dltSong(e) {
         e.preventDefault()
-        const dlt = await dispatch(songActions.deleteSong(id))
+        const dlt = dispatch(songActions.deleteSong(id))
         console.log("success")
     }
-
+        
     return (
         <>
             song editor
-            <form onSubmit={submit}>
-                <input onChange={(e) => setTitle(e.target.value)} placeholder="title" value={title}/>
+            <button onClick={() => setPlay(!play)}>start/stop</button>
+            <form onSubmit={save}>
+                <input onChange={(e) => setTitle(e.target.value)} onFocus={() => setFocus(true)} onBlur={() => setFocus(false)} placeholder="title" value={title}/>
                 <input onChange={(e) => setBpm(e.target.value)} placeholder="BPM"/>
-                <button type="submit">submit</button>
+                <button type="submit">save</button>
                 <button onClick={dltSong}>delete</button>
             </form>
+            <Song isPlaying={play} bpm={bpm}>
+                <Tracks songId={id} focus={focus}/>
+            </Song>
         </>
     )
 }
