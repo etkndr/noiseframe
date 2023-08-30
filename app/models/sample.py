@@ -10,6 +10,7 @@ class Sample(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     instrument_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("instruments.id")), nullable=False)
     url = db.Column(db.String(255), nullable=False)
+    pitch = db.Column(db.String(3), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
     
@@ -20,6 +21,7 @@ class Sample(db.Model):
             'id': self.id,
             "instrument_id": self.instrument_id,
             "url": self.url,
+            
             "created_at": self.created_at,
             "updated_at": self.updated_at
         }

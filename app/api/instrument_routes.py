@@ -111,7 +111,8 @@ def upload_sample(id):
             return {"errors": upload}, 401
 
         url = upload["url"]
-        new_sample = Sample(instrument_id=id, url=url)
+        pitch = form.data["pitch"]
+        new_sample = Sample(instrument_id=id, url=url, pitch=pitch)
         db.session.add(new_sample)
         db.session.commit()
 

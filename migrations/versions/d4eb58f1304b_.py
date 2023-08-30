@@ -1,16 +1,18 @@
 """empty message
 
-Revision ID: 07209b7db12a
+Revision ID: d4eb58f1304b
 Revises: 
-Create Date: 2023-08-29 00:46:06.616295
+Create Date: 2023-08-29 22:42:22.373997
 
 """
 from alembic import op
 import sqlalchemy as sa
-
+import os
+environment = os.getenv("FLASK_ENV")
+SCHEMA = os.environ.get("SCHEMA")
 
 # revision identifiers, used by Alembic.
-revision = '07209b7db12a'
+revision = 'd4eb58f1304b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,6 +29,9 @@ def upgrade():
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
     )
+    if environment == "production":
+        op.execute(f"ALTER TABLE users SET SCHEMA {SCHEMA};")
+        
     op.create_table('instruments',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
@@ -39,6 +44,9 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    if environment == "production":
+        op.execute(f"ALTER TABLE instruments SET SCHEMA {SCHEMA};")
+        
     op.create_table('songs',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
@@ -49,15 +57,22 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    if environment == "production":
+        op.execute(f"ALTER TABLE songs SET SCHEMA {SCHEMA};")
+        
     op.create_table('samples',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('instrument_id', sa.Integer(), nullable=False),
     sa.Column('url', sa.String(length=255), nullable=False),
+    sa.Column('pitch', sa.String(length=3), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.ForeignKeyConstraint(['instrument_id'], ['instruments.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    if environment == "production":
+        op.execute(f"ALTER TABLE samples SET SCHEMA {SCHEMA};")
+        
     op.create_table('tracks',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('song_id', sa.Integer(), nullable=False),
@@ -71,6 +86,8 @@ def upgrade():
     sa.ForeignKeyConstraint(['song_id'], ['songs.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    if environment == "production":
+        op.execute(f"ALTER TABLE tracks SET SCHEMA {SCHEMA};")
     # ### end Alembic commands ###
 
 
