@@ -44,7 +44,6 @@ export default function InstEditor() {
         const newInst = {
             title,
             type: "sampler",
-            sample: [],
             osc: "",
             env: 1
         }

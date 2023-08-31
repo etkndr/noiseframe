@@ -48,7 +48,6 @@ def new_inst():
             user_id = current_user.id,
             title = form.data["title"],
             type = form.data["type"],
-            sample = form.data["sample"],
             osc = form.data["osc"],
             env = form.data["env"]
         )
@@ -76,7 +75,6 @@ def edit_inst(id):
         inst.user_id = current_user.id
         inst.title = form.data["title"]
         inst.type = form.data["type"]
-        inst.sample = form.data["sample"]
         inst.osc = form.data["osc"]
         inst.env = form.data["env"]
         
