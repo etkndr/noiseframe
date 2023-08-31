@@ -113,6 +113,7 @@ def upload_sample(id):
         sample.filename = get_unique_filename(sample.filename)
         upload = upload_file_to_s3(sample)
         print(upload)
+        print("TEST")
 
         if "url" not in upload:
         # if the dictionary doesn't have a url key
@@ -120,16 +121,16 @@ def upload_sample(id):
         # so you send back that error message (and you printed it above)
             return {"errors": upload}, 401
 
+        name = form.data["name"]
         url = upload["url"]
         pitch = form.data["pitch"]
-        new_sample = Sample(instrument_id=id, url=url, pitch=pitch)
+        new_sample = Sample(instrument_id=id, name=name, url=url, pitch=pitch)
         db.session.add(new_sample)
         db.session.commit()
 
         return new_sample.to_dict()
 
-    if form.errors:
-        return {"errors": validation_errors_to_error_messages(form.errors)}, 401
+    return {"errors": validation_errors_to_error_messages(form.errors)}, 401
     
 # GET ALL SAMPLES FOR INSTRUMENT
 @instrument_routes.route("/<int:id>/samples")

@@ -63,6 +63,7 @@ def upgrade():
     op.create_table('samples',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('instrument_id', sa.Integer(), nullable=False),
+    sa.Column('name', sa.String(length=255), nullable=False),
     sa.Column('url', sa.String(length=255), nullable=False),
     sa.Column('pitch', sa.String(length=3), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),

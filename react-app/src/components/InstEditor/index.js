@@ -60,9 +60,10 @@ export default function InstEditor() {
     const addSample = async (e) => {
         e.preventDefault()
         let formData = new FormData()
-        formData.append("Sample file", sample)
+        formData.append("sample", sample)
         setSampleLoading(true)
-        
+        console.log(formData)
+
         await dispatch(instrumentActions.newSample(id, formData))
     }
 
@@ -82,7 +83,7 @@ export default function InstEditor() {
             <button onClick={() => setPlaying(!playing)}>play/pause</button>
                 <Song bpm={120} isPlaying={playing}>
                         <Track steps={["C3"]}>
-                            <Inst sample={sample} />
+                            <Inst sample={sampleArr[0]?.url} />
                         </Track>
                 </Song>
                 <form onSubmit={save}>
