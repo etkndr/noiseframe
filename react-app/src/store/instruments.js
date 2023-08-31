@@ -3,8 +3,6 @@ const GET_INSTRUMENT = "instruments/GET_INSTRUMENT"
 const SAVE_INSTRUMENT = "instruments/SAVE_INSTRUMENT"
 const EDIT_INSTRUMENT = "instruments/EDIT_INSTRUMENT"
 const DELETE_INSTRUMENT = "instruments/DELETE_INSTRUMENTS"
-const NEW_SAMPLE = "instruments/NEW_SAMPLE"
-const DELETE_SAMPLE = "instrument/DELETE_SAMPLE"
 
 function loadInstruments(insts) {
     return {
@@ -38,20 +36,6 @@ function dltInstrument(inst) {
     return {
         type: DELETE_INSTRUMENT,
         inst
-    }
-}
-
-function addSample(sample) {
-    return {
-        type: NEW_SAMPLE,
-        sample
-    }
-}
-
-function dltSample(sample) {
-    return {
-        type: DELETE_SAMPLE,
-        sample
     }
 }
 
@@ -119,33 +103,6 @@ export const deleteInstrument = (id) => async dispatch => {
     }
 }
 
-export const newSample = (id, sample) => async dispatch => {
-    console.log(sample)
-    const res = await fetch(`/api/instruments/${id}/samples`, {
-        method: "POST",
-        body: sample
-    })
-
-
-    if (res.ok) {
-        const data = await res.json()
-        dispatch(addSample(data))
-        return data
-    }
-}
-
-export const deleteSample = (id) => async dispatch => {
-    const res = await fetch(`/api/samples/${id}`, {
-        method: "DELETE"
-    })
-
-    if (res.ok) {
-        const data = await res.json()
-        dispatch(dltSample(data))
-        return data
-    }
-}
-
 const initState = {}
 
 export default function instruments(state = initState, action) {
@@ -164,12 +121,6 @@ export default function instruments(state = initState, action) {
             return newState
         case DELETE_INSTRUMENT:
             delete newState[action.inst.id]
-            return newState
-        case NEW_SAMPLE:
-            newState[action.sample.id] = action.sample
-            return newState
-        case DELETE_SAMPLE:
-            delete newState[action.sample.id]
             return newState
         default:
             return state

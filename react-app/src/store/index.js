@@ -4,12 +4,14 @@ import session from './session'
 import songs from "./songs"
 import tracks from './tracks';
 import instruments from './instruments';
+import samples from './samples';
 
 const rootReducer = combineReducers({
   session,
   songs,
   tracks,
-  instruments
+  instruments,
+  samples
 });
 
 
