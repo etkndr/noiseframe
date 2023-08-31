@@ -23,17 +23,11 @@ export default function InstEditor() {
     // load settings from instrument
     const [title, setTitle] = useState("Loading")
     const sampleArr = inst?.Samples
-    const sampleNames = []
     const [sample, setSample] = useState("")
+    const [sampleName, setSampleName] = useState("")
+    const [pitch, setPitch] = useState("C3")
     const [sampleLoading, setSampleLoading] = useState(false)
     const [currInst, setCurrInst] = useState("")
-
-    useEffect(() => {
-        sampleArr?.forEach((sample) => {
-            sampleNames?.push(sample.url.slice(46,sample.url.length))
-        })
-        console.log(sampleNames)
-    }, [sampleArr])
     
     useEffect(() => {
         const getTitle = inst?.title
@@ -57,14 +51,21 @@ export default function InstEditor() {
         console.log({"success": newInst})
     }
 
-    const addSample = async (e) => {
+    const addSample = (e) => {
         e.preventDefault()
         let formData = new FormData()
+        formData.append("name", sampleName)
+        formData.append("pitch", pitch)
         formData.append("sample", sample)
         setSampleLoading(true)
         console.log(formData)
 
-        await dispatch(instrumentActions.newSample(id, formData))
+        dispatch(instrumentActions.newSample(id, formData))
+    }
+
+    const dltSample = (e, id) => {
+        e.preventDefault()
+        dispatch(instrumentActions.deleteSample(id))
     }
 
     if (inst?.user_id !== currUser?.id || !currUser) {
@@ -77,7 +78,7 @@ export default function InstEditor() {
             <div>
                 samples: 
                 {sampleArr?.map((file, idx) => {
-                    return <li key={idx}>{file.url}</li>
+                    return <li key={idx}>{file.name} <button onClick={(e) => dltSample(e, file.id)}>delete</button></li>
                 })}
             </div>
             <button onClick={() => setPlaying(!playing)}>play/pause</button>
@@ -91,7 +92,9 @@ export default function InstEditor() {
                     <button type="submit">save instrument</button>
                 </form>
                 <form onSubmit={addSample} encType="multipart/form-data">
-                    <input type="file" accept="audio/*" onChange={(e) => setSample(e.target.files[0])} placeholder="upload sample"/>
+                    <input type="text" onChange={(e) => setSampleName(e.target.value)} placeholder="sample name" value={sampleName}/>
+                    <input type="text" onChange={(e) => setPitch(e.target.value)} placeholder="base pitch" value={pitch}/>
+                    <input type="file" accept="audio/*" onChange={(e) => setSample(e.target.files[0])} placeholder="sample file"/>
                     <button type="submit">upload</button>
                 </form>
             </>
