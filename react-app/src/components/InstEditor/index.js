@@ -52,11 +52,18 @@ export default function InstEditor() {
 
     const addSample = (e) => {
         e.preventDefault()
+        let changePitch = samples?.filter((sample) => sample.pitch === pitch)
+        if (changePitch.length) {
+            console.log(pitch, changePitch)
+            return "current note already in use, please choose a different pitch"
+        }
+
         let formData = new FormData()
         formData.append("name", sampleName)
         formData.append("pitch", pitch)
         formData.append("sample", sample)
         setSampleLoading(true)
+
 
         dispatch(sampleActions.newSample(id, formData))
         .then(() => setSampleLoading(false))
@@ -91,7 +98,7 @@ export default function InstEditor() {
             <Song isPlaying={playing} bpm={120}>
                 {samples?.map((sample, idx) => {
                     return (
-                        <Track steps={[sample.pitch]} mute={currSample !== idx} volume={0.7}>
+                        <Track steps={["C3"]} mute={currSample !== idx} volume={0.7}>
                             <Inst sample={sample.url}/>
                         </Track>
                     )
