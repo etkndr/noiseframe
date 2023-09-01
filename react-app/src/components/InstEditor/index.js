@@ -26,8 +26,7 @@ export default function InstEditor() {
     useEffect(() => {
         dispatch(instrumentActions.getInstrument(id))
         dispatch(sampleActions.getSamples(id))
-        .then(() => setSampleLoading(false))
-    }, [])
+    }, [dispatch])
     
     useEffect(() => {
         const getTitle = inst?.title
@@ -60,11 +59,13 @@ export default function InstEditor() {
         setSampleLoading(true)
 
         dispatch(sampleActions.newSample(id, formData))
+        .then(() => setSampleLoading(false))
     }
 
     const dltSample = (e, id) => {
         e.preventDefault()
         dispatch(sampleActions.deleteSample(id))
+        .then(() => dispatch(sampleActions.getSamples(inst?.id)))
     }
 
     if (inst?.user_id !== currUser?.id || !currUser) {
@@ -73,7 +74,7 @@ export default function InstEditor() {
 
     return (
         <>
-            {inst?.title}
+            <h2>{inst?.title}</h2>
             <div>
                 samples:
                 {sampleLoading && "loading..."}
@@ -81,12 +82,12 @@ export default function InstEditor() {
                     return (
                     <li key={idx}>{sample.name}
                     <button onClick={() => handleFocus(idx)}>play</button>
+                    <button onClick={() => setPlaying(false)}>stop</button>
                     <button onClick={(e) => dltSample(e, sample.id)}>delete</button>
                     </li>
                     )
                 })}
             </div>
-            <button onClick={() => setPlaying(false)}>stop audio</button>
             <Song isPlaying={playing} bpm={120}>
                 {samples?.map((sample, idx) => {
                     return (
