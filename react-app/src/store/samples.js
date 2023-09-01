@@ -1,6 +1,6 @@
-const GET_SAMPLES = "instruments/GET_SAMPLES"
-const NEW_SAMPLE = "instruments/NEW_SAMPLE"
-const DELETE_SAMPLE = "instrument/DELETE_SAMPLE"
+const GET_SAMPLES = "samples/GET_SAMPLES"
+const NEW_SAMPLE = "samples/NEW_SAMPLE"
+const DELETE_SAMPLE = "samples/DELETE_SAMPLE"
 
 function loadSamples(samples) {
     return {
@@ -16,10 +16,10 @@ function addSample(sample) {
     }
 }
 
-function dltSample(sample) {
+function dltSample(id) {
     return {
         type: DELETE_SAMPLE,
-        sample
+        id
     }
 }
 
@@ -57,7 +57,7 @@ export const deleteSample = (id) => async dispatch => {
 
     if (res.ok) {
         const data = await res.json()
-        dispatch(dltSample(data))
+        dispatch(dltSample(id))
         return data
     }
 }
@@ -76,8 +76,9 @@ export default function samples(state = initState, action) {
             newState[action.sample.id] = action.sample
             return newState
         case DELETE_SAMPLE:
-            delete newState[action.sample.id]
-            return newState
+            delete newState[action.id]
+            const refresh = {...newState}
+            return refresh
         default:
             return state
     }
