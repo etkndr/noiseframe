@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.8.3",
     "@theoryofnekomata/react-musical-keyboard": "^1.1.4",
     "audiokeys": "^0.1.1",
+    "generic-step-sequencer": "^2.0.0",
     "http-proxy-middleware": "^1.0.5",
     "midi-note": "^1.0.0",
     "qwertytomidi": "^1.0.0",
