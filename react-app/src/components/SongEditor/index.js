@@ -3,26 +3,31 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import * as trackActions from "../../store/tracks"
 import * as songActions from "../../store/songs"
-import {getInstruments} from "../../store/instruments"
-import {Instrument, Song, Track} from "reactronica"
-import Tracks from "../Tracks"
-import AudioKeys from "audiokeys"
+import { getInstruments } from "../../store/instruments"
+import { getSamples } from "../../store/samples"
+import {Song} from "reactronica"
+import Sequencer from "../Sequencer"
 
 export default function SongEditor() {
     const dispatch = useDispatch()
     const {id} = useParams()
-    const tracks = useSelector(state => state.tracks)
+    // const tracks = useSelector(state => state.tracks)
+    const currUser = useSelector(state => state.session.user)
     const song = useSelector(state => state.songs)
-    const insts = useSelector(state => state.instruments)
-    const [note, setNote] = useState("") // send note to track
-    const [press, setPress] = useState(0) // send keypress to track
+    const allInst = useSelector(state => state.instruments)
+    const samples = useSelector(state => Object.values(state.samples))
     const [play, setPlay] = useState(false)
+    const [currInst, setCurrInst] = useState(1)
     
     useEffect(() => {
-        dispatch(trackActions.getTracks(id))
+        // dispatch(trackActions.getTracks(id))
         dispatch(songActions.getSong(id))
         dispatch(getInstruments())
     }, [])
+
+    useEffect(() => {
+        dispatch(getSamples(currInst))
+    }, [currInst])
     
     const [title, setTitle] = useState("")
     const [bpm, setBpm] = useState(120)
@@ -40,22 +45,12 @@ export default function SongEditor() {
         console.log("success")
     }
 
-    const keys = new AudioKeys() // Create midi map from user keyboard
-
-    // Set note on key press
-    keys.down((note) => {
-        setNote(note.note)
-        setPress(1)
-    })
-
-    // Stop note from being added on key release 
-    keys.up((note) => {
-        setPress(0)
-    })
-
+    if (song?.user_id !== currUser?.id || !currUser) {
+        return "Unauthorized"
+    }
     return (
         <>
-            song editor
+            <h2>{song?.title}</h2>
             <button onClick={() => setPlay(!play)}>start/stop</button>
             <form onSubmit={save}>
                 <input onChange={(e) => setTitle(e.target.value)} placeholder="title" value={title}/>
@@ -63,8 +58,10 @@ export default function SongEditor() {
                 <button type="submit">save</button>
                 <button onClick={dltSong}>delete</button>
             </form>
-            <Song isPlaying={play} bpm={bpm}>
-                <Tracks note={note} press={press} songId={id}/>
+            <Song bpm={bpm} isPlaying={play}>
+                {samples?.map((sample) => {
+                    return <Sequencer sample={sample.url}/>
+                })}
             </Song>
         </>
     )

@@ -87,7 +87,7 @@ export default function InstEditor() {
                 {sampleLoading && "loading..."}
                 {samples?.map((sample, idx) => {
                     return (
-                    <li key={idx}>{sample.name}
+                    <li key={idx}>{sample.name} - {sample.pitch}
                     <button onClick={() => handleFocus(idx)}>play</button>
                     <button onClick={() => setPlaying(false)}>stop</button>
                     <button onClick={(e) => dltSample(e, sample.id)}>delete</button>

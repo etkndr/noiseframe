@@ -112,7 +112,7 @@ export default function songReducer(state = initState, action) {
             return newState
         case GET_SONG:
             newState[action.song.id] = action.song
-            return newState
+            return newState[action.song.id]
         case SAVE_SONG:
             newState[action.song.id] = action.song
             return newState
