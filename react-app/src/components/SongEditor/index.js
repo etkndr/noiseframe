@@ -3,24 +3,31 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import * as trackActions from "../../store/tracks"
 import * as songActions from "../../store/songs"
-import {getInstruments} from "../../store/instruments"
-import {Instrument, Song, Track} from "reactronica"
-import TrackEditor from "../TrackEditor"
+import { getInstruments } from "../../store/instruments"
+import { getSamples } from "../../store/samples"
+import {Song} from "reactronica"
 import Sequencer from "../Sequencer"
 
 export default function SongEditor() {
     const dispatch = useDispatch()
     const {id} = useParams()
     // const tracks = useSelector(state => state.tracks)
+    const currUser = useSelector(state => state.session.user)
     const song = useSelector(state => state.songs)
-    // const allInst = useSelector(state => state.instruments)
+    const allInst = useSelector(state => state.instruments)
+    const samples = useSelector(state => Object.values(state.samples))
     const [play, setPlay] = useState(false)
     const [currInst, setCurrInst] = useState(1)
     
     useEffect(() => {
-        dispatch(trackActions.getTracks(id))
+        // dispatch(trackActions.getTracks(id))
         dispatch(songActions.getSong(id))
+        dispatch(getInstruments())
     }, [])
+
+    useEffect(() => {
+        dispatch(getSamples(currInst))
+    }, [currInst])
     
     const [title, setTitle] = useState("")
     const [bpm, setBpm] = useState(120)
@@ -38,6 +45,9 @@ export default function SongEditor() {
         console.log("success")
     }
 
+    if (song?.user_id !== currUser?.id || !currUser) {
+        return "Unauthorized"
+    }
     return (
         <>
             <h2>{song?.title}</h2>
@@ -49,9 +59,10 @@ export default function SongEditor() {
                 <button onClick={dltSong}>delete</button>
             </form>
             <Song bpm={bpm} isPlaying={play}>
-                <Sequencer/>
+                {samples?.map((sample) => {
+                    return <Sequencer sample={sample.url}/>
+                })}
             </Song>
-            {/* <TrackEditor songId={id} instId={currInst} /> */}
         </>
     )
 }

@@ -87,7 +87,7 @@ export default function InstEditor() {
                 {sampleLoading && "loading..."}
                 {samples?.map((sample, idx) => {
                     return (
-                    <li key={idx}>{sample.name}
+                    <li key={idx}>{sample.name} - {sample.pitch}
                     <button onClick={() => handleFocus(idx)}>play</button>
                     <button onClick={() => setPlaying(false)}>stop</button>
                     <button onClick={(e) => dltSample(e, sample.id)}>delete</button>
@@ -99,7 +99,7 @@ export default function InstEditor() {
                 {samples?.map((sample, idx) => {
                     return (
                         <Track steps={["C3"]} mute={currSample !== idx} volume={0.7}>
-                            <Inst sample={sample.url}/>
+                            <Inst url={sample.url}/>
                         </Track>
                     )
                 })}
