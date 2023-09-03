@@ -33,14 +33,12 @@ export default function Sequencer({sample}) {
         console.log(currStep)
     }
 
-    console.log(steps)
-
     return (
         <>
         <div>
             {Object.values(steps).map((step, idx) => {
                 return (
-                    <Toggle handleToggle={handleToggle} step={idx}/>
+                    <Toggle handleToggle={handleToggle} step={idx} on={step !== null}/>
                 )
             })}
         </div>
