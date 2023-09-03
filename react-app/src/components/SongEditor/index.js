@@ -29,8 +29,8 @@ export default function SongEditor() {
         dispatch(getSamples(currInst))
     }, [currInst])
     
-    const [title, setTitle] = useState("")
-    const [bpm, setBpm] = useState(120)
+    const [title, setTitle] = useState(song?.title || "")
+    const [bpm, setBpm] = useState(song?.bpm || 120)
     
     function save(e) {
         e.preventDefault()
@@ -53,14 +53,14 @@ export default function SongEditor() {
             <h2>{song?.title}</h2>
             <button onClick={() => setPlay(!play)}>start/stop</button>
             <form onSubmit={save}>
-                <input onChange={(e) => setTitle(e.target.value)} placeholder="title" value={title}/>
-                <input onChange={(e) => setBpm(e.target.value)} placeholder="BPM"/>
+                <input onChange={(e) => setTitle(e.target.value)} placeholder={`title (${song?.title || "new song"})`}/>
+                <input onChange={(e) => setBpm(e.target.value)} placeholder={`bpm (${song?.bpm})`}/>
                 <button type="submit">save</button>
                 <button onClick={dltSong}>delete</button>
             </form>
-            <Song bpm={bpm} isPlaying={play}>
-                {samples?.map((sample) => {
-                    return <Sequencer sample={sample.url}/>
+            <Song bpm={bpm*2} isPlaying={play}>
+                {samples?.map((sample, idx) => {
+                    return <Sequencer sample={sample.url} savedSteps={sample.steps} key={idx} />
                 })}
             </Song>
         </>

@@ -52,15 +52,9 @@ export default function InstEditor() {
 
     const addSample = (e) => {
         e.preventDefault()
-        let changePitch = samples?.filter((sample) => sample.pitch === pitch)
-        if (changePitch.length) {
-            console.log(pitch, changePitch)
-            return "current note already in use, please choose a different pitch"
-        }
 
         let formData = new FormData()
         formData.append("name", sampleName)
-        formData.append("pitch", pitch)
         formData.append("sample", sample)
         setSampleLoading(true)
 
@@ -87,7 +81,7 @@ export default function InstEditor() {
                 {sampleLoading && "loading..."}
                 {samples?.map((sample, idx) => {
                     return (
-                    <li key={idx}>{sample.name} - {sample.pitch}
+                    <li key={idx}>{sample.name}
                     <button onClick={() => handleFocus(idx)}>play</button>
                     <button onClick={() => setPlaying(false)}>stop</button>
                     <button onClick={(e) => dltSample(e, sample.id)}>delete</button>
