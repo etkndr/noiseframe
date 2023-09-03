@@ -99,7 +99,7 @@ export default function InstEditor() {
                 {samples?.map((sample, idx) => {
                     return (
                         <Track steps={["C3"]} mute={currSample !== idx} volume={0.7}>
-                            <Inst url={sample.url}/>
+                            <Inst sample={sample.url}/>
                         </Track>
                     )
                 })}
