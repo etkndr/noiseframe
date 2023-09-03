@@ -20,7 +20,6 @@ export default function SongEditor() {
     const [currInst, setCurrInst] = useState(1)
     
     useEffect(() => {
-        // dispatch(trackActions.getTracks(id))
         dispatch(songActions.getSong(id))
         dispatch(getInstruments())
     }, [])

@@ -6,6 +6,7 @@ import style from "./Sequencer.module.css"
 export default function Sequencer({url, sample, savedSteps, saveSample}) {
 
     const [steps, setSteps] = useState({})
+    const [mute, setMute] = useState(false)
     let currStep
 
     useEffect(() => {
@@ -41,7 +42,6 @@ export default function Sequencer({url, sample, savedSteps, saveSample}) {
                 return step
             }
         })
-        console.log(joinSteps.join(" "))
         saveSample(sample, joinSteps.join(" "))
     }, [steps])
 
@@ -60,8 +60,6 @@ export default function Sequencer({url, sample, savedSteps, saveSample}) {
         }
     }
 
-    console.log(sample)
-
     return (
         <>
         <div>
@@ -75,8 +73,9 @@ export default function Sequencer({url, sample, savedSteps, saveSample}) {
                     />
                 )
             })}
+            <button onClick={() => setMute(!mute)}>{mute && `unmute`} {!mute && `mute`}</button>
         </div>
-        <Track steps={Object.values(steps)} onStepPlay={handleStepChange}>
+        <Track steps={Object.values(steps)} onStepPlay={handleStepChange} mute={mute}>
             <Instrument type="sampler" samples={{"C3": url}}/>
         </Track>
         </>
