@@ -30,8 +30,9 @@ export default function Sequencer({sample}) {
         } else {
             currStep = 0
         }
-        console.log(currStep)
     }
+
+    console.log(steps)
 
     return (
         <>
