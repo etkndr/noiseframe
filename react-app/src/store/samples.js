@@ -1,5 +1,6 @@
 const GET_SAMPLES = "samples/GET_SAMPLES"
 const NEW_SAMPLE = "samples/NEW_SAMPLE"
+const SAVE_STEPS = "samples/SAVE_STEPS"
 const DELETE_SAMPLE = "samples/DELETE_SAMPLE"
 
 function loadSamples(samples) {
@@ -12,6 +13,13 @@ function loadSamples(samples) {
 function addSample(sample) {
     return {
         type: NEW_SAMPLE,
+        sample
+    }
+}
+
+function editSample(sample) {
+    return {
+        type: SAVE_STEPS,
         sample
     }
 }
@@ -36,7 +44,6 @@ export const getSamples = (id) => async dispatch => {
 }
 
 export const newSample = (id, sample) => async dispatch => {
-    console.log(sample)
     const res = await fetch(`/api/instruments/${id}/samples`, {
         method: "POST",
         body: sample
@@ -46,6 +53,20 @@ export const newSample = (id, sample) => async dispatch => {
     if (res.ok) {
         const data = await res.json()
         dispatch(addSample(data))
+        return data
+    }
+}
+
+export const saveSample = (id, sample) => async dispatch => {
+    const res = await fetch(`/api/samples/${id}`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(sample)
+    })
+
+    if (res.ok) {
+        const data = await res.json()
+        dispatch(editSample(data))
         return data
     }
 }
@@ -73,6 +94,9 @@ export default function samples(state = initState, action) {
             })
             return newState
         case NEW_SAMPLE:
+            newState[action.sample.id] = action.sample
+            return newState
+        case SAVE_STEPS:
             newState[action.sample.id] = action.sample
             return newState
         case DELETE_SAMPLE:

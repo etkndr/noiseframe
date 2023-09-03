@@ -58,7 +58,6 @@ export default function InstEditor() {
         formData.append("sample", sample)
         setSampleLoading(true)
 
-
         dispatch(sampleActions.newSample(id, formData))
         .then(() => setSampleLoading(false))
     }

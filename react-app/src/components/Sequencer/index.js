@@ -3,7 +3,7 @@ import { Track, Instrument } from "reactronica"
 import Toggle from "./Toggle"
 import style from "./Sequencer.module.css"
 
-export default function Sequencer({sample, savedSteps}) {
+export default function Sequencer({url, sample, savedSteps, saveSample}) {
 
     const [steps, setSteps] = useState({})
     let currStep
@@ -33,6 +33,18 @@ export default function Sequencer({sample, savedSteps}) {
         }
     }, [])
 
+    useEffect(() => {
+        const joinSteps = Object.values(steps).map((step) => {
+            if (step === null) {
+                return "null"
+            } else {
+                return step
+            }
+        })
+        console.log(joinSteps.join(" "))
+        saveSample(sample, joinSteps.join(" "))
+    }, [steps])
+
     function handleToggle(step, state) {
         setSteps((prev) => ({
             ...prev,
@@ -48,19 +60,24 @@ export default function Sequencer({sample, savedSteps}) {
         }
     }
 
-    console.log(steps)
+    console.log(sample)
 
     return (
         <>
         <div>
             {Object.values(steps).map((step, idx) => {
                 return (
-                    <Toggle handleToggle={handleToggle} step={idx} on={step !== null} key={idx}/>
+                    <Toggle 
+                        handleToggle={handleToggle} 
+                        step={idx} 
+                        on={step !== null} 
+                        key={idx}
+                    />
                 )
             })}
         </div>
         <Track steps={Object.values(steps)} onStepPlay={handleStepChange}>
-            <Instrument type="sampler" samples={{"C3": sample}}/>
+            <Instrument type="sampler" samples={{"C3": url}}/>
         </Track>
         </>
     )

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import * as trackActions from "../../store/tracks"
 import * as songActions from "../../store/songs"
 import { getInstruments } from "../../store/instruments"
-import { getSamples } from "../../store/samples"
+import * as sampleActions from "../../store/samples"
 import {Song} from "reactronica"
 import Sequencer from "../Sequencer"
 
@@ -26,13 +26,13 @@ export default function SongEditor() {
     }, [])
 
     useEffect(() => {
-        dispatch(getSamples(currInst))
+        dispatch(sampleActions.getSamples(currInst))
     }, [currInst])
     
     const [title, setTitle] = useState(song?.title || "")
     const [bpm, setBpm] = useState(song?.bpm || 120)
     
-    function save(e) {
+    function saveSong(e) {
         e.preventDefault()
         const newSong = {title, bpm}
         const save = dispatch(songActions.editSong(id, newSong))
@@ -45,6 +45,15 @@ export default function SongEditor() {
         console.log("success")
     }
 
+    function saveSample(sample, stepArr) {
+        const {id, name, url} = sample
+        const save = dispatch(sampleActions.saveSample(id, {
+            name,
+            steps: stepArr,
+            url
+        }))
+    }
+
     if (song?.user_id !== currUser?.id || !currUser) {
         return "Unauthorized"
     }
@@ -52,7 +61,7 @@ export default function SongEditor() {
         <>
             <h2>{song?.title}</h2>
             <button onClick={() => setPlay(!play)}>start/stop</button>
-            <form onSubmit={save}>
+            <form onSubmit={saveSong}>
                 <input onChange={(e) => setTitle(e.target.value)} placeholder={`title (${song?.title || "new song"})`}/>
                 <input onChange={(e) => setBpm(e.target.value)} placeholder={`bpm (${song?.bpm})`}/>
                 <button type="submit">save</button>
@@ -60,7 +69,13 @@ export default function SongEditor() {
             </form>
             <Song bpm={bpm*2} isPlaying={play}>
                 {samples?.map((sample, idx) => {
-                    return <Sequencer sample={sample.url} savedSteps={sample.steps} key={idx} />
+                    return <Sequencer 
+                                url={sample.url}
+                                sample={sample} 
+                                savedSteps={sample.steps} 
+                                saveSample={saveSample} 
+                                key={idx} 
+                            />
                 })}
             </Song>
         </>
