@@ -10,9 +10,8 @@ class Track(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     song_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("songs.id")), nullable=False)
     instrument_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("instruments.id")), nullable=False)
-    title = db.Column(db.String(255), nullable=False)
-    notes = db.Column(db.String(255))
-    volume = db.Column(db.Integer, nullable=False)
+    steps = db.Column(db.String(255), nullable=False)
+    volume = db.Column(db.Integer)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
     
@@ -25,7 +24,7 @@ class Track(db.Model):
             "song_id": self.song_id,
             "instrument_id": self.instrument_id,
             "title": self.title,
-            "notes": self.notes,
+            "steps": self.notes,
             "volume": self.volume,
             "created_at": self.created_at,
             "updated_at": self.updated_at

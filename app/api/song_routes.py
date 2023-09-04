@@ -117,8 +117,7 @@ def new_track(id):
         track = Track(
             song_id = id,
             instrument_id = form.data["instrument_id"],
-            title = form.data["title"],
-            notes = form.data["notes"],
+            steps = form.data["steps"],
             volume = form.data["volume"]
         )
 
