@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom/cjs/react-router-dom.min"
+import { NavLink, useParams } from "react-router-dom/cjs/react-router-dom.min"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import * as trackActions from "../../store/tracks"
@@ -28,8 +28,9 @@ export default function SongEditor() {
         dispatch(sampleActions.getSamples(currInst))
     }, [currInst])
     
-    const [title, setTitle] = useState(song?.title || "")
-    const [bpm, setBpm] = useState(song?.bpm || 120)
+    const [title, setTitle] = useState(song?.title)
+    const [bpm, setBpm] = useState(song?.bpm)
+
     
     function saveSong(e) {
         e.preventDefault()
@@ -59,14 +60,21 @@ export default function SongEditor() {
     return (
         <>
             <h2>{song?.title}</h2>
-            <button onClick={() => setPlay(!play)}>start/stop</button>
+            <h3>
+                <NavLink to={`/instruments/${currInst}`}>
+                    {allInst[currInst]?.title}
+                </NavLink>
+            </h3>
+            <button onClick={() => setPlay(!play)}>{!play && "play"}{play && "stop"}</button>
             <form onSubmit={saveSong}>
-                <input onChange={(e) => setTitle(e.target.value)} placeholder={`title (${song?.title || "new song"})`}/>
-                <input onChange={(e) => setBpm(e.target.value)} placeholder={`bpm (${song?.bpm})`}/>
+                <label for="title">song title</label>
+                    <input onChange={(e) => setTitle(e.target.value)} placeholder={`${song?.title}`} name="title"/>
+                <label for="bpm">bpm</label>
+                    <input onChange={(e) => setBpm(e.target.value)} placeholder={`${song?.bpm}`} name="bpm"/>
                 <button type="submit">save</button>
                 <button onClick={dltSong}>delete</button>
             </form>
-            <Song bpm={bpm*2} isPlaying={play}>
+            <Song bpm={bpm*2 || 240} isPlaying={play}>
                 {samples?.map((sample, idx) => {
                     return <Sequencer 
                                 url={sample.url}

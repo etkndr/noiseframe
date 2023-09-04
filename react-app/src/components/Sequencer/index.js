@@ -3,7 +3,7 @@ import { Track, Instrument } from "reactronica"
 import Toggle from "./Toggle"
 import style from "./Sequencer.module.css"
 
-export default function Sequencer({url, sample, savedSteps, saveSample}) {
+export default function Sequencer({url, sample, savedSteps, saveSample, muted}) {
 
     const [steps, setSteps] = useState({})
     const [mute, setMute] = useState(false)
@@ -63,6 +63,7 @@ export default function Sequencer({url, sample, savedSteps, saveSample}) {
     return (
         <>
         <div>
+            {sample?.name}
             {Object.values(steps).map((step, idx) => {
                 return (
                     <Toggle 
