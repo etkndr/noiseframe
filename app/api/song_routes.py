@@ -35,6 +35,7 @@ def new_song():
     if form.validate_on_submit():
         song = Song(
             user_id = current_user.id,
+            instrument_id = form.data["instrument_id"],
             title = form.data["title"],
             bpm = form.data["bpm"]    
         )
@@ -62,6 +63,7 @@ def edit_song(id):
 
     if form.validate_on_submit():
         song.user_id = current_user.id
+        song.instrument_id = form.data["instrument_id"]
         song.title = form.data["title"]
         song.bpm = form.data["bpm"] 
         

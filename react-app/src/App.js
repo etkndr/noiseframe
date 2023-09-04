@@ -9,6 +9,8 @@ import LandingPage from "./components/LandingPage";
 import Home from "./components/Home";
 import SongEditor from "./components/SongEditor";
 import InstEditor from "./components/InstEditor";
+import NewSong from "./components/SongEditor/NewSong";
+import NewInst from "./components/InstEditor/NewInst"
 
 function App() {
   const dispatch = useDispatch();
@@ -37,8 +39,14 @@ function App() {
           <Route path="/songs/:id">
             <SongEditor />
           </Route>
+          <Route exact path="/songs">
+            <NewSong />
+          </Route>
           <Route path="/instruments/:id">
             <InstEditor />
+          </Route>
+          <Route exact path="/instruments">
+            <NewInst />
           </Route>
         </Switch>
       )}
