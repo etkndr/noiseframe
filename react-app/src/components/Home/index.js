@@ -23,7 +23,6 @@ export default function Home() {
 
     return (
         <>
-            Home
             <select onChange={(e) => setSelSong(e.target.value)}>
                 <option default disabled>song list</option>
                 {songs?.map((song, idx) => {
@@ -38,6 +37,11 @@ export default function Home() {
                 })}
             </select>
             <button onClick={() => selInst && history.push(`/instruments/${selInst}`)}>edit instrument</button>
+
+            <div>
+                <button onClick={() => history.push("/songs")}>new song</button>
+                <button onClick={() => history.push("/instruments")}>new instrument</button>
+            </div>
         </>
     )
 }
