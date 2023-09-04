@@ -17,7 +17,7 @@ export default function Home() {
     useEffect(() => {
         dispatch(songActions.getSongs())
         dispatch(instrumentActions.getInstruments())
-    }, [])
+    }, [dispatch])
 
     return (
         <>

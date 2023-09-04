@@ -3,6 +3,7 @@ from wtforms import StringField, IntegerField, SubmitField
 from wtforms.validators import DataRequired, NumberRange
 
 class SongForm(FlaskForm):
+    instrument_id = IntegerField("Instrument")
     title = StringField("Song title", validators=[DataRequired()])
     bpm = IntegerField("BPM", validators=[DataRequired(), NumberRange(10,300)])
     submit = SubmitField("Submit")

@@ -89,10 +89,12 @@ export default function samples(state = initState, action) {
     let newState = {...state}
     switch (action.type) {
         case GET_SAMPLES:
+            const sampleState = {}
             action.samples.forEach((sample) => {
-                newState[sample.id] = sample
+                sampleState[sample.id] = sample
             })
-            return newState
+            console.log(sampleState)
+            return sampleState
         case NEW_SAMPLE:
             newState[action.sample.id] = action.sample
             return newState

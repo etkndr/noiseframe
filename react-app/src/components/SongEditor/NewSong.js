@@ -9,7 +9,6 @@ import Sequencer from "../Sequencer"
 
 export default function NewSong() {
     const dispatch = useDispatch()
-    // const tracks = useSelector(state => state.tracks)
     const currUser = useSelector(state => state.session.user)
     const allInst = useSelector(state => state.instruments)
     const samples = useSelector(state => Object.values(state.samples))
@@ -18,7 +17,7 @@ export default function NewSong() {
     
     useEffect(() => {
         dispatch(getInstruments())
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
         dispatch(sampleActions.getSamples(currInst))
@@ -30,7 +29,10 @@ export default function NewSong() {
     
     function saveSong(e) {
         e.preventDefault()
-        const newSong = {title, bpm}
+        const newSong = {
+            title, 
+            bpm, 
+            instrument_id: currInst}
         const save = dispatch(songActions.saveSong(newSong))
         console.log("success")
     }
