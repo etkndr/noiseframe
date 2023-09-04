@@ -15,6 +15,7 @@ class Sample(db.Model):
     updated_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
     
     instrument = db.relationship("Instrument", back_populates="sample")
+    track = db.relationship("Track", back_populates="sample")
     
     def to_dict(self):
         return {

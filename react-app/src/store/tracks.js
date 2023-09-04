@@ -1,6 +1,6 @@
 const GET_TRACKS = "tracks/GET_TRACKS"
 const GET_TRACK = "tracks/GET_TRACK"
-const SAVE_TRACK = "tracks/SAVE_TRACK"
+const NEW_TRACK = "tracks/NEW_TRACK"
 const EDIT_TRACK = "tracks/EDIT_TRACK"
 const DELETE_TRACK = "tracks/DELETE_TRACK"
 
@@ -20,7 +20,7 @@ function loadTrack(track) {
 
 function newTrack(track) {
     return {
-        type: SAVE_TRACK,
+        type: NEW_TRACK,
         track
     }
 }
@@ -63,7 +63,7 @@ export const getTrack = (id) => async dispatch => {
     }
 }
 
-export const saveTrack = (id, track) => async dispatch => {
+export const newTrack = (id, track) => async dispatch => {
     const res = await fetch(`/api/songs/${id}/tracks`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
@@ -77,7 +77,7 @@ export const saveTrack = (id, track) => async dispatch => {
     }
 }
 
-const editTrack = (id, track) => async dispatch => {
+const saveTrack = (id, track) => async dispatch => {
     const res = await fetch(`/api/tracks/${id}`, {
         method: "PUT",
         headers: {"Content-Type": "application/json"},
@@ -116,7 +116,7 @@ export default function tracks(state = initState, action) {
         case GET_TRACK:
             newState[action.track.id] = action.track
             return newState
-        case SAVE_TRACK:
+        case NEW_TRACK:
             newState[action.track.id] = action.track
             return newState
         case EDIT_TRACK:

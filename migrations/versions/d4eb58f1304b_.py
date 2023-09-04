@@ -77,12 +77,12 @@ def upgrade():
     op.create_table('tracks',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('song_id', sa.Integer(), nullable=False),
-    sa.Column('instrument_id', sa.Integer(), nullable=False),
+    sa.Column('sample_id', sa.Integer(), nullable=False),
     sa.Column('steps', sa.String(length=255), nullable=True),
     sa.Column('volume', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.ForeignKeyConstraint(['instrument_id'], ['instruments.id'], ),
+    sa.ForeignKeyConstraint(['sample_id'], ['samples.id'], ),
     sa.ForeignKeyConstraint(['song_id'], ['songs.id'], ),
     sa.PrimaryKeyConstraint('id')
     )

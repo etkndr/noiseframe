@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import * as songActions from "../../store/songs"
 import { getInstruments } from "../../store/instruments"
 import * as sampleActions from "../../store/samples"
+import * as trackActions from "../../store/tracks"
 import {Song} from "reactronica"
 import Sequencer from "../Sequencer"
 
@@ -78,7 +79,7 @@ export default function NewSong() {
                                 url={sample.url}
                                 sample={sample} 
                                 savedSteps={sample.steps} 
-                                saveSample={saveSample} 
+                                saveSample={saveSample}
                                 key={idx} 
                             />
                 })}

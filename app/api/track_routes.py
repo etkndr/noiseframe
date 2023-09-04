@@ -35,7 +35,7 @@ def edit_track(id, song_id):
         return {"errors": "Tracks can only be edited by song creator"}, 400
     
     if form.validate_on_submit():
-        track.instrument_id = form.data["instrument_id"]
+        track.sample_id = form.data["sample_id"]
         track.steps = form.data["steps"]
         track.volume = form.data["volume"]
 

@@ -9,20 +9,20 @@ class Track(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     song_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("songs.id")), nullable=False)
-    instrument_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("instruments.id")), nullable=False)
+    sample_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("samples.id")), nullable=False)
     steps = db.Column(db.String(255), nullable=False)
     volume = db.Column(db.Integer)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
     
     song = db.relationship("Song", back_populates="track")
-    instrument = db.relationship("Instrument", back_populates="track")
+    sample = db.relationship("Sample", back_populates="track")
     
     def to_dict(self):
         return {
             'id': self.id,
             "song_id": self.song_id,
-            "instrument_id": self.instrument_id,
+            "sample_id": self.sample_id,
             "title": self.title,
             "steps": self.notes,
             "volume": self.volume,

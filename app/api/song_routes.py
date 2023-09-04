@@ -116,7 +116,7 @@ def new_track(id):
     if form.validate_on_submit():
         track = Track(
             song_id = id,
-            instrument_id = form.data["instrument_id"],
+            sample_id = form.data["sample_id"],
             steps = form.data["steps"],
             volume = form.data["volume"]
         )
