@@ -16,7 +16,7 @@ export default function SongEditor() {
     const allInst = useSelector(state => state.instruments)
     const samples = useSelector(state => Object.values(state.samples))
     const [play, setPlay] = useState(false)
-    const [currInst, setCurrInst] = useState(1)
+    const [currInst, setCurrInst] = useState("")
     
     useEffect(() => {
         dispatch(songActions.getSong(id))
@@ -59,12 +59,22 @@ export default function SongEditor() {
     return (
         <>
             <h2>{song?.title}</h2>
+            <select onChange={(e) => setCurrInst(e.target.value)}>
+                <option selected disabled>select an instrument</option>
+                {Object.values(allInst)?.map((inst, idx) => {
+                    return <option value={inst.id} key={idx}>{inst.title}</option>
+                })}
+            </select>
+            {currInst &&
             <h3>
                 <NavLink to={`/instruments/${currInst}`}>
                     {allInst[currInst]?.title}
                 </NavLink>
             </h3>
+            }
+            {currInst &&
             <button onClick={() => setPlay(!play)}>{!play && "play"}{play && "stop"}</button>
+            }
             <form onSubmit={saveSong}>
                 <label for="title">song title</label>
                     <input onChange={(e) => setTitle(e.target.value)} placeholder={`${song?.title}`} name="title"/>
