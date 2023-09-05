@@ -3,10 +3,50 @@
 }
 
 body {
-    background-color: rgb(229, 229, 229);
+    background-color: #3A4951;
+    color: #C1D0D5;
+    font-size: 14pt;
 }
 
 .container {
     width: 95%;
     margin: 0 auto;
+}
+
+button, input {
+    background-color: #51636C;
+    color: #DFD7CD;
+    font-size: 14pt;
+    border: 3px solid #DFD7CD;
+    padding: 5px 10px;
+    margin: 10px;
+}
+
+button {
+    cursor: pointer;
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #51636C;
+    color: #DFD7CD;
+    font-size: 14pt;
+    border: 3px solid #DFD7CD;
+    padding: 5px 10px;
+    margin: 10px;
+  }
+
+li {
+    list-style: none;
+}
+
+a {
+    color: #C1D0D5;
+    cursor: pointer;
+}
+
+a:hover {
+    color: #51636C;
 }

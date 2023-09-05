@@ -19,6 +19,12 @@ export default function Toggle({handleToggle, step, on}) {
             <ReactSwitch
                 onChange={returnState}
                 checked={active}
+                checkedIcon={false}
+                uncheckedIcon={false}
+                width={45}
+                onHandleColor="#DFD7CD"
+                offHandleColor="#DFD7CD"
+                onColor="#4f7487"
             />
         </>
     )

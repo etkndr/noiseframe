@@ -81,15 +81,15 @@ export default function SongEditor() {
             <button onClick={() => setPlay(!play)}>{!play && "play"}{play && "stop"}</button>
             }
             <form onSubmit={saveSong}>
-                <select onChange={(e) => setCurrInst(e.target.value)} value={currInst}>
-                    <option selected disabled>select an instrument</option>
+                <select onChange={(e) => setCurrInst(e.target.value)} value={currInst} defaultValue={"default"}>
+                    <option value="default" disabled>select an instrument</option>
                     {Object.values(allInst)?.map((inst, idx) => {
                         return <option value={inst.id} key={idx}>{inst.title}</option>
                     })}
                 </select>
-                <label for="title">song title</label>
+                <label htmlFor="title">song title</label>
                     <input onChange={(e) => setTitle(e.target.value)} placeholder={`${song?.title}`} name="title"/>
-                <label for="bpm">bpm</label>
+                <label htmlFor="bpm">bpm</label>
                     <input onChange={(e) => setBpm(e.target.value)} placeholder={`${song?.bpm}`} name="bpm"/>
                 <button type="submit">save</button>
                 <button onClick={dltSong}>delete</button>

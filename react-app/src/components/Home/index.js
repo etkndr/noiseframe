@@ -21,15 +21,15 @@ export default function Home() {
 
     return (
         <>
-            <select onChange={(e) => setSelSong(e.target.value)}>
-                <option selected disabled>song list</option>
+            <select onChange={(e) => setSelSong(e.target.value)} defaultValue={"default"}>
+                <option value="default" disabled>song list</option>
                 {songs?.map((song, idx) => {
                     return <option value={song.id} key={idx}>{song.title}</option>
                 })}
             </select>
             <button onClick={() => selSong > 0 && history.push(`/songs/${selSong}`)}>edit song</button>
-            <select type="select" onChange={(e) => setSelInst(e.target.value)}>
-                <option selected disabled>instrument list</option>
+            <select type="select" onChange={(e) => setSelInst(e.target.value)} defaultValue={"default"}>
+                <option value="default" disabled>instrument list</option>
                 {insts?.map((inst, idx) => {
                     return <option value={inst.id} key={idx}>{inst.title}</option>
                 })}

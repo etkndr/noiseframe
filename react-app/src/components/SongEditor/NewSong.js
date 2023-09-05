@@ -1,4 +1,4 @@
-import { NavLink, useParams } from "react-router-dom/cjs/react-router-dom.min"
+import { NavLink } from "react-router-dom/cjs/react-router-dom.min"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import * as songActions from "../../store/songs"
@@ -13,7 +13,7 @@ export default function NewSong() {
     const allInst = useSelector(state => state.instruments)
     const samples = useSelector(state => Object.values(state.samples))
     const [play, setPlay] = useState(false)
-    const [currInst, setCurrInst] = useState("")
+    const [currInst, setCurrInst] = useState(null)
     
     useEffect(() => {
         dispatch(getInstruments())
@@ -49,8 +49,8 @@ export default function NewSong() {
     return (
         <>
             <h2>New song</h2>
-            <select onChange={(e) => setCurrInst(e.target.value)}>
-                <option selected disabled>select an instrument</option>
+            <select onChange={(e) => setCurrInst(e.target.value)} value={currInst} defaultValue={"default"}>
+                <option value="default" disabled>select an instrument</option>
                 {Object.values(allInst)?.map((inst, idx) => {
                     return <option value={inst.id} key={idx}>{inst.title}</option>
                 })}
@@ -66,9 +66,9 @@ export default function NewSong() {
             <button onClick={() => setPlay(!play)}>{!play && "play"}{play && "stop"}</button>
             }
             <form onSubmit={saveSong}>
-                <label for="title">song title</label>
+                <label htmlFor="title">song title</label>
                     <input onChange={(e) => setTitle(e.target.value)} placeholder={`title`} name="title"/>
-                <label for="bpm">bpm</label>
+                <label htmlFor="bpm">bpm</label>
                     <input onChange={(e) => setBpm(e.target.value)} placeholder={`bpm (default 120)`} name="bpm"/>
                 <button type="submit">save</button>
             </form>
