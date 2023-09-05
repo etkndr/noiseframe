@@ -35,6 +35,7 @@ export default function SongEditor() {
     
     useEffect(() => {
         dispatch(sampleActions.getSamples(currInst))
+        dispatch(trackActions.getTracks(id))
     }, [currInst])
     
     function saveSong(e) {
@@ -54,16 +55,14 @@ export default function SongEditor() {
         console.log("success")
     }
 
-    function saveSample(sample, stepArr) {
-        const {id, name, url} = sample
-        const save = dispatch(sampleActions.saveSample(id, {
-            name,
+    function saveTrack(sample, stepArr) {
+        const {id} = sample
+        const save = dispatch(trackActionsActions.saveTrack(id, {
+            sample_id: id,
             steps: stepArr,
-            url
+            volume: 0.8
         }))
     }
-
-    console.log(currInst)
 
     if (song?.user_id !== currUser?.id || !currUser) {
         return "Unauthorized"

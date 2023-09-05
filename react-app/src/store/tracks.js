@@ -40,7 +40,7 @@ function dltTrack(track) {
 }
 
 export const getTracks = (id) => async dispatch => {
-    const res = await fetch(`/api/songs/${id}/tracks`, {
+    const res = await fetch(`/api/songs/${id}/tracks/`, {
         method: "GET"
     })
 

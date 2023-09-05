@@ -38,12 +38,12 @@ export default function NewSong() {
         console.log("success")
     }
 
-    function saveSample(sample, stepArr) {
-        const {id, name, url} = sample
-        const save = dispatch(sampleActions.saveSample(id, {
-            name,
+    function saveTrack(sample, stepArr) {
+        const {id} = sample
+        const save = dispatch(trackActionsActions.saveTrack(id, {
+            sample_id: id,
             steps: stepArr,
-            url
+            volume: 0.8
         }))
     }
 
@@ -78,8 +78,8 @@ export default function NewSong() {
                     return <Sequencer 
                                 url={sample.url}
                                 sample={sample} 
-                                savedSteps={sample.steps} 
-                                saveSample={saveSample}
+                                savedSteps={null} 
+                                saveTrack={saveTrack}
                                 key={idx} 
                             />
                 })}

@@ -23,8 +23,7 @@ class Track(db.Model):
             'id': self.id,
             "song_id": self.song_id,
             "sample_id": self.sample_id,
-            "title": self.title,
-            "steps": self.notes,
+            "steps": self.steps,
             "volume": self.volume,
             "created_at": self.created_at,
             "updated_at": self.updated_at
