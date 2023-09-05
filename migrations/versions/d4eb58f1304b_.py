@@ -66,7 +66,7 @@ def upgrade():
     sa.Column('instrument_id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=False),
     sa.Column('url', sa.String(length=255), nullable=False),
-    sa.Column('steps', sa.String(length=3)),
+    sa.Column('steps', sa.String(length=255)),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.ForeignKeyConstraint(['instrument_id'], ['instruments.id'], ),
