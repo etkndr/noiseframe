@@ -111,7 +111,6 @@ def upload_sample(id):
         sample.filename = get_unique_filename(sample.filename)
         upload = upload_file_to_s3(sample)
         print(upload)
-        print("TEST")
 
         if "url" not in upload:
         # if the dictionary doesn't have a url key
@@ -121,8 +120,7 @@ def upload_sample(id):
 
         name = form.data["name"]
         url = upload["url"]
-        pitch = form.data["pitch"]
-        new_sample = Sample(instrument_id=id, name=name, url=url, pitch=pitch)
+        new_sample = Sample(instrument_id=id, name=name, url=url)
         db.session.add(new_sample)
         db.session.commit()
 

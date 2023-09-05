@@ -9,6 +9,7 @@ class Song(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False)
+    instrument_id = db.Column(db.Integer)
     title = db.Column(db.String(255), nullable=False)
     bpm = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -21,6 +22,7 @@ class Song(db.Model):
         return {
             'id': self.id,
             "user_id": self.user_id,
+            "instrument_id": self.instrument_id,
             "title": self.title,
             "bpm": self.bpm,
             "created_at": self.created_at,

@@ -19,7 +19,6 @@ export default function InstEditor() {
     const [title, setTitle] = useState("Loading...")
     const [sample, setSample] = useState("")
     const [sampleName, setSampleName] = useState("")
-    const [pitch, setPitch] = useState("C3")
     const [sampleLoading, setSampleLoading] = useState(false)
     const [currSample, setCurrSample] = useState("")
     
@@ -47,23 +46,17 @@ export default function InstEditor() {
             env: 1
         }
         const saveEdit = dispatch(instrumentActions.editInstrument(id, newInst))
+        .then(() => setSampleName(""))
         console.log({"success": newInst})
     }
 
     const addSample = (e) => {
         e.preventDefault()
-        let changePitch = samples?.filter((sample) => sample.pitch === pitch)
-        if (changePitch.length) {
-            console.log(pitch, changePitch)
-            return "current note already in use, please choose a different pitch"
-        }
 
         let formData = new FormData()
         formData.append("name", sampleName)
-        formData.append("pitch", pitch)
         formData.append("sample", sample)
         setSampleLoading(true)
-
 
         dispatch(sampleActions.newSample(id, formData))
         .then(() => setSampleLoading(false))
@@ -110,7 +103,6 @@ export default function InstEditor() {
             </form>
             <form onSubmit={addSample} encType="multipart/form-data">
                 <input type="text" onChange={(e) => setSampleName(e.target.value)} placeholder="sample name" value={sampleName}/>
-                <input type="text" onChange={(e) => setPitch(e.target.value)} placeholder="base pitch" value={pitch}/>
                 <input type="file" accept="audio/*" onChange={(e) => setSample(e.target.files[0])} placeholder="sample file"/>
                 <button type="submit">upload</button>
             </form>
