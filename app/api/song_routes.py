@@ -1,5 +1,5 @@
 from app.models import db
-from app.models import Song, Track
+from app.models import Song, Track, Sample
 from app.forms import SongForm, TrackForm
 from flask import Blueprint, request
 from flask_login import current_user, login_required
@@ -89,14 +89,20 @@ def delete_song(id):
     return {"message": "Song successfully deleted"}
 
 # GET TRACKS FOR CURRENT SONG
-@song_routes.route("/<int:id>/tracks")
-def song_tracks(id):
-    song = Song.query.get(id)
-    
+@song_routes.route("/<int:id>/<int:sample_id>")
+def song_tracks(id, sample_id):
+    song = Song.query.get(id)   
     if not song:
         return {"errors": "Song not found"}, 404
     
-    tracks = Track.query.filter(Track.song_id == id).all()
+    sample = Sample.query.get(sample_id)
+    if not sample:
+        return {"errors": "Sample not found"}, 404
+    
+    tracks = (
+        Track.query.filter(Track.song_id == id).all()) and (Track.query.filter(Track.sample_id == sample_id).all()
+    )
+
     
     return {"tracks": [track.to_dict() for track in tracks]}
 

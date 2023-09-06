@@ -57,7 +57,7 @@ export default function SongEditor() {
 
     function saveTrack(sample, stepArr) {
         const {id} = sample
-        const save = dispatch(trackActionsActions.saveTrack(id, {
+        const save = dispatch(trackActions.editTrack(id, {
             sample_id: id,
             steps: stepArr,
             volume: 0.8
@@ -100,7 +100,7 @@ export default function SongEditor() {
                                 url={sample.url}
                                 sample={sample} 
                                 savedSteps={sample.steps} 
-                                saveSample={saveSample} 
+                                saveTrack={saveTrack} 
                                 key={idx} 
                             />
                 })}

@@ -63,7 +63,7 @@ export const getTrack = (id) => async dispatch => {
     }
 }
 
-export const newTrack = (id, track) => async dispatch => {
+export const editTrack = (id, track) => async dispatch => {
     const res = await fetch(`/api/songs/${id}/tracks`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},

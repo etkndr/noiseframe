@@ -40,7 +40,7 @@ export default function NewSong() {
 
     function saveTrack(sample, stepArr) {
         const {id} = sample
-        const save = dispatch(trackActionsActions.saveTrack(id, {
+        const save = dispatch(trackActions.editTrack(id, {
             sample_id: id,
             steps: stepArr,
             volume: 0.8
