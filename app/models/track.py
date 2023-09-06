@@ -1,11 +1,23 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
+
+# Base = declarative_base()
+
+# tracks = db.Table(
+#     "tracks",
+#     Base.metadata,
+#     db.Column("song_id", db.ForeignKey("songs.id"), primary_key=True),
+#     db.Column("sample_id", db.ForeignKey("samples.id"), primary_key=True),
+#     db.Column("steps", db.String)
+#     )
 
 class Track(db.Model):
     __tablename__ = "tracks"
     
     if environment == "production":
         __table_args__ = {'schema': SCHEMA}
+        
 
     id = db.Column(db.Integer, primary_key=True)
     song_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("songs.id")), nullable=False)

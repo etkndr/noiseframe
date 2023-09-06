@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from app.models import db, Sample, Instrument
+from app.models import db, Sample, Instrument, Track
 from app.forms import StepForm
 from flask_login import current_user, login_required
 from app.api.aws_helpers import remove_file_from_s3
@@ -18,6 +18,11 @@ def delete_sample(id):
     inst = Instrument.query.get(sample.instrument_id)
     if inst.user_id != current_user.id:
         return {"errors": "Samples can only be deleted by instrument creator"}, 400
+    
+    tracks = Track.query.filter(Track.sample_id == id).all()
+    
+    for track in tracks:
+        db.session.delete(track)
     
     db.session.delete(sample)
     db.session.commit()

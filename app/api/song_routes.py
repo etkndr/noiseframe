@@ -84,32 +84,31 @@ def delete_song(id):
     if song.user_id != current_user.id:
         return {"errors": "Songs can only be deleted by their creator"}, 400
     
+    tracks = Track.query.filter(Track.song_id == id).all()
+    
+    for track in tracks:
+        db.session.delete(track)
+    
     db.session.delete(song)
     db.session.commit()
+    
     return {"message": "Song successfully deleted"}
 
 # GET TRACKS FOR CURRENT SONG
-@song_routes.route("/<int:id>/<int:sample_id>")
-def song_tracks(id, sample_id):
-    song = Song.query.get(id)   
+@song_routes.route("/<int:id>/tracks")
+def song_tracks(id):
+    song = Song.query.get(id)
     if not song:
         return {"errors": "Song not found"}, 404
+        
+    tracks = Track.query.filter(Track.song_id == id).all()
     
-    sample = Sample.query.get(sample_id)
-    if not sample:
-        return {"errors": "Sample not found"}, 404
-    
-    tracks = (
-        Track.query.filter(Track.song_id == id).all()) and (Track.query.filter(Track.sample_id == sample_id).all()
-    )
-
-    
-    return {"tracks": [track.to_dict() for track in tracks]}
+    return [track.to_dict() for track in tracks]
 
 # SAVE NEW TRACK
-@song_routes.route("/<int:id>/tracks", methods=["POST"])
+@song_routes.route("/<int:id>/<int:sample_id>", methods=["POST"])
 @login_required
-def new_track(id):
+def new_track(id, sample_id):
     form = TrackForm()
     form["csrf_token"].data = request.cookies["csrf_token"]
     
@@ -119,10 +118,14 @@ def new_track(id):
     if song.user_id != current_user.id:
         return {"errors": "Tracks can only be added by song creator"}, 400
     
+    sample = Sample.query.get(sample_id)
+    if not sample:
+        return {"errors": "Sample not found"}, 404
+    
     if form.validate_on_submit():
         track = Track(
             song_id = id,
-            sample_id = form.data["sample_id"],
+            sample_id = sample_id,
             steps = form.data["steps"],
             volume = form.data["volume"]
         )
@@ -131,4 +134,5 @@ def new_track(id):
         db.session.commit()
         
         return track.to_dict()
+    
     return {"errors": validation_errors_to_error_messages(form.errors)}, 401
