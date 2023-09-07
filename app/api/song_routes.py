@@ -22,13 +22,6 @@ def get_one_song(id):
     
     if not song:
         return {"errors": "Song not found"}, 404
-    
-    samples = Sample.query.filter(Sample.instrument_id == song.instrument_id).all()
-    sample_ids = [sample.id for sample in samples]
-    tracks = Track.query.filter(Track.song_id == song.id).all()
-    
-    for track in tracks:
-        pass
 
     return song.to_dict()
 

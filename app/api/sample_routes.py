@@ -23,6 +23,7 @@ def delete_sample(id):
     
     for track in tracks:
         db.session.delete(track)
+        db.session.commit()
     
     db.session.delete(sample)
     db.session.commit()
