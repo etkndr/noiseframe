@@ -40,7 +40,7 @@ function dltTrack(track) {
 }
 
 export const getTracks = (id) => async dispatch => {
-    const res = await fetch(`/api/songs/${id}/tracks/`, {
+    const res = await fetch(`/api/songs/${id}/tracks`, {
         method: "GET"
     })
 
@@ -109,10 +109,11 @@ export default function tracks(state = initState, action) {
     let newState = {...state}
     switch (action.type) {
         case GET_TRACKS:
-            action.tracks.tracks.forEach((track) => {
-                newState[track.id] = track
+            let trackState = {}
+            action.tracks.forEach((track) => {
+                trackState[track.id] = track
             })
-            return newState
+            return trackState
         case GET_TRACK:
             newState[action.track.id] = action.track
             return newState
@@ -121,6 +122,7 @@ export default function tracks(state = initState, action) {
             return newState
         case EDIT_TRACK:
             newState[action.track.id] = action.track
+            return newState
         case DELETE_TRACK:
             delete newState[action.track.id]
             return newState

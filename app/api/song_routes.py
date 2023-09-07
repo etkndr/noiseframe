@@ -22,6 +22,13 @@ def get_one_song(id):
     
     if not song:
         return {"errors": "Song not found"}, 404
+    
+    samples = Sample.query.filter(Sample.instrument_id == song.instrument_id).all()
+    sample_ids = [sample.id for sample in samples]
+    tracks = Track.query.filter(Track.song_id == song.id).all()
+    
+    for track in tracks:
+        pass
 
     return song.to_dict()
 
@@ -37,24 +44,23 @@ def new_song():
             user_id = current_user.id,
             instrument_id = form.data["instrument_id"],
             title = form.data["title"],
-            bpm = form.data["bpm"]    
+            bpm = form.data["bpm"]
         )
-        
-        samples = Sample.query.filter(Sample.instrument_id == song.instrument_id).all()
-        for sample in samples:
-            track_form = TrackForm()
-            if track_form.validate_on_submit():
-                track = Track(
-                    song_id = song.id,
-                    sample_id = sample.id,
-                    steps = track_form.data["steps"],
-                    volume = track_form.data["volume"]
-                )
-                
-                db.session.add(track)
         
         db.session.add(song)
         db.session.commit()
+        
+        samples = Sample.query.filter(Sample.instrument_id == form.data["instrument_id"]).all()
+        for sample in samples:
+            track = Track(
+                song_id = song.id,
+                sample_id = sample.id,
+                steps = "",
+                volume = -3
+            )
+            
+            db.session.add(track)
+            db.session.commit()
         
         return song.to_dict()
     return {"errors": validation_errors_to_error_messages(form.errors)}, 401
@@ -83,16 +89,15 @@ def edit_song(id):
                 
             samples = Sample.query.filter(Sample.instrument_id == new_inst).all()
             for sample in samples:
-                track_form = TrackForm()
-                if track_form.validate_on_submit():
-                    track = Track(
-                        song_id = song.id,
-                        sample_id = sample.id,
-                        steps = track_form.data["steps"],
-                        volume = track_form.data["volume"]
-                    )
-                    
-                    db.session.add(track)
+                track = Track(
+                    song_id = song.id,
+                    sample_id = sample.id,
+                    steps = "",
+                    volume = -3
+                )
+                
+                db.session.add(track)
+                db.session.commit()
                     
         
         song.user_id = current_user.id
@@ -121,6 +126,7 @@ def delete_song(id):
     
     for track in tracks:
         db.session.delete(track)
+        db.session.commit()
     
     db.session.delete(song)
     db.session.commit()
