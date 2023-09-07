@@ -40,6 +40,19 @@ def new_song():
             bpm = form.data["bpm"]    
         )
         
+        samples = Sample.query.filter(Sample.instrument_id == song.instrument_id).all()
+        for sample in samples:
+            track_form = TrackForm()
+            if track_form.validate_on_submit():
+                track = Track(
+                    song_id = song.id,
+                    sample_id = sample.id,
+                    steps = track_form.data["steps"],
+                    volume = track_form.data["volume"]
+                )
+                
+                db.session.add(track)
+        
         db.session.add(song)
         db.session.commit()
         
@@ -62,8 +75,28 @@ def edit_song(id):
     form["csrf_token"].data = request.cookies["csrf_token"]
 
     if form.validate_on_submit():
+        new_inst = form.data["instrument_id"]
+        if song.instrument_id != new_inst:
+            old_tracks = Track.query.filter(Track.song_id == song.id).all()
+            for track in old_tracks:
+                db.session.delete(track)
+                
+            samples = Sample.query.filter(Sample.instrument_id == new_inst).all()
+            for sample in samples:
+                track_form = TrackForm()
+                if track_form.validate_on_submit():
+                    track = Track(
+                        song_id = song.id,
+                        sample_id = sample.id,
+                        steps = track_form.data["steps"],
+                        volume = track_form.data["volume"]
+                    )
+                    
+                    db.session.add(track)
+                    
+        
         song.user_id = current_user.id
-        song.instrument_id = form.data["instrument_id"]
+        song.instrument_id = new_inst
         song.title = form.data["title"]
         song.bpm = form.data["bpm"] 
         
@@ -104,35 +137,3 @@ def song_tracks(id):
     tracks = Track.query.filter(Track.song_id == id).all()
     
     return [track.to_dict() for track in tracks]
-
-# SAVE NEW TRACK
-@song_routes.route("/<int:id>/<int:sample_id>", methods=["POST"])
-@login_required
-def new_track(id, sample_id):
-    form = TrackForm()
-    form["csrf_token"].data = request.cookies["csrf_token"]
-    
-    song = Song.query.get(id)
-    if not song:
-        return {"errors": "Song not found"}, 404
-    if song.user_id != current_user.id:
-        return {"errors": "Tracks can only be added by song creator"}, 400
-    
-    sample = Sample.query.get(sample_id)
-    if not sample:
-        return {"errors": "Sample not found"}, 404
-    
-    if form.validate_on_submit():
-        track = Track(
-            song_id = id,
-            sample_id = sample_id,
-            steps = form.data["steps"],
-            volume = form.data["volume"]
-        )
-
-        db.session.add(track)
-        db.session.commit()
-        
-        return track.to_dict()
-    
-    return {"errors": validation_errors_to_error_messages(form.errors)}, 401

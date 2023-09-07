@@ -1,16 +1,7 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
-
-# Base = declarative_base()
-
-# tracks = db.Table(
-#     "tracks",
-#     Base.metadata,
-#     db.Column("song_id", db.ForeignKey("songs.id"), primary_key=True),
-#     db.Column("sample_id", db.ForeignKey("samples.id"), primary_key=True),
-#     db.Column("steps", db.String)
-#     )
+from app.models import Song, Sample
 
 class Track(db.Model):
     __tablename__ = "tracks"
@@ -40,3 +31,17 @@ class Track(db.Model):
             "created_at": self.created_at,
             "updated_at": self.updated_at
         }
+        
+        
+# tSong = Song.__table__
+# tTrack = Track.__table__
+# tSample = Sample.__table__
+
+# update = (
+#     tTrack.update()
+#     .where(tSong.c.instrument_id == tSample.c.instrument_id)
+#     .values(song_id=tSong.c.id)
+#     .values(sample_id=tSample.c.id)
+# )
+
+# resUpdate = db.execute(update)

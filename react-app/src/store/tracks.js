@@ -1,6 +1,6 @@
 const GET_TRACKS = "tracks/GET_TRACKS"
 const GET_TRACK = "tracks/GET_TRACK"
-const NEW_TRACK = "tracks/NEW_TRACK"
+const SAVE_TRACK = "tracks/SAVE_TRACK"
 const EDIT_TRACK = "tracks/EDIT_TRACK"
 const DELETE_TRACK = "tracks/DELETE_TRACK"
 
@@ -20,7 +20,7 @@ function loadTrack(track) {
 
 function newTrack(track) {
     return {
-        type: NEW_TRACK,
+        type: SAVE_TRACK,
         track
     }
 }
@@ -63,8 +63,8 @@ export const getTrack = (id) => async dispatch => {
     }
 }
 
-export const editTrack = (id, track) => async dispatch => {
-    const res = await fetch(`/api/songs/${id}/tracks`, {
+export const saveTrack = (id, sampleId, track) => async dispatch => {
+    const res = await fetch(`/api/songs/${id}/${sampleId}`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(track)
@@ -77,7 +77,7 @@ export const editTrack = (id, track) => async dispatch => {
     }
 }
 
-const saveTrack = (id, track) => async dispatch => {
+export const editTrack = (id, track) => async dispatch => {
     const res = await fetch(`/api/tracks/${id}`, {
         method: "PUT",
         headers: {"Content-Type": "application/json"},
@@ -91,7 +91,7 @@ const saveTrack = (id, track) => async dispatch => {
     }
 }
 
-const deleteTrack = (id) => async dispatch => {
+export const deleteTrack = (id) => async dispatch => {
     const res = await fetch(`/api/tracks/${id}`,{
         method: "DELETE"
     })
@@ -116,7 +116,7 @@ export default function tracks(state = initState, action) {
         case GET_TRACK:
             newState[action.track.id] = action.track
             return newState
-        case NEW_TRACK:
+        case SAVE_TRACK:
             newState[action.track.id] = action.track
             return newState
         case EDIT_TRACK:
