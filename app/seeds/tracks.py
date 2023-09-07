@@ -3,11 +3,11 @@ from sqlalchemy.sql import text
 
 def seed_tracks():
     test1 = Track(
-        song_id=1, instrument_id=1, title='test1', notes="C3 E3 G3", volume=0.5)
+        song_id=1, sample_id=1, steps="C3 C3 null null C3 null null null null C3 null C3 null null null null", volume=0.5)
     test2 = Track(
-        song_id=2, instrument_id=2, title='test2', notes="C3 E3 G3", volume=0.5)
+        song_id=2, sample_id=2, steps="C3 C3 null null C3 null null null null C3 null C3 null null null null", volume=0.5)
     test3 = Track(
-        song_id=3, instrument_id=3, title='test3', notes="C3 E3 G3", volume=0.5)
+        song_id=3, sample_id=3, steps="C3 C3 null null C3 null null null null C3 null C3 null null null null", volume=0.5)
 
     db.session.add(test1)
     db.session.add(test2)

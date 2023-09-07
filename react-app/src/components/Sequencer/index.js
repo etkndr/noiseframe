@@ -3,7 +3,7 @@ import { Track, Instrument } from "reactronica"
 import Toggle from "./Toggle"
 import style from "./Sequencer.module.css"
 
-export default function Sequencer({url, sample, savedSteps, saveSample, muted}) {
+export default function Sequencer({url, sample, savedSteps, saveTrack, track}) {
 
     const [steps, setSteps] = useState({})
     const [mute, setMute] = useState(false)
@@ -42,7 +42,8 @@ export default function Sequencer({url, sample, savedSteps, saveSample, muted}) 
                 return step
             }
         })
-        saveSample(sample, joinSteps.join(" "))
+
+        saveTrack(track, joinSteps.join(" "))
     }, [steps])
 
     function handleToggle(step, state) {

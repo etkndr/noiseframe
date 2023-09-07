@@ -11,11 +11,11 @@ class Sample(db.Model):
     instrument_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("instruments.id")), nullable=False)
     name = db.Column(db.String(255), nullable=False)
     url = db.Column(db.String(255), nullable=False)
-    steps = db.Column(db.String(255))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
     
     instrument = db.relationship("Instrument", back_populates="sample")
+    track = db.relationship("Track", back_populates="sample")
     
     def to_dict(self):
         return {
@@ -23,7 +23,6 @@ class Sample(db.Model):
             "instrument_id": self.instrument_id,
             "name": self.name,
             "url": self.url,
-            "steps": self.steps,
             "created_at": self.created_at,
             "updated_at": self.updated_at
         }

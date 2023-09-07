@@ -63,8 +63,8 @@ export const getTrack = (id) => async dispatch => {
     }
 }
 
-export const saveTrack = (id, track) => async dispatch => {
-    const res = await fetch(`/api/songs/${id}/tracks`, {
+export const saveTrack = (id, sampleId, track) => async dispatch => {
+    const res = await fetch(`/api/songs/${id}/${sampleId}`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(track)
@@ -77,7 +77,7 @@ export const saveTrack = (id, track) => async dispatch => {
     }
 }
 
-const editTrack = (id, track) => async dispatch => {
+export const editTrack = (id, track) => async dispatch => {
     const res = await fetch(`/api/tracks/${id}`, {
         method: "PUT",
         headers: {"Content-Type": "application/json"},
@@ -91,7 +91,7 @@ const editTrack = (id, track) => async dispatch => {
     }
 }
 
-const deleteTrack = (id) => async dispatch => {
+export const deleteTrack = (id) => async dispatch => {
     const res = await fetch(`/api/tracks/${id}`,{
         method: "DELETE"
     })
@@ -109,10 +109,11 @@ export default function tracks(state = initState, action) {
     let newState = {...state}
     switch (action.type) {
         case GET_TRACKS:
-            action.tracks.tracks.forEach((track) => {
-                newState[track.id] = track
+            let trackState = {}
+            action.tracks.forEach((track) => {
+                trackState[track.id] = track
             })
-            return newState
+            return trackState
         case GET_TRACK:
             newState[action.track.id] = action.track
             return newState
@@ -121,6 +122,7 @@ export default function tracks(state = initState, action) {
             return newState
         case EDIT_TRACK:
             newState[action.track.id] = action.track
+            return newState
         case DELETE_TRACK:
             delete newState[action.track.id]
             return newState

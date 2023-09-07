@@ -20,7 +20,7 @@ def get_track(id):
 # SAVE TRACK EDITS
 @track_routes.route("/<int:id>", methods=["PUT"])
 @login_required
-def edit_track(id, song_id):
+def edit_track(id):
     track = Track.query.get(id)
     if not track:
         return {"errors": "Track not found"}, 404
@@ -28,17 +28,15 @@ def edit_track(id, song_id):
     form = TrackForm()
     form["csrf_token"].data = request.cookies["csrf_token"]
     
-    song = Song.query.get(song_id)
+    song = Song.query.get(track.song_id)
     if not song:
         return {"errors": "Song not found"}, 404
     if song.user_id != current_user.id:
         return {"errors": "Tracks can only be edited by song creator"}, 400
     
     if form.validate_on_submit():
-        track.instrument_id = form.instrument_id
-        track.title = form.title
-        track.notes = form.notes
-        track.volume = form.volume
+        track.steps = form.data["steps"]
+        track.volume = form.data["volume"]
 
         db.session.commit()
         
