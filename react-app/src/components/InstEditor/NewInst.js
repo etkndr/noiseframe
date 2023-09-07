@@ -7,9 +7,6 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
 export default function NewInst() {
     const history = useHistory()
     const dispatch = useDispatch()
-    const currUser = useSelector(state => state.session.user)
-
-    // load settings from instrument
     const [title, setTitle] = useState("")
     
     

@@ -28,7 +28,7 @@ export default function Home() {
                 })}
             </select>
             <button onClick={() => selSong > 0 && history.push(`/songs/${selSong}`)}>edit song</button>
-            <select type="select" onChange={(e) => setSelInst(e.target.value)}>
+            <select onChange={(e) => setSelInst(e.target.value)}>
                 <option selected disabled>instrument list</option>
                 {insts?.map((inst, idx) => {
                     return <option value={inst.id} key={idx}>{inst.title}</option>

@@ -1,4 +1,4 @@
-from app.models import db, Instrument, Sample
+from app.models import db, Instrument, Sample, Song, Track
 from app.forms import InstrumentForm, SampleForm
 from flask import Blueprint, request
 from flask_login import current_user, login_required
@@ -123,6 +123,19 @@ def upload_sample(id):
         new_sample = Sample(instrument_id=id, name=name, url=url)
         db.session.add(new_sample)
         db.session.commit()
+        
+        songs = Song.query.filter(Song.instrument_id == id).all()
+        
+        for song in songs:
+            track = Track(
+                song_id = song.id,
+                sample_id = new_sample.id,
+                steps = "",
+                volume = -3  
+            )
+            
+            db.session.add(track)
+            db.session.commit()
 
         return new_sample.to_dict()
 
