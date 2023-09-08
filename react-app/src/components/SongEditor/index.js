@@ -101,7 +101,7 @@ export default function SongEditor() {
                                 url={sample.url}
                                 sample={sample} 
                                 savedSteps={tracks[idx]?.steps} 
-                                saveTrack={() => saveTrack} 
+                                saveTrack={saveTrack} 
                                 track={tracks[idx]}
                                 key={tracks[idx]?.id}
                             />
