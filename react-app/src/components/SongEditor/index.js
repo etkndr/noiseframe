@@ -26,7 +26,7 @@ export default function SongEditor() {
         dispatch(songActions.getSong(id))
         dispatch(trackActions.getTracks(id))
     }, [dispatch])
-
+    
     useEffect(() => {
         dispatch(getInstruments())
         
@@ -36,7 +36,9 @@ export default function SongEditor() {
     }, [song])
     
     useEffect(() => {
-        dispatch(sampleActions.getSamples(currInst))
+        if (currInst) {
+            dispatch(sampleActions.getSamples(currInst))
+        }
     }, [currInst])
     
     function saveSong(e) {
@@ -99,9 +101,9 @@ export default function SongEditor() {
                                 url={sample.url}
                                 sample={sample} 
                                 savedSteps={tracks[idx]?.steps} 
-                                saveTrack={saveTrack} 
+                                saveTrack={() => saveTrack} 
                                 track={tracks[idx]}
-                                key={idx} 
+                                key={tracks[idx]?.id}
                             />
                 })}
             </Song>
