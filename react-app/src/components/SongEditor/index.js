@@ -15,7 +15,7 @@ export default function SongEditor() {
     const song = useSelector(state => state.songs)
     const allInst = useSelector(state => state.instruments)
     const samples = useSelector(state => Object.values(state.samples))
-    const tracks = useSelector(state => Object.values(state.tracks))
+    let tracks = useSelector(state => Object.values(state.tracks))
     const [play, setPlay] = useState(false)
     
     const [currInst, setCurrInst] = useState("")
@@ -26,7 +26,7 @@ export default function SongEditor() {
         dispatch(songActions.getSong(id))
         dispatch(trackActions.getTracks(id))
     }, [dispatch])
-
+    
     useEffect(() => {
         dispatch(getInstruments())
         
@@ -36,7 +36,9 @@ export default function SongEditor() {
     }, [song])
     
     useEffect(() => {
-        dispatch(sampleActions.getSamples(currInst))
+        if (currInst) {
+            dispatch(sampleActions.getSamples(currInst))
+        }
     }, [currInst])
     
     function saveSong(e) {
@@ -62,6 +64,8 @@ export default function SongEditor() {
             volume: -3
         }))
     }
+
+    console.log(tracks)
 
     if (song?.user_id !== currUser?.id || !currUser) {
         return "Unauthorized"
@@ -99,9 +103,9 @@ export default function SongEditor() {
                                 url={sample.url}
                                 sample={sample} 
                                 savedSteps={tracks[idx]?.steps} 
-                                saveTrack={saveTrack} 
+                                saveTrack={() => saveTrack} 
                                 track={tracks[idx]}
-                                key={idx} 
+                                key={tracks[idx]?.id}
                             />
                 })}
             </Song>
