@@ -15,7 +15,7 @@ export default function SongEditor() {
     const song = useSelector(state => state.songs)
     const allInst = useSelector(state => state.instruments)
     const samples = useSelector(state => Object.values(state.samples))
-    let tracks = useSelector(state => Object.values(state.tracks))
+    const tracks = useSelector(state => Object.values(state.tracks))
     const [play, setPlay] = useState(false)
     
     const [currInst, setCurrInst] = useState("")
@@ -64,8 +64,6 @@ export default function SongEditor() {
             volume: -3
         }))
     }
-
-    console.log(tracks)
 
     if (song?.user_id !== currUser?.id || !currUser) {
         return "Unauthorized"
