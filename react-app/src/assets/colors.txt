@@ -1,0 +1,12 @@
+dark blue #3A4951
+med blue #51636C
+light blue #C1D0D5
+light beige #F1EBE3
+med beige #DFD7CD
+
+
+dark green #333523
+gold #C8AD55
+pearl #E1DAC4
+green slate #646C41
+moss #899147

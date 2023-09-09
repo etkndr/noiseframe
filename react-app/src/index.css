@@ -3,18 +3,28 @@
 }
 
 body {
-    background-color: #3A4951;
-    color: #C1D0D5;
-    font-size: 14pt;
+    background-image: url("./assets/bg.png"), url("./assets/layer02.png");
+    background-repeat: repeat, no-repeat;
+    background-position: center;
+    background-color: #646C41;
+    color: #121400;
+    font-size: 12pt;
 }
 
 .container {
-    width: 95%;
-    margin: 0 auto;
+    width: 80%;
+    height: 75vh;
+    background-color: #E1DAC4;
+    background-clip: padding-box;
+    padding: 1%;
+    margin: 3% auto;
+    border: 15px solid #c8ad55a9;
+    transition-property: width;
+    transition-duration: 4s;
 }
 
 button, input {
-    background-color: #51636C;
+    background-color: #333523;
     color: #DFD7CD;
     font-size: 14pt;
     border: 3px solid #DFD7CD;
@@ -30,7 +40,7 @@ select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    background-color: #51636C;
+    background-color: #333523;
     color: #DFD7CD;
     font-size: 14pt;
     border: 3px solid #DFD7CD;
