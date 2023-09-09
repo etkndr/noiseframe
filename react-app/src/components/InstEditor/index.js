@@ -120,8 +120,18 @@ export default function InstEditor() {
                 {samples?.map((sample, idx) => {
                     return (
                         <li key={idx}>{sample.name}
-                    <button onClick={() => handleFocus(idx)}>play</button>
-                    <button onClick={() => setPlaying(false)}>stop</button>
+                    <button onClick={() => {
+                        if (playing && currSample === idx) {
+                            setPlaying(false)
+                        } else {
+                            handleFocus(idx)
+                        }
+                        }}>
+                            {playing && currSample === idx && "stop"}
+                            {!playing && "play"}
+                            {playing && currSample !== idx && "play"}
+                    </button>
+                    {/* <button onClick={() => setPlaying(false)}>stop</button> */}
                     <button onClick={(e) => dltSample(e, sample.id)}>delete</button>
                     </li>
                     )
