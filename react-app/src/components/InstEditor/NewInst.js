@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import * as instrumentActions from "../../store/instruments"
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
+import "./Instrument.css"
 
 
 export default function NewInst() {
@@ -24,8 +25,10 @@ export default function NewInst() {
 
     return (
         <>
+        <div className="inst-form">
             <input onChange={(e) => setTitle(e.target.value)} value={title} placeholder="instrument title"/>
             <button onClick={save}>create instrument</button>
+        </div>
         </>
     )
 }

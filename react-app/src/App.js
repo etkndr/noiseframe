@@ -22,6 +22,7 @@ function App() {
   return (
     <div className="container">
       <Navigation isLoaded={isLoaded} />
+      <div className="main">
       {isLoaded && (
         <Switch>
           <Route path="/login" >
@@ -50,6 +51,7 @@ function App() {
           </Route>
         </Switch>
       )}
+      </div>
     </div>
   );
 }

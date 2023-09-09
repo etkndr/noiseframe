@@ -20,42 +20,79 @@ export default function Home() {
         dispatch(instrumentActions.getInstruments())
     }, [dispatch])
 
-    
-
     return (
         <>
-        <div className="lists">
-            <div className="list">
-                {songs?.map((song, idx) => {
-                    let select = ""
-                    if (song.id === selSong) {
-                        select = "select"
-                    }
-                    return <li 
-                        onClick={() => setSelSong(song.id)} 
-                        className={select}
-                        key={idx}>
-                    {song.title}</li>
-                })}
+        <div className="home-left">
+            <div className="lists">
+                <div className="list-container">
+                    <div className="list-title">
+                        <h3>all songs</h3>
+                    </div>
+                    <div className="list">
+                        {!songs?.length &&
+                            <p>
+                                you haven't created any songs yet. click the "new song" button below to get started.
+                            </p>
+                        }
+                        {!songs?.length && !insts?.length &&
+                            <p>
+                                you haven't created any songs or instruments yet. first, create an instrument by clicking the "new instrument" button below, then come back and create a song.
+                            </p>
+                        }
+                        {songs?.map((song, idx) => {
+                            let select = ""
+                            if (song.id === selSong) {
+                                select = "select"
+                            }
+                            return <li 
+                            onClick={() => setSelSong(song.id)} 
+                            className={select}
+                            key={idx}>
+                            {song.title}</li>
+                        })}
+                    </div>
+                    <div className="list-btns">
+                        <button onClick={() => selSong > 0 && history.push(`/songs/${selSong}`)} disabled={!selSong}>edit song</button>
+                        <button onClick={() => history.push("/songs")} disabled={!insts.length}>new song</button>
+                    </div>
+                </div>
+                <div className="list-container">
+                    <div className="list-title">
+                            <h3>all instruments</h3>
+                    </div>
+                    <div className="list">
+                        {!insts?.length &&
+                            <p>
+                                you haven't created any instruments yet. click the "new instrument" button below to get started.
+                            </p>
+                        }
+                        {insts?.map((inst, idx) => {
+                            let select = ""
+                            if (inst.id === selInst) {
+                                select = "select"
+                            }
+                            return <li 
+                                onClick={() => setSelInst(inst.id)} 
+                                className={select}
+                                key={idx}>{inst.title}</li>
+                        })}
+                    </div>
+                    <div className="list-btns">
+                        <button onClick={() => selInst > 0 && history.push(`/instruments/${selInst}`)} disabled={!selInst}>edit instrument</button>
+                        <button onClick={() => history.push("/instruments")}>new instrument</button>
+                    </div>
+                    </div>
+                </div>
             </div>
-            <button onClick={() => selSong > 0 && history.push(`/songs/${selSong}`)}>edit song</button>
-            <div className="list">
-                {insts?.map((inst, idx) => {
-                    let select = ""
-                    if (inst.id === selInst) {
-                        select = "select"
-                    }
-                    return <li 
-                        onClick={() => setSelInst(inst.id)} 
-                        className={select}
-                        key={idx}>{inst.title}</li>
-                })}
-            </div>
-            <button onClick={() => selInst > 0 && history.push(`/instruments/${selInst}`)}>edit instrument</button>
-            </div>
-            <div>
-                <button onClick={() => history.push("/songs")}>new song</button>
-                <button onClick={() => history.push("/instruments")}>new instrument</button>
+            <div className="home-right">
+                <h3>instructions</h3>
+                <p>
+                    to get started, you will first need an instrument. 
+                    each instrument can hold multiple sound files, which can be uploaded from your computer.
+                    after creating an instrument, you can begin adding songs. songs hold one instrument at a time, 
+                    and are used to create patterns which trigger playback of the sound files in the instrument.
+                    and that's all there is to it. have fun!
+                </p>
             </div>
         </>
     )
