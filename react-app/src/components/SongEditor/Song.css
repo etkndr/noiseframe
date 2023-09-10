@@ -11,6 +11,10 @@
     margin-bottom: 5px;
 }
 
+.song-btns button {
+    margin-right: 10px;
+}
+
 .song-title.title {
     margin-top: 1.5%;
 }

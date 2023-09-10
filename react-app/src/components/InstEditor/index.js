@@ -1,5 +1,5 @@
 import { NavLink, useParams } from "react-router-dom/cjs/react-router-dom.min"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Song, Track, Instrument } from "reactronica"
 import * as instrumentActions from "../../store/instruments"
@@ -10,6 +10,7 @@ import "./Instrument.css"
 
 export default function InstEditor() {
     const dispatch = useDispatch()
+    const resetFile = useRef(null)
     const {id} = useParams()
     const currUser = useSelector(state => state.session.user)
     const inst = useSelector(state => state.instruments[id])
@@ -95,6 +96,12 @@ export default function InstEditor() {
         .then(() => {
             setSample("")
             setSampleName("")
+
+            if (resetFile.current) {
+                resetFile.current.value = "";
+                resetFile.current.type = "text";
+                resetFile.current.type = "file";
+            }
         })
     }
 
@@ -149,7 +156,7 @@ export default function InstEditor() {
             </Song>
             <form className="sample-form" onSubmit={addSample} encType="multipart/form-data">
                 <input className="sample-input" type="text" onChange={(e) => setSampleName(e.target.value)} placeholder="sample name" value={sampleName}/>
-                <input className="sample-input" type="file" accept="audio/*" onChange={(e) => setSample(e.target.files[0])} placeholder="sample file"/>
+                <input className="sample-input" ref={resetFile} type="file" accept="audio/*" onChange={(e) => setSample(e.target.files[0])} placeholder="sample file"/>
                 <button type="submit">upload</button>
             </form>
             <div className="err-container">

@@ -93,11 +93,12 @@ export default function SongEditor() {
                     name="bpm" 
                     value={bpm}/> bpm
             </div>
-            <div>
+            <div className="song-btns">
                 {selInst &&
                     <button className="play-song" onClick={() => setPlay(!play)}>{!play && "play"}{play && "stop"}</button>
                 }
                 <button onClick={saveSong}>save song</button>
+                <button onClick={dltSong}>delete song</button>
             </div>
             <div>
                 <Song bpm={bpm*2 || 240} isPlaying={play}>
