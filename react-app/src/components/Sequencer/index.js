@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { Track, Instrument } from "reactronica"
 import Toggle from "./Toggle"
-import style from "./Sequencer.module.css"
+import "./Sequencer.css"
 
 export default function Sequencer({url, sample, savedSteps, saveTrack, track}) {
 
@@ -63,23 +63,27 @@ export default function Sequencer({url, sample, savedSteps, saveTrack, track}) {
 
     return (
         <>
-        <div>
+        <div className="sample-name">
             {sample?.name}
-            {Object.values(steps).map((step, idx) => {
+        </div>
+        <div className="seq">
+        <div className="seq-row">
+            {Object.values(steps)?.map((step, idx) => {
                 return (
                     <Toggle 
                         handleToggle={handleToggle} 
                         step={idx} 
-                        on={step !== null} 
+                        on={step !== null}
                         key={idx}
                     />
                 )
             })}
-            <button onClick={() => setMute(!mute)}>{mute && `unmute`} {!mute && `mute`}</button>
         </div>
+            <button className="mute" onClick={() => setMute(!mute)}><span className="muted">{mute && `unmute`}</span> {!mute && `mute`}</button>
         <Track steps={Object.values(steps)} onStepPlay={handleStepChange} mute={mute}>
             <Instrument type="sampler" samples={{"C3": url}}/>
         </Track>
+        </div>
         </>
     )
 }

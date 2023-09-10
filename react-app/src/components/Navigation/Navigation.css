@@ -1,0 +1,25 @@
+.nav {
+  height: 70px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0;
+}
+ 
+.profile-dropdown {
+  margin-top: 70px;
+}
+
+.hidden {
+  display: none;
+}
+
+.logo {
+  width: 150px;
+}
+
+.profile {
+  display: flex;
+  justify-content: flex-end;
+}

@@ -1,0 +1,42 @@
+.inst {
+    width: 100%;
+    padding: 0 20px 0 20px;
+}
+.inst-title {
+    background-color: #E1DAC4;
+    border: 0;
+    font-size: 12pt;
+    font-weight: 800;
+    color: #333523;
+    max-width: fit-content;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.sample-form {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-height: 30px;
+    align-items: center;
+}
+
+.sample-input {
+    width: 40%;
+    max-height: 25px;
+    margin: 0;
+}
+
+.err-container {
+    width: 100%;
+    display: flex;
+}
+
+.err {
+    width: 43.5%;
+    color: red;
+    font-size: 8pt;
+    font-weight: 400;
+    max-height: 5px;
+}

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import * as songActions from "../../store/songs"
 import * as instrumentActions from "../../store/instruments"
 import { useEffect, useState } from "react"
+import "./Song.css"
 
 export default function NewSong() {
     const history = useHistory()
@@ -10,16 +11,49 @@ export default function NewSong() {
     const insts = useSelector(state => Object.values(state.instruments))
     const [title, setTitle] = useState("")
     const [bpm, setBpm] = useState("")
-    const [currInst, setCurrInst] = useState("")
+    const [selInst, setSelInst] = useState("")
+    const [err, setErr] = useState({})
     
     useEffect(() =>{
         dispatch(instrumentActions.getInstruments())
     }, [dispatch])
+
+    useEffect(() => {
+        if (title) {
+            setErr((prev) => ({
+                ...prev,
+                1: null
+            }))
+        } 
+        if (bpm) {
+            setErr((prev) => ({
+                ...prev,
+                2: null
+            }))
+        } 
+    }, [bpm, title])
     
     const save = (e) => {
         e.preventDefault()
+
+        if (!title) {
+            setErr((prev) => ({
+                ...prev,
+                1: "please enter a name for your song"
+            }))
+        } 
+        if (!bpm) {
+            setErr((prev) => ({
+                ...prev,
+                2: "please select bpm for your song"
+            }))
+        }
+        if (bpm && title) {
+            setErr({})
+        }
+
         const newSong = {
-            instrument_id: currInst,
+            instrument_id: selInst,
             title,
             bpm
         }
@@ -29,15 +63,45 @@ export default function NewSong() {
 
     return (
         <>
+        <div className="inst-form">
             <input onChange={(e) => setTitle(e.target.value)} value={title} placeholder="song title"/>
             <input onChange={(e) => setBpm(e.target.value)} value={bpm} placeholder="bpm"/>
-            <select onChange={(e) => setCurrInst(e.target.value)}>
-                <option selected disabled>select an instrument</option>
-                {insts?.map((instrument, idx) => {
-                    return <option value={instrument.id} key={idx}>{instrument.title}</option>
-                })}
-            </select>
+            <div className="err-container">
+                <div className="err">
+                <p>
+                    {err[1] && err[1]}
+                </p>
+                </div>
+                <div className="err">
+                <p>
+                    {err[2] && err[2]}
+                </p>
+                </div>
+            </div>
+            <div className="list-container">
+                <div className="list-title">
+                        <h3>all instruments</h3>
+                </div>
+                <div className="list">
+                    {!insts?.length &&
+                        <p>
+                            you haven't created any instruments yet. click the "new instrument" button below to get started.
+                        </p>
+                    }
+                    {insts?.map((inst, idx) => {
+                        let select = ""
+                        if (inst.id === selInst) {
+                            select = "select"
+                        }
+                        return <li 
+                            onClick={() => setSelInst(inst.id)} 
+                            className={select}
+                            key={idx}>{inst.title}</li>
+                    })}
+                </div>
+            </div>
             <button onClick={save}>create song</button>
+        </div>
         </>
     )
 }

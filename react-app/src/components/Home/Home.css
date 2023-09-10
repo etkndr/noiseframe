@@ -1,0 +1,91 @@
+.home-left {
+    width: 60%;
+    min-width: 60%;
+    height: 100%;
+    padding-left: 20px;
+}
+
+.lists {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+.list-container {
+    width: 50%;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.list-container.editor {
+    width: 100%;
+}
+
+.list-title {
+    width: 100%;
+    margin: 0 0 0 5%;
+    padding: 0;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.list-title h3 {
+    line-height: 5px;
+}
+
+.list {
+    width: 95%;
+    height: 70%;
+    background-color: #c5bea6;
+    overflow-y: scroll;
+}
+
+.list li {
+    cursor: pointer;
+    color: #E1DAC4;
+    background-color: #575e38;
+    padding: 5px 10px;
+    margin-bottom: 2px;
+}
+
+.list li:hover {
+    background-color: #79834d;
+    color: #E1DAC4;
+}
+
+.list .select, .list .select:hover {
+    color: #C8AD55;
+    font-style: italic;
+    background-color: #79834d;
+}
+
+.list-btns {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 10%;
+}
+
+.list-btns button {
+    width: 100%;
+}
+
+.home-right {
+    width: 30%;
+    max-width: 30%;
+    padding-right: 30px;
+}
+
+.home-right h3 {
+    line-height: 5px;
+}
+
+.home-right p {
+    line-height: 20px;
+    font-weight: 400;
+    font-size: 8pt;
+}

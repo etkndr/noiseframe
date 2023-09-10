@@ -1,0 +1,36 @@
+.song-title {
+    background-color: #E1DAC4;
+    width: 100%;
+    border: 0;
+    font-size: 12pt;
+    font-weight: 800;
+    color: #333523;
+    max-width: fit-content;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.song-btns button {
+    margin-right: 10px;
+}
+
+.song-title.title {
+    margin-top: 1.5%;
+}
+
+.song-title.bpm {
+    width: 40px;
+    margin-bottom: 0;
+}
+
+.bpm {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.play-song {
+    margin: 0 0 20px 0;
+    width: 73px;
+}

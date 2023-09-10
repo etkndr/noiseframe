@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ReactSwitch from "react-switch"
-import style from "./Sequencer.module.css"
+import "./Sequencer.css"
 
 export default function Toggle({handleToggle, step, on}) {
     const [active, setActive] = useState(on)
@@ -14,12 +14,20 @@ export default function Toggle({handleToggle, step, on}) {
         }
     }
 
+    const onIcon = <div className="on-icon"><span class="material-symbols-outlined">radio_button_unchecked</span></div>
+    const offIcon = <div className="off-icon"><span class="material-symbols-outlined">close</span></div>
+
     return (
         <>
-            <ReactSwitch
+            <label className="switch">
+                <input type="checkbox"
                 onChange={returnState}
-                checked={active}
-            />
+                checked={active}/>
+                <span className="slider">
+                    {active && onIcon}
+                    {!active && offIcon}
+                </span>
+            </label>
         </>
     )
 }
