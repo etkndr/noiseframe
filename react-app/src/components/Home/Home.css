@@ -19,6 +19,10 @@
     align-items: center;
 }
 
+.list-container.editor {
+    width: 100%;
+}
+
 .list-title {
     width: 100%;
     margin: 0 0 0 5%;

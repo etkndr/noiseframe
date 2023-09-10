@@ -24,6 +24,7 @@ body {
     padding-top: 0;
     margin: 5% auto;
     border: 15px solid #c8ad5591;
+    overflow-y: scroll;
 }
 
 .main {

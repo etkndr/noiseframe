@@ -104,9 +104,10 @@ export const deleteSong = (id) => async dispatch => {
 const initState = {}
 export default function songReducer(state = initState, action) {
     let newState = {...state}
+    let songState = {}
     switch (action.type) {
         case GET_SONGS:
-            let songState = {}
+            songState = {}
             action.songs.user_songs.forEach((song) => {
                 songState[song.id] = song
             })

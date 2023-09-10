@@ -16,7 +16,7 @@ export default function InstEditor() {
     const samples = useSelector(state => Object.values(state.samples))
 
     const [playing, setPlaying] = useState(false)
-    const [title, setTitle] = useState("Loading...")
+    const [title, setTitle] = useState("loading...")
     const [sample, setSample] = useState("")
     const [sampleName, setSampleName] = useState("")
     const [sampleLoading, setSampleLoading] = useState(false)
