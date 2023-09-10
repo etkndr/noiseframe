@@ -63,8 +63,11 @@ export default function Sequencer({url, sample, savedSteps, saveTrack, track}) {
 
     return (
         <>
-        <div>
+        <div className="sample-name">
             {sample?.name}
+        </div>
+        <div className="seq">
+        <div className="seq-row">
             {Object.values(steps)?.map((step, idx) => {
                 return (
                     <Toggle 
@@ -75,11 +78,12 @@ export default function Sequencer({url, sample, savedSteps, saveTrack, track}) {
                     />
                 )
             })}
-            <button onClick={() => setMute(!mute)}>{mute && `unmute`} {!mute && `mute`}</button>
         </div>
+            <button className="mute" onClick={() => setMute(!mute)}><span className="muted">{mute && `unmute`}</span> {!mute && `mute`}</button>
         <Track steps={Object.values(steps)} onStepPlay={handleStepChange} mute={mute}>
             <Instrument type="sampler" samples={{"C3": url}}/>
         </Track>
+        </div>
         </>
     )
 }

@@ -99,7 +99,7 @@ export default function SongEditor() {
                 }
                 <button onClick={saveSong}>save song</button>
             </div>
-            <div className="seq">
+            <div>
                 <Song bpm={bpm*2 || 240} isPlaying={play}>
                     {samples?.map((sample, idx) => {
                         return <Sequencer 
