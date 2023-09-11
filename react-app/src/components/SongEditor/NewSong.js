@@ -83,11 +83,6 @@ export default function NewSong() {
                         <h3>all instruments</h3>
                 </div>
                 <div className="list">
-                    {!insts?.length &&
-                        <p>
-                            you haven't created any instruments yet. click the "new instrument" button below to get started.
-                        </p>
-                    }
                     {insts?.map((inst, idx) => {
                         let select = ""
                         if (inst.id === selInst) {

@@ -51,6 +51,8 @@ export default function SongEditor() {
         }
         const save = dispatch(songActions.editSong(id, newSong))
         .then((res) => dispatch(songActions.getSong(res.id)))
+        .then((res) => dispatch(trackActions.getTracks(res.id)))
+        .then((res) => dispatch(sampleActions.getSamples(res.id)))
         console.log("success")
     }
 
@@ -72,6 +74,8 @@ export default function SongEditor() {
         setSelInst(id)
         dispatch(trackActions.getTracks(id))
     }
+
+    console.log(tracks[0]?.steps)
 
     if (song?.user_id !== currUser?.id || !currUser) {
         return "Unauthorized"

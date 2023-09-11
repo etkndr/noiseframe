@@ -40,3 +40,12 @@
     font-weight: 400;
     max-height: 5px;
 }
+
+.dlt-inst {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.listen {
+    width: 60px;
+}

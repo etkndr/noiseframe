@@ -10,6 +10,14 @@ export default function Sequencer({url, sample, savedSteps, saveTrack, track}) {
     let currStep
 
     useEffect(() => {
+        console.log("track change")
+    }, [track])
+
+    useEffect(() => {
+        console.log("sample change")
+    }, [url, sample])
+
+    useEffect(() => {
         if (!savedSteps) {
             for (let i = 0; i < 16; i++) {
                 setSteps(prev => ({
@@ -35,7 +43,7 @@ export default function Sequencer({url, sample, savedSteps, saveTrack, track}) {
     }, [])
 
     useEffect(() => {
-        const joinSteps = Object.values(steps).map((step) => {
+        const joinSteps = Object.values(steps)?.map((step) => {
             if (step === null) {
                 return "null"
             } else {

@@ -1,4 +1,4 @@
-import { NavLink, useParams } from "react-router-dom/cjs/react-router-dom.min"
+import { NavLink, useParams, useHistory } from "react-router-dom/cjs/react-router-dom.min"
 import { useEffect, useState, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Song, Track, Instrument } from "reactronica"
@@ -10,6 +10,7 @@ import "./Instrument.css"
 
 export default function InstEditor() {
     const dispatch = useDispatch()
+    const history = useHistory()
     const resetFile = useRef(null)
     const {id} = useParams()
     const currUser = useSelector(state => state.session.user)
@@ -67,6 +68,11 @@ export default function InstEditor() {
         console.log({"success": newInst})
     }
 
+    function dltInst() {
+        dispatch(instrumentActions.deleteInstrument(id))
+        .then(() => history.push("/home"))
+    }
+
     const addSample = (e) => {
         e.preventDefault()
 
@@ -118,16 +124,19 @@ export default function InstEditor() {
     return (
         <>
         <div className="home-left">
-            <input className="inst-title" 
-                onChange={(e) => setTitle(e.target.value)} 
-                placeholder="title" 
-                value={title}
-                onBlur={save}/>
+            <div>
+                <input className="inst-title" 
+                    onChange={(e) => setTitle(e.target.value)} 
+                    placeholder="title" 
+                    value={title}
+                    onBlur={save}/>
+            </div>
+            <button className="dlt-inst" onClick={dltInst}>delete instrument</button>
             <div className="inst-samples">
                 {samples?.map((sample, idx) => {
                     return (
                         <li key={idx}>{sample.name}
-                    <button onClick={() => {
+                    <button className="listen" onClick={() => {
                         if (playing && currSample === idx) {
                             setPlaying(false)
                         } else {
