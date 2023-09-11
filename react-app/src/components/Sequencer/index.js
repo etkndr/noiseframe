@@ -18,14 +18,19 @@ export default function Sequencer({url, sample, savedSteps, saveTrack, track}) {
     }, [url, sample])
 
     useEffect(() => {
-        if (!savedSteps) {
-            for (let i = 0; i < 16; i++) {
-                setSteps(prev => ({
-                    ...prev,
-                    [i]: null
-                }))
-            } 
-        } else {
+        const joinSteps = Object.values(steps)?.map((step) => {
+            if (step === null) {
+                return "null"
+            } else {
+                return step
+            }
+        })
+        
+        saveTrack(track?.id, joinSteps.join(" "))
+    }, [steps])
+
+    useEffect(() => {
+        if (savedSteps) {
             savedSteps.split(" ").forEach((step, idx) => {
                 if (step === "null") {
                     setSteps(prev => ({
@@ -40,22 +45,14 @@ export default function Sequencer({url, sample, savedSteps, saveTrack, track}) {
                 }
             })
         }
-    }, [])
+
+    }, [savedSteps])
 
     function handleToggle(step, state) {
         setSteps((prev) => ({
             ...prev,
             [step]: state
         }))
-        const joinSteps = Object.values(steps)?.map((step) => {
-            if (step === null) {
-                return "null"
-            } else {
-                return step
-            }
-        })
-    
-        saveTrack(track?.id, joinSteps.join(" "))
     }
 
     function handleStepChange() {

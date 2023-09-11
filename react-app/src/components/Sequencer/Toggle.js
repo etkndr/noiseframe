@@ -1,17 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactSwitch from "react-switch"
 import "./Sequencer.css"
 
 export default function Toggle({handleToggle, step, on}) {
     const [active, setActive] = useState(on)
 
-    function returnState() {
-        setActive(!active)
-        if (!active) {
-           handleToggle(step, "C3")
+    useEffect(() => {
+        if (active) {
+            handleToggle(step, "C3")
         } else {
             handleToggle(step, null)
         }
+    }, [active])
+
+    function returnState(e) {
+        e.preventDefault()
+        setActive(!active)
     }
 
     const onIcon = <div className="on-icon"><span className="material-symbols-outlined">radio_button_unchecked</span></div>
@@ -21,7 +25,7 @@ export default function Toggle({handleToggle, step, on}) {
         <>
             <label className="switch">
                 <input type="checkbox"
-                onChange={returnState}
+                onChange={(e) => returnState(e)}
                 checked={active}/>
                 <span className="slider">
                     {active && onIcon}

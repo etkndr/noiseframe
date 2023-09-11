@@ -27,7 +27,7 @@ export default function SongEditor() {
     useEffect(() => {
         dispatch(songActions.getSong(id))
         dispatch(trackActions.getTracks(id))
-    }, [])
+    }, [dispatch])
     
     useEffect(() => {
         dispatch(getInstruments())
@@ -71,12 +71,18 @@ export default function SongEditor() {
         }))
     }
 
-    function handleSelect(e, id) {
+    function handleSelect(e, instId) {
         e.preventDefault()
         setPlay(false)
-        setSelInst(id)
-        dispatch(trackActions.getTracks(id))
-        dispatch(sampleActions.getSamples(selInst))
+        setSelInst(instId)
+        const newSong = {
+            title,
+            bpm,
+            instrument_id: instId
+        }
+        const save = dispatch(songActions.editSong(id, newSong))
+        .then(() => dispatch(songActions.getSong(id)))
+        .then(() => trackActions.getTracks(id))
     }
 
     if (song?.user_id !== currUser?.id || !currUser) {
@@ -110,7 +116,6 @@ export default function SongEditor() {
                 <Song bpm={bpm*2 || 240} isPlaying={play}>
                     {samples?.map((sample, idx) => {
                         const currTrack = tracks[idx]
-                        console.log(tracks.length)
                         return <Sequencer 
                                     url={sample.url}
                                     sample={sample} 
