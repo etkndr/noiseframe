@@ -1,4 +1,4 @@
-import { NavLink, useParams } from "react-router-dom/cjs/react-router-dom.min"
+import { NavLink, useParams, useHistory } from "react-router-dom/cjs/react-router-dom.min"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import * as songActions from "../../store/songs"
@@ -11,6 +11,7 @@ import "./Song.css"
 
 export default function SongEditor() {
     const dispatch = useDispatch()
+    const history = useHistory()
     const {id} = useParams()
     const currUser = useSelector(state => state.session.user)
     const song = useSelector(state => state.songs)
@@ -59,6 +60,7 @@ export default function SongEditor() {
     function dltSong(e) {
         e.preventDefault()
         const dlt = dispatch(songActions.deleteSong(id))
+        .then(() => history.push("/"))
         console.log("success")
     }
 

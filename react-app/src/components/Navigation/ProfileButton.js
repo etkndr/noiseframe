@@ -41,7 +41,7 @@ function ProfileButton({ user }) {
     e.preventDefault();
     const email = "demo@aa.io"
     const password = "password"
-    const data = await dispatch(login(email, password));
+    const data = dispatch(login(email, password))
   };
 
   const ulClassName = `profile-dropdown` + (showMenu ? "" : ` hidden`);
@@ -79,7 +79,7 @@ function ProfileButton({ user }) {
                onItemClick={closeMenu}
                modalComponent={<SignupFormModal />}
              />
-             <button onClick={handleLogin}>demo login</button>
+             <button onClick={(e) => handleLogin(e)}>demo login</button>
            </>
       </div>
          )}
