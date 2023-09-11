@@ -6,6 +6,10 @@ export default function Toggle({handleToggle, step, on}) {
     const [active, setActive] = useState(on)
 
     useEffect(() => {
+        return
+    }, [on])
+
+    useEffect(() => {
         if (active) {
             handleToggle(step, "C3")
         } else {
@@ -26,10 +30,10 @@ export default function Toggle({handleToggle, step, on}) {
             <label className="switch">
                 <input type="checkbox"
                 onChange={(e) => returnState(e)}
-                checked={active}/>
+                checked={on}/>
                 <span className="slider">
-                    {active && onIcon}
-                    {!active && offIcon}
+                    {on && onIcon}
+                    {!on && offIcon}
                 </span>
             </label>
         </>

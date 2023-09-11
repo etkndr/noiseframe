@@ -3,13 +3,15 @@ import { Track, Instrument } from "reactronica"
 import Toggle from "./Toggle"
 import "./Sequencer.css"
 
-export default function Sequencer({url, sample, savedSteps, saveTrack, track}) {
+export default function Sequencer({url, sample, saveTrack, track}) {
 
     const [steps, setSteps] = useState({})
     const [mute, setMute] = useState(false)
+    const [savedSteps, setSavedSteps] = useState(track?.steps)
     let currStep
 
     useEffect(() => {
+        setSavedSteps(track?.steps)
         return
     }, [track])
 

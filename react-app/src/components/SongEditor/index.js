@@ -26,10 +26,10 @@ export default function SongEditor() {
 
     useEffect(() => {
         dispatch(songActions.getSong(id))
-        dispatch(trackActions.getTracks(id))
     }, [dispatch])
     
     useEffect(() => {
+        dispatch(trackActions.getTracks(id))
         dispatch(getInstruments())
         const getTitle = song?.title
         const getBpm = song?.bpm
@@ -82,7 +82,6 @@ export default function SongEditor() {
         }
         const save = dispatch(songActions.editSong(id, newSong))
         .then(() => dispatch(songActions.getSong(id)))
-        .then(() => trackActions.getTracks(id))
     }
 
     if (song?.user_id !== currUser?.id || !currUser) {
@@ -118,10 +117,9 @@ export default function SongEditor() {
                         const currTrack = tracks[idx]
                         return <Sequencer 
                                     url={sample.url}
-                                    sample={sample} 
-                                    savedSteps={currTrack?.steps} 
+                                    sample={sample}  
                                     saveTrack={saveTrack} 
-                                    track={tracks[idx]}
+                                    track={currTrack}
                                     key={idx}
                                 />
                     })}
