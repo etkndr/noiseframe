@@ -1,0 +1,27 @@
+.auth-form {
+    background-color: #E1DAC4;
+    width: 50vw;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.auth-form form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 20px;
+}
+
+.auth-fields {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: 20px;
+}
+
+#modal-content {
+    background-color: #E1DAC4;
+}

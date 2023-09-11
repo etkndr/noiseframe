@@ -31,7 +31,13 @@ export default function NewSong() {
                 2: null
             }))
         } 
-    }, [bpm, title])
+        if (selInst) {
+            setErr((prev) => ({
+                ...prev,
+                2: null
+            }))
+        }
+    }, [bpm, title, selInst])
     
     const save = (e) => {
         e.preventDefault()
@@ -48,9 +54,14 @@ export default function NewSong() {
                 2: "please select bpm for your song"
             }))
         }
-        if (bpm && title) {
-            setErr({})
+        if (!selInst) {
+            setErr((prev) => ({
+                ...prev,
+                3: "please select an instrument for your song"
+            }))
         }
+        if (bpm && title && selInst) {
+            setErr({})
 
         const newSong = {
             instrument_id: selInst,
@@ -60,25 +71,15 @@ export default function NewSong() {
         const save = dispatch(songActions.saveSong(newSong))
         .then((res) => history.push(`/songs/${res.id}`))
     }
+    }
 
     return (
         <>
-        <div className="inst-form">
+        <div className="song-form">
             <input onChange={(e) => setTitle(e.target.value)} value={title} placeholder="song title"/>
             <input onChange={(e) => setBpm(e.target.value)} value={bpm} placeholder="bpm"/>
-            <div className="err-container">
-                <div className="err">
-                <p>
-                    {err[1] && err[1]}
-                </p>
-                </div>
-                <div className="err">
-                <p>
-                    {err[2] && err[2]}
-                </p>
-                </div>
-            </div>
-            <div className="list-container">
+                <div className="lists new-song">
+            <div className="list-container new-song">
                 <div className="list-title">
                         <h3>all instruments</h3>
                 </div>
@@ -95,7 +96,15 @@ export default function NewSong() {
                     })}
                 </div>
             </div>
-            <button onClick={save}>create song</button>
+            </div>
+            <div className="err new-song">
+                {Object.values(err).map((error) => {
+                    return <p>{error}</p>
+                })}
+            </div>
+            <div>
+                <button onClick={save}>create song</button>
+            </div>
         </div>
         </>
     )

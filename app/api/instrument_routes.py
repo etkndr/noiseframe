@@ -92,6 +92,15 @@ def delete_inst(id):
         return {"errors": "Instrument not found"}, 404
     if inst.user_id != current_user.id:
         return {"errors": "Instruments can only be deleted by creator"}, 400
+    
+    songs = Song.query.filter(Song.instrument_id == inst.id).all()
+    for song in songs:
+        tracks = Track.query.filter(Track.song_id == song.id).all()
+        for track in tracks:
+            db.session.delete(track)
+            db.session.commit()
+        db.session.delete(song)
+        db.session.commit()
 
     db.session.delete(inst)
     db.session.commit()

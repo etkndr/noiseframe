@@ -1,4 +1,4 @@
-import { NavLink, useParams } from "react-router-dom/cjs/react-router-dom.min"
+import { NavLink, useParams, useHistory } from "react-router-dom/cjs/react-router-dom.min"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import * as songActions from "../../store/songs"
@@ -11,6 +11,7 @@ import "./Song.css"
 
 export default function SongEditor() {
     const dispatch = useDispatch()
+    const history = useHistory()
     const {id} = useParams()
     const currUser = useSelector(state => state.session.user)
     const song = useSelector(state => state.songs)
@@ -25,10 +26,10 @@ export default function SongEditor() {
 
     useEffect(() => {
         dispatch(songActions.getSong(id))
-        dispatch(trackActions.getTracks(id))
     }, [dispatch])
     
     useEffect(() => {
+        dispatch(trackActions.getTracks(id))
         dispatch(getInstruments())
         const getTitle = song?.title
         const getBpm = song?.bpm
@@ -58,22 +59,33 @@ export default function SongEditor() {
 
     function dltSong(e) {
         e.preventDefault()
-        const dlt = dispatch(songActions.deleteSong(id))
-        console.log("success")
+        if (window.confirm("delete song and associated patterns?")) {
+            const dlt = dispatch(songActions.deleteSong(id))
+            .then(() => history.push("/"))
+            console.log("success")
+        }
     }
-
+    
     function saveTrack(track, stepArr) {
-        const save = dispatch(trackActions.editTrack(track?.id, {
+        const save = dispatch(trackActions.editTrack(track, {
             steps: stepArr,
             volume: -3
         }))
     }
 
-    function handleSelect(e, id) {
+    function handleSelect(e, instId) {
         e.preventDefault()
         setPlay(false)
-        setSelInst(id)
-        dispatch(trackActions.getTracks(id))
+        if (window.confirm("clear patterns and change instrument")) {
+        setSelInst(instId)
+        const newSong = {
+            title,
+            bpm,
+            instrument_id: instId
+        }
+        const save = dispatch(songActions.editSong(id, newSong))
+        .then(() => dispatch(songActions.getSong(id)))
+        }
     }
 
     if (song?.user_id !== currUser?.id || !currUser) {
@@ -105,24 +117,24 @@ export default function SongEditor() {
             </div>
             <div>
                 <Song bpm={bpm*2 || 240} isPlaying={play}>
-                    {tracks && samples?.map((sample, idx) => {
+                    {samples?.map((sample, idx) => {
+                        const currTrack = tracks[idx]
                         return <Sequencer 
                                     url={sample.url}
-                                    sample={sample} 
-                                    savedSteps={tracks[idx]?.steps} 
+                                    sample={sample}  
                                     saveTrack={saveTrack} 
-                                    track={tracks[idx] && tracks[idx]}
-                                    key={tracks[idx]?.id}
+                                    track={currTrack}
+                                    key={idx}
                                 />
                     })}
                 </Song>
             </div>
         </div>
         <div className="home-right"> 
-        <div className="lists">
+        <div className="lists editor">
            <div className="list-container editor">
                 <div className="list-title">
-                        <h3>change instruments</h3>
+                        <h3>change instrument</h3>
                 </div>
                 <div className="list">
                     {insts?.map((inst, idx) => {
@@ -138,6 +150,7 @@ export default function SongEditor() {
                 </div>
             </div>
         </div>
+        <button className="song-edit-btn" onClick={() => history.push(`/instruments/${selInst}`)}>edit instrument</button>
         </div>
         </>
     )

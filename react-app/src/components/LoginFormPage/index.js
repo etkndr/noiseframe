@@ -23,6 +23,7 @@ function LoginFormPage() {
 
   return (
     <>
+    <div className="auth-form">
       <h1>Log In</h1>
       <form onSubmit={handleSubmit}>
         <ul>
@@ -50,6 +51,7 @@ function LoginFormPage() {
         </label>
         <button type="submit">Log In</button>
       </form>
+      </div>
     </>
   );
 }

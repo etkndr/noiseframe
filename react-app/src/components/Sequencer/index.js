@@ -3,29 +3,36 @@ import { Track, Instrument } from "reactronica"
 import Toggle from "./Toggle"
 import "./Sequencer.css"
 
-export default function Sequencer({url, sample, savedSteps, saveTrack, track}) {
+export default function Sequencer({url, sample, saveTrack, track}) {
 
     const [steps, setSteps] = useState({})
     const [mute, setMute] = useState(false)
+    const [savedSteps, setSavedSteps] = useState(track?.steps)
     let currStep
 
     useEffect(() => {
-        console.log("track change")
+        setSavedSteps(track?.steps)
+        return
     }, [track])
 
     useEffect(() => {
-        console.log("sample change")
+        return
     }, [url, sample])
 
     useEffect(() => {
-        if (!savedSteps) {
-            for (let i = 0; i < 16; i++) {
-                setSteps(prev => ({
-                    ...prev,
-                    [i]: null
-                }))
-            } 
-        } else {
+        const joinSteps = Object.values(steps)?.map((step) => {
+            if (step === null) {
+                return "null"
+            } else {
+                return step
+            }
+        })
+        
+        saveTrack(track?.id, joinSteps.join(" "))
+    }, [steps])
+
+    useEffect(() => {
+        if (savedSteps) {
             savedSteps.split(" ").forEach((step, idx) => {
                 if (step === "null") {
                     setSteps(prev => ({
@@ -40,19 +47,8 @@ export default function Sequencer({url, sample, savedSteps, saveTrack, track}) {
                 }
             })
         }
-    }, [])
 
-    useEffect(() => {
-        const joinSteps = Object.values(steps)?.map((step) => {
-            if (step === null) {
-                return "null"
-            } else {
-                return step
-            }
-        })
-
-        saveTrack(track, joinSteps.join(" "))
-    }, [steps])
+    }, [savedSteps])
 
     function handleToggle(step, state) {
         setSteps((prev) => ({
