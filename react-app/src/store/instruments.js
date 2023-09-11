@@ -109,6 +109,7 @@ export default function instruments(state = initState, action) {
     let newState = {...state}
     switch (action.type) {
         case GET_INSTRUMENTS:
+            newState = {}
             action.insts.instruments.forEach((inst) => {
                 newState[inst.id] = inst
             })

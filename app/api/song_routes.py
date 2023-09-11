@@ -77,15 +77,17 @@ def edit_song(id):
         new_inst = form.data["instrument_id"]
         if song.instrument_id != new_inst:
             old_tracks = Track.query.filter(Track.song_id == song.id).all()
+            
             for track in old_tracks:
                 db.session.delete(track)
+                db.session.commit()
                 
             samples = Sample.query.filter(Sample.instrument_id == new_inst).all()
             for sample in samples:
                 track = Track(
                     song_id = song.id,
                     sample_id = sample.id,
-                    steps = "",
+                    steps = "null null null null null null null null null null null null null null null null",
                     volume = -3
                 )
                 

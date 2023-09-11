@@ -27,12 +27,41 @@ export default function Home() {
         <>
         <div className="home-left">
             <div className="lists">
+            <div className="list-container">
+                    <div className="list-title">
+                            <h3>all instruments</h3>
+                    </div>
+                    <div className="list">
+                        {!insts?.length &&
+                            <p>
+                                you haven't created any instruments yet. click the "new instrument" button below to get started.
+                            </p>
+                        }
+                        {insts?.map((inst, idx) => {
+                            let select = ""
+                            if (inst.id === selInst) {
+                                select = "select"
+                            }
+                            return <li 
+                                onClick={() => setSelInst(inst.id)} 
+                                className={select}
+                                key={idx}>{inst.title}</li>
+                        })}
+                    </div>
+                    <div className="list-btns">
+                        <button className="tooltip" onClick={() => selInst > 0 && history.push(`/instruments/${selInst}`)} disabled={!selInst}>
+                            {!selInst && <span className="tooltext">select an instrument to edit</span>}
+                            edit instrument
+                        </button>
+                        <button onClick={() => history.push("/instruments")}>new instrument</button>
+                    </div>
+                    </div>
                 <div className="list-container">
                     <div className="list-title">
                         <h3>all songs</h3>
                     </div>
                     <div className="list">
-                        {!songs?.length &&
+                        {!songs?.length && (insts?.length > 0) &&
                             <p>
                                 you haven't created any songs yet. click the "new song" button below to get started.
                             </p>
@@ -55,36 +84,16 @@ export default function Home() {
                         })}
                     </div>
                     <div className="list-btns">
-                        <button onClick={() => selSong > 0 && history.push(`/songs/${selSong}`)} disabled={!selSong}>edit song</button>
-                        <button onClick={() => history.push("/songs")} disabled={!insts.length}>new song</button>
+                        <button className="tooltip" onClick={() => selSong > 0 && history.push(`/songs/${selSong}`)} disabled={!selSong}>
+                            {!selSong && <span className="tooltext">select a song to edit</span>}
+                            edit song
+                        </button>
+                        <button className="tooltip" onClick={() => history.push("/songs")} disabled={!insts.length}>
+                            {!insts.length && <span className="tooltext">create an instrument first</span>}
+                            new song
+                        </button>
                     </div>
                 </div>
-                <div className="list-container">
-                    <div className="list-title">
-                            <h3>all instruments</h3>
-                    </div>
-                    <div className="list">
-                        {!insts?.length &&
-                            <p>
-                                you haven't created any instruments yet. click the "new instrument" button below to get started.
-                            </p>
-                        }
-                        {insts?.map((inst, idx) => {
-                            let select = ""
-                            if (inst.id === selInst) {
-                                select = "select"
-                            }
-                            return <li 
-                                onClick={() => setSelInst(inst.id)} 
-                                className={select}
-                                key={idx}>{inst.title}</li>
-                        })}
-                    </div>
-                    <div className="list-btns">
-                        <button onClick={() => selInst > 0 && history.push(`/instruments/${selInst}`)} disabled={!selInst}>edit instrument</button>
-                        <button onClick={() => history.push("/instruments")}>new instrument</button>
-                    </div>
-                    </div>
                 </div>
             </div>
             <div className="home-right">

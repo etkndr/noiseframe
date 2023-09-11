@@ -11,8 +11,9 @@ export default function LandingPage() {
     if (user) history.push("/home")
 
     return (
-        <>
-            welcome to noiseframe
-        </>
+        <div className={styles.container}>
+            <p className={styles.welcome}>welcome to noiseframe, an app that allows you quickly create patterns of sample-based music</p>
+            <p className={styles.welcome}>sign up or log in to get started</p>
+        </div>
     )
 }

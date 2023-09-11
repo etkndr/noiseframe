@@ -56,3 +56,7 @@
     text-align: center;
     max-height: 100%;
 }
+
+.lists.editor {
+    margin-bottom: -40%;
+}

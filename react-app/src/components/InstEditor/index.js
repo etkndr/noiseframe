@@ -69,9 +69,12 @@ export default function InstEditor() {
     }
 
     function dltInst() {
-        dispatch(instrumentActions.deleteInstrument(id))
-        .then(() => history.push("/home"))
+        if (window.confirm("delete instrument and all associated songs?")) {
+            const dlt = dispatch(instrumentActions.deleteInstrument(id))
+            .then(() => history.push("/home"))
+        }
     }
+
 
     const addSample = (e) => {
         e.preventDefault()

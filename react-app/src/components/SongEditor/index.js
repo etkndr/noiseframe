@@ -59,9 +59,11 @@ export default function SongEditor() {
 
     function dltSong(e) {
         e.preventDefault()
-        const dlt = dispatch(songActions.deleteSong(id))
-        .then(() => history.push("/"))
-        console.log("success")
+        if (window.confirm("delete song and associated patterns?")) {
+            const dlt = dispatch(songActions.deleteSong(id))
+            .then(() => history.push("/"))
+            console.log("success")
+        }
     }
     
     function saveTrack(track, stepArr) {
@@ -74,6 +76,7 @@ export default function SongEditor() {
     function handleSelect(e, instId) {
         e.preventDefault()
         setPlay(false)
+        if (window.confirm("clear patterns and change instrument")) {
         setSelInst(instId)
         const newSong = {
             title,
@@ -82,6 +85,7 @@ export default function SongEditor() {
         }
         const save = dispatch(songActions.editSong(id, newSong))
         .then(() => dispatch(songActions.getSong(id)))
+        }
     }
 
     if (song?.user_id !== currUser?.id || !currUser) {
@@ -127,10 +131,10 @@ export default function SongEditor() {
             </div>
         </div>
         <div className="home-right"> 
-        <div className="lists">
+        <div className="lists editor">
            <div className="list-container editor">
                 <div className="list-title">
-                        <h3>change instruments</h3>
+                        <h3>change instrument</h3>
                 </div>
                 <div className="list">
                     {insts?.map((inst, idx) => {
@@ -146,6 +150,7 @@ export default function SongEditor() {
                 </div>
             </div>
         </div>
+        <button className="song-edit-btn" onClick={() => history.push(`/instruments/${selInst}`)}>edit instrument</button>
         </div>
         </>
     )
