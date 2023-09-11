@@ -19,11 +19,13 @@ function ProfileButton({ user }) {
   useEffect(() => {
     if (!showMenu) return;
 
+    if (user) {
     const closeMenu = (e) => {
-      if (!ulRef.current.contains(e.target)) {
-        setShowMenu(false);
-      }
-    };
+        if (!ulRef.current.contains(e.target)) {
+          setShowMenu(false);
+        }
+      };
+    }
 
     document.addEventListener("click", closeMenu);
 

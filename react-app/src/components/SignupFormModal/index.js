@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { signUp } from "../../store/session";
@@ -13,24 +13,41 @@ function SignupFormModal() {
 	const [errors, setErrors] = useState([]);
 	const { closeModal } = useModal();
 
+	useEffect(() => {
+		if ((email.includes("@") && email.includes(".")) && password.length >= 6 && password === confirmPassword) {
+			setErrors([])
+		}
+	}, [email, password, confirmPassword])
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		if (password === confirmPassword) {
-			const data = await dispatch(signUp(username, email, password));
-			if (data) {
-				setErrors(data);
-			} else {
-				closeModal();
-			}
-		} else {
+		if (!email.includes("@") || !email.includes(".")) {
 			setErrors([
-				"Confirm Password field must be the same as the Password field",
+				...errors,
+				"Please enter a valid email address"
+			])
+		}
+		else if (password.length < 6) {
+			setErrors([
+				...errors,
+				"Password must be at least six characters"
 			]);
+		}
+		else if (password !== confirmPassword) {
+			setErrors([
+				...errors,
+				"Passwords must match"
+			]);
+		}
+		else {
+			const data = await dispatch(signUp(username, email, password))
+			.then(() => closeModal())
 		}
 	};
 
 	return (
 		<>
+		<div className="auth-form">
 			<h1>Sign Up</h1>
 			<form onSubmit={handleSubmit}>
 				<ul>
@@ -38,6 +55,7 @@ function SignupFormModal() {
 						<li key={idx}>{error}</li>
 					))}
 				</ul>
+				<div className="auth-fields">
 				<label>
 					Email
 					<input
@@ -74,8 +92,10 @@ function SignupFormModal() {
 						required
 					/>
 				</label>
+				</div>
 				<button type="submit">Sign Up</button>
 			</form>
+			</div>
 		</>
 	);
 }

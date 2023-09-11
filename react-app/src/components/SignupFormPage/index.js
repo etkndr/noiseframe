@@ -29,6 +29,7 @@ function SignupFormPage() {
 
   return (
     <>
+    <div className="auth-form">
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <ul>
@@ -72,6 +73,7 @@ function SignupFormPage() {
         </label>
         <button type="submit">Sign Up</button>
       </form>
+      </div>
     </>
   );
 }
