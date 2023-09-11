@@ -71,7 +71,6 @@ export default function samples(state = initState, action) {
             action.samples.forEach((sample) => {
                 sampleState[sample.id] = sample
             })
-            console.log(sampleState)
             return sampleState
         case NEW_SAMPLE:
             newState[action.sample.id] = action.sample

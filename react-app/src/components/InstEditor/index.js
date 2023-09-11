@@ -1,4 +1,4 @@
-import { NavLink, useParams } from "react-router-dom/cjs/react-router-dom.min"
+import { NavLink, useParams, useHistory } from "react-router-dom/cjs/react-router-dom.min"
 import { useEffect, useState, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Song, Track, Instrument } from "reactronica"
@@ -10,6 +10,7 @@ import "./Instrument.css"
 
 export default function InstEditor() {
     const dispatch = useDispatch()
+    const history = useHistory()
     const resetFile = useRef(null)
     const {id} = useParams()
     const currUser = useSelector(state => state.session.user)
@@ -67,6 +68,11 @@ export default function InstEditor() {
         console.log({"success": newInst})
     }
 
+    function dltInst() {
+        dispatch(instrumentActions.deleteInstrument(id))
+        .then(() => history.push("/home"))
+    }
+
     const addSample = (e) => {
         e.preventDefault()
 
@@ -118,16 +124,19 @@ export default function InstEditor() {
     return (
         <>
         <div className="home-left">
-            <input className="inst-title" 
-                onChange={(e) => setTitle(e.target.value)} 
-                placeholder="title" 
-                value={title}
-                onBlur={save}/>
+            <div>
+                <input className="inst-title" 
+                    onChange={(e) => setTitle(e.target.value)} 
+                    placeholder="title" 
+                    value={title}
+                    onBlur={save}/>
+            </div>
+            <button className="dlt-inst" onClick={dltInst}>delete instrument</button>
             <div className="inst-samples">
                 {samples?.map((sample, idx) => {
                     return (
                         <li key={idx}>{sample.name}
-                    <button onClick={() => {
+                    <button className="listen" onClick={() => {
                         if (playing && currSample === idx) {
                             setPlaying(false)
                         } else {
@@ -135,8 +144,8 @@ export default function InstEditor() {
                         }
                         }}>
                             {playing && currSample === idx && "stop"}
-                            {!playing && "play"}
-                            {playing && currSample !== idx && "play"}
+                            {!playing && "listen"}
+                            {playing && currSample !== idx && "listen"}
                     </button>
                     {/* <button onClick={() => setPlaying(false)}>stop</button> */}
                     <button onClick={(e) => dltSample(e, sample.id)}>delete</button>
@@ -156,7 +165,20 @@ export default function InstEditor() {
             </Song>
             <form className="sample-form" onSubmit={addSample} encType="multipart/form-data">
                 <input className="sample-input" type="text" onChange={(e) => setSampleName(e.target.value)} placeholder="sample name" value={sampleName}/>
-                <input className="sample-input" ref={resetFile} type="file" accept="audio/*" onChange={(e) => setSample(e.target.files[0])} placeholder="sample file"/>
+                <input className="sample-input" ref={resetFile} type="file" accept="audio/*" onChange={(e) => {
+                    if (e.target.files[0].size > 204800) {
+                        setErr((prev) => ({
+                            ...prev,
+                            3: "maximum file size of 180 kB"
+                        }))
+                    } else {
+                        setErr((prev) => ({
+                            ...prev,
+                            3: ""
+                        }))
+                    }
+                    setSample(e.target.files[0])
+                    }} placeholder="sample file"/>
                 <button type="submit">upload</button>
             </form>
             <div className="err-container">
@@ -168,6 +190,9 @@ export default function InstEditor() {
                 <div className="err">
                 <p>
                     {err[2] && err[2]}
+                </p>
+                <p>
+                    {err[3] && err[3]}
                 </p>
                 </div>
             </div>
