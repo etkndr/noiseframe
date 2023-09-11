@@ -135,8 +135,8 @@ export default function InstEditor() {
                         }
                         }}>
                             {playing && currSample === idx && "stop"}
-                            {!playing && "play"}
-                            {playing && currSample !== idx && "play"}
+                            {!playing && "listen"}
+                            {playing && currSample !== idx && "listen"}
                     </button>
                     {/* <button onClick={() => setPlaying(false)}>stop</button> */}
                     <button onClick={(e) => dltSample(e, sample.id)}>delete</button>
@@ -156,7 +156,20 @@ export default function InstEditor() {
             </Song>
             <form className="sample-form" onSubmit={addSample} encType="multipart/form-data">
                 <input className="sample-input" type="text" onChange={(e) => setSampleName(e.target.value)} placeholder="sample name" value={sampleName}/>
-                <input className="sample-input" ref={resetFile} type="file" accept="audio/*" onChange={(e) => setSample(e.target.files[0])} placeholder="sample file"/>
+                <input className="sample-input" ref={resetFile} type="file" accept="audio/*" onChange={(e) => {
+                    if (e.target.files[0].size > 204800) {
+                        setErr((prev) => ({
+                            ...prev,
+                            3: "maximum file size of 180 kB"
+                        }))
+                    } else {
+                        setErr((prev) => ({
+                            ...prev,
+                            3: ""
+                        }))
+                    }
+                    setSample(e.target.files[0])
+                    }} placeholder="sample file"/>
                 <button type="submit">upload</button>
             </form>
             <div className="err-container">
@@ -168,6 +181,9 @@ export default function InstEditor() {
                 <div className="err">
                 <p>
                     {err[2] && err[2]}
+                </p>
+                <p>
+                    {err[3] && err[3]}
                 </p>
                 </div>
             </div>

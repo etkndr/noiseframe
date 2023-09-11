@@ -115,6 +115,7 @@ export default function tracks(state = initState, action) {
             })
             return trackState
         case GET_TRACK:
+            newState = {}
             newState[action.track.id] = action.track
             return newState
         case SAVE_TRACK:
