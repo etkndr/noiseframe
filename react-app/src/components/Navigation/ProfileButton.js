@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { logout } from "../../store/session";
+import { login, logout } from "../../store/session";
 import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
@@ -35,16 +35,24 @@ function ProfileButton({ user }) {
     dispatch(logout());
   };
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const email = "demo@aa.io"
+    const password = "password"
+    const data = await dispatch(login(email, password));
+  };
+
   const ulClassName = `profile-dropdown` + (showMenu ? "" : ` hidden`);
   const closeMenu = () => setShowMenu(false);
 
   return (
     <>
+    {user && (
+    <div>
       <button onClick={openMenu}>
         {user?.username}
       </button>
       <ul className={ulClassName} ref={ulRef}>
-        {user ? (
           <>
             <li>{user.username}</li>
             <li>{user.email}</li>
@@ -52,22 +60,27 @@ function ProfileButton({ user }) {
               <button onClick={handleLogout}>Log Out</button>
             </li>
           </>
-        ) : (
-          <>
-            <OpenModalButton
-              buttonText="Log In"
-              onItemClick={closeMenu}
-              modalComponent={<LoginFormModal />}
-            />
+          </ul>
+        </div>
+        )}
+        {!user && (
+          <div>
+           <>
+             <OpenModalButton
+               buttonText="log in"
+               onItemClick={closeMenu}
+               modalComponent={<LoginFormModal />}
+             />
 
             <OpenModalButton
-              buttonText="Sign Up"
-              onItemClick={closeMenu}
-              modalComponent={<SignupFormModal />}
-            />
-          </>
-        )}
-      </ul>
+               buttonText="sign up"
+               onItemClick={closeMenu}
+               modalComponent={<SignupFormModal />}
+             />
+             <button onClick={handleLogin}>demo login</button>
+           </>
+      </div>
+         )}
     </>
   );
 }

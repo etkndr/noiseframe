@@ -8,7 +8,17 @@
 }
  
 .profile-dropdown {
-  margin-top: 70px;
+  position: absolute;
+  margin-top: 0px;
+  margin-left: -45px;
+  background-color: #c5bea6;
+  padding: 0;
+  padding-top: 10px;
+  padding-left: 20px;
+  padding-right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .hidden {
@@ -22,4 +32,10 @@
 .profile {
   display: flex;
   justify-content: flex-end;
+}
+
+.logout {
+  min-width: fit-content;
+  min-height: fit-content;
+  cursor: pointer;
 }
