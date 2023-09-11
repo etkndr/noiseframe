@@ -10,11 +10,11 @@ export default function Sequencer({url, sample, savedSteps, saveTrack, track}) {
     let currStep
 
     useEffect(() => {
-        console.log("track change")
+        return
     }, [track])
 
     useEffect(() => {
-        console.log("sample change")
+        return
     }, [url, sample])
 
     useEffect(() => {
@@ -42,7 +42,11 @@ export default function Sequencer({url, sample, savedSteps, saveTrack, track}) {
         }
     }, [])
 
-    useEffect(() => {
+    function handleToggle(step, state) {
+        setSteps((prev) => ({
+            ...prev,
+            [step]: state
+        }))
         const joinSteps = Object.values(steps)?.map((step) => {
             if (step === null) {
                 return "null"
@@ -50,15 +54,8 @@ export default function Sequencer({url, sample, savedSteps, saveTrack, track}) {
                 return step
             }
         })
-
-        saveTrack(track, joinSteps.join(" "))
-    }, [steps])
-
-    function handleToggle(step, state) {
-        setSteps((prev) => ({
-            ...prev,
-            [step]: state
-        }))
+    
+        saveTrack(track?.id, joinSteps.join(" "))
     }
 
     function handleStepChange() {

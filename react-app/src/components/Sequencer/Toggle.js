@@ -14,8 +14,8 @@ export default function Toggle({handleToggle, step, on}) {
         }
     }
 
-    const onIcon = <div className="on-icon"><span class="material-symbols-outlined">radio_button_unchecked</span></div>
-    const offIcon = <div className="off-icon"><span class="material-symbols-outlined">close</span></div>
+    const onIcon = <div className="on-icon"><span className="material-symbols-outlined">radio_button_unchecked</span></div>
+    const offIcon = <div className="off-icon"><span className="material-symbols-outlined">close</span></div>
 
     return (
         <>

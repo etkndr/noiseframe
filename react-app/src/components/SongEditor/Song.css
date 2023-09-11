@@ -34,3 +34,25 @@
     margin: 0 0 20px 0;
     width: 73px;
 }
+
+.song-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.list-container.new-song {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.lists.new-song {
+    margin-bottom: 0;
+    max-height: 300px;
+}
+
+.err.new-song {
+    width: 100%;
+    text-align: center;
+    max-height: 100%;
+}

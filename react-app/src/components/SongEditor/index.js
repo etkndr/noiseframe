@@ -27,7 +27,7 @@ export default function SongEditor() {
     useEffect(() => {
         dispatch(songActions.getSong(id))
         dispatch(trackActions.getTracks(id))
-    }, [dispatch])
+    }, [])
     
     useEffect(() => {
         dispatch(getInstruments())
@@ -63,9 +63,9 @@ export default function SongEditor() {
         .then(() => history.push("/"))
         console.log("success")
     }
-
+    
     function saveTrack(track, stepArr) {
-        const save = dispatch(trackActions.editTrack(track?.id, {
+        const save = dispatch(trackActions.editTrack(track, {
             steps: stepArr,
             volume: -3
         }))
@@ -76,6 +76,7 @@ export default function SongEditor() {
         setPlay(false)
         setSelInst(id)
         dispatch(trackActions.getTracks(id))
+        dispatch(sampleActions.getSamples(selInst))
     }
 
     if (song?.user_id !== currUser?.id || !currUser) {
@@ -107,14 +108,16 @@ export default function SongEditor() {
             </div>
             <div>
                 <Song bpm={bpm*2 || 240} isPlaying={play}>
-                    {tracks && samples?.map((sample, idx) => {
+                    {samples?.map((sample, idx) => {
+                        const currTrack = tracks[idx]
+                        console.log(tracks.length)
                         return <Sequencer 
                                     url={sample.url}
                                     sample={sample} 
-                                    savedSteps={tracks[idx]?.steps} 
+                                    savedSteps={currTrack?.steps} 
                                     saveTrack={saveTrack} 
-                                    track={tracks[idx] && tracks[idx]}
-                                    key={tracks[idx]?.id}
+                                    track={tracks[idx]}
+                                    key={idx}
                                 />
                     })}
                 </Song>
