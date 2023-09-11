@@ -11,6 +11,7 @@ export default function Home() {
     const dispatch = useDispatch()
     const songs = useSelector(state => Object.values(state.songs))
     const insts = useSelector(state => Object.values(state.instruments))
+    const currUser = useSelector(state => state.session.user)
 
     const [selSong, setSelSong] = useState("")
     const [selInst, setSelInst] = useState("")
@@ -20,6 +21,8 @@ export default function Home() {
         dispatch(instrumentActions.getInstruments())
     }, [dispatch])
 
+    if (!currUser) history.push("/")
+    
     return (
         <>
         <div className="home-left">

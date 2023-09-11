@@ -50,9 +50,9 @@ export default function SongEditor() {
             instrument_id: selInst
         }
         const save = dispatch(songActions.editSong(id, newSong))
-        .then((res) => dispatch(songActions.getSong(res.id)))
-        .then((res) => dispatch(trackActions.getTracks(res.id)))
-        .then((res) => dispatch(sampleActions.getSamples(res.id)))
+        .then((res) => dispatch(songActions.getSong(id)))
+        .then((res) => dispatch(trackActions.getTracks(id)))
+        .then((res) => dispatch(sampleActions.getSamples(selInst)))
         console.log("success")
     }
 
@@ -71,11 +71,10 @@ export default function SongEditor() {
 
     function handleSelect(e, id) {
         e.preventDefault()
+        setPlay(false)
         setSelInst(id)
         dispatch(trackActions.getTracks(id))
     }
-
-    console.log(tracks[0]?.steps)
 
     if (song?.user_id !== currUser?.id || !currUser) {
         return "Unauthorized"
@@ -106,13 +105,13 @@ export default function SongEditor() {
             </div>
             <div>
                 <Song bpm={bpm*2 || 240} isPlaying={play}>
-                    {samples?.map((sample, idx) => {
+                    {tracks && samples?.map((sample, idx) => {
                         return <Sequencer 
                                     url={sample.url}
                                     sample={sample} 
                                     savedSteps={tracks[idx]?.steps} 
                                     saveTrack={saveTrack} 
-                                    track={tracks[idx]}
+                                    track={tracks[idx] && tracks[idx]}
                                     key={tracks[idx]?.id}
                                 />
                     })}
