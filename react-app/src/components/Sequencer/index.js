@@ -8,14 +8,18 @@ export default function Sequencer({url, sample, saveTrack, track}) {
     const [steps, setSteps] = useState({})
     const [mute, setMute] = useState(false)
     const [savedSteps, setSavedSteps] = useState(track?.steps)
+    const [currSample, setCurrSample] = useState(url)
+    const [seed, setSeed] = useState(1);
     let currStep
-
+    
     useEffect(() => {
         setSavedSteps(track?.steps)
         return
     }, [track])
-
+    
     useEffect(() => {
+        setSeed(Math.random());
+        setCurrSample(url)
         return
     }, [url, sample])
 
@@ -85,7 +89,7 @@ export default function Sequencer({url, sample, saveTrack, track}) {
         </div>
             <button className="mute" onClick={() => setMute(!mute)}><span className="muted">{mute && `unmute`}</span> {!mute && `mute`}</button>
         <Track steps={Object.values(steps)} onStepPlay={handleStepChange} mute={mute}>
-            <Instrument type="sampler" samples={{"C3": url}}/>
+            <Instrument type="sampler" samples={{"C3": currSample}} key={seed}/>
         </Track>
         </div>
         </>
