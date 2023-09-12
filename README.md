@@ -22,8 +22,6 @@ noiseframe was built using the following technologies:
 - React
 - Redux
 
-![image](https://github.com/nicolyoshikawa/pour-d/assets/78172054/c4d9ef19-e79c-4fe0-8804-e1164b621846)
-
 ### 🏠 [Homepage](https://onrender.onrender.com/home)
 
 ## Installation
@@ -77,6 +75,12 @@ noiseframe was built using the following technologies:
     ```
 
 3. At this point, the application should be up and running, and will be available in your web browser at http://localhost:3000/
-![Uploading Screen Shot 2023-09-11 at 9.09.46 PM.png…]()
+
+![image](https://github.com/etkndr/noiseframe/assets/103692901/de55040c-2660-4b0d-adc2-17869b05be41)
+
+![image](https://github.com/etkndr/noiseframe/assets/103692901/0c3b79e0-ce39-4fb9-8a55-feaa9b161a79)
+
+![image](https://github.com/etkndr/noiseframe/assets/103692901/2f0ab110-210f-4c88-a21a-fbd47bc0e2cc)
+
 
 
