@@ -20,9 +20,9 @@ export default function SongEditor() {
     const tracks = useSelector(state => Object.values(state.tracks))
     const [play, setPlay] = useState(false)
     
-    const [selInst, setSelInst] = useState("loading...")
-    const [title, setTitle] = useState("loading...")
-    const [bpm, setBpm] = useState("loading")
+    const [selInst, setSelInst] = useState(null)
+    const [title, setTitle] = useState(null)
+    const [bpm, setBpm] = useState(null)
 
     useEffect(() => {
         dispatch(songActions.getSong(id))
@@ -40,7 +40,9 @@ export default function SongEditor() {
     }, [song])
     
     useEffect(() => {
-        dispatch(sampleActions.getSamples(selInst))
+        if (selInst) {
+            dispatch(sampleActions.getSamples(selInst))
+        }
     }, [selInst])
     
     function saveSong(e) {
@@ -54,15 +56,15 @@ export default function SongEditor() {
         .then((res) => dispatch(songActions.getSong(id)))
         .then((res) => dispatch(trackActions.getTracks(id)))
         .then((res) => dispatch(sampleActions.getSamples(selInst)))
-        console.log("success")
+        .then((res) => {if (res.ok) console.log("success")})
     }
 
     function dltSong(e) {
         e.preventDefault()
         if (window.confirm("delete song and associated patterns?")) {
             const dlt = dispatch(songActions.deleteSong(id))
+            .then((res) => {if (res.ok) console.log("success")})
             .then(() => history.push("/"))
-            console.log("success")
         }
     }
     

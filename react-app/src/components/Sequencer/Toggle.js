@@ -6,7 +6,11 @@ export default function Toggle({handleToggle, step, on}) {
     const [active, setActive] = useState(on)
 
     useEffect(() => {
-        return
+        if (!on) {
+            setActive(false)
+        } else {
+            setActive(true)
+        }
     }, [on])
     
     function returnState(e) {

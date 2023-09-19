@@ -71,7 +71,6 @@ export default function Sequencer({url, sample, saveTrack, track}) {
         }
     }
 
-
     return (
         <>
         <div className="sample-name">
@@ -80,11 +79,12 @@ export default function Sequencer({url, sample, saveTrack, track}) {
         <div className="seq">
         <div className="seq-row">
             {Object.values(steps)?.map((step, idx) => {
+                const on = step !== null
                 return (
                     <Toggle 
                         handleToggle={handleToggle} 
                         step={idx} 
-                        on={step !== null}
+                        on={on}
                         key={idx}
                     />
                 )
