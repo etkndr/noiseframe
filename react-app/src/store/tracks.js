@@ -122,8 +122,8 @@ export default function tracks(state = initState, action) {
             newState[action.track.id] = action.track
             return newState
         case EDIT_TRACK:
-            newState = {...state}
             newState[action.track.id] = action.track
+            console.log(action.track.id)
             return newState
         case DELETE_TRACK:
             delete newState[action.track.id]

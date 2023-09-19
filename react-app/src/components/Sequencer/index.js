@@ -31,10 +31,12 @@ export default function Sequencer({url, sample, saveTrack, track}) {
                 return step
             }
         })
-        
-        saveTrack(track?.id, joinSteps.join(" "))
-    }, [steps])
 
+        if (joinSteps) {
+            saveTrack(track?.id, joinSteps?.join(" "))
+        }
+    }, [steps])
+    
     useEffect(() => {
         if (savedSteps) {
             savedSteps.split(" ").forEach((step, idx) => {
@@ -55,10 +57,10 @@ export default function Sequencer({url, sample, saveTrack, track}) {
     }, [savedSteps])
 
     function handleToggle(step, state) {
-        setSteps((prev) => ({
-            ...prev,
+        setSteps({
+            ...steps,
             [step]: state
-        }))
+        })
     }
 
     function handleStepChange() {
@@ -68,6 +70,7 @@ export default function Sequencer({url, sample, saveTrack, track}) {
             currStep = 0
         }
     }
+
 
     return (
         <>
@@ -88,7 +91,7 @@ export default function Sequencer({url, sample, saveTrack, track}) {
             })}
         </div>
             <button className="mute" onClick={() => setMute(!mute)}><span className="muted">{mute && `unmute`}</span> {!mute && `mute`}</button>
-        <Track steps={Object.values(steps)} onStepPlay={handleStepChange} mute={mute}>
+        <Track steps={Object.values(steps)} onStepPlay={handleStepChange} mute={mute} key={`track-${seed}`}>
             <Instrument type="sampler" samples={{"C3": currSample}} key={seed}/>
         </Track>
         </div>

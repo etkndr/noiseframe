@@ -122,7 +122,7 @@ export default function SongEditor() {
                         return <Sequencer 
                                     url={sample.url}
                                     sample={sample}  
-                                    saveTrack={saveTrack} 
+                                    saveTrack={saveTrack}
                                     track={currTrack}
                                     key={idx}
                                 />
