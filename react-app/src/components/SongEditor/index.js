@@ -126,6 +126,7 @@ export default function SongEditor() {
                                     sample={sample}  
                                     saveTrack={saveTrack}
                                     track={currTrack}
+                                    play={play}
                                     key={idx}
                                 />
                     })}

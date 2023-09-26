@@ -3,7 +3,7 @@ import { Track, Instrument } from "reactronica"
 import Toggle from "./Toggle"
 import "./Sequencer.css"
 
-export default function Sequencer({url, sample, saveTrack, track}) {
+export default function Sequencer({url, sample, saveTrack, track, play}) {
 
     const [steps, setSteps] = useState({})
     const [mute, setMute] = useState(false)
@@ -11,6 +11,12 @@ export default function Sequencer({url, sample, saveTrack, track}) {
     const [currSample, setCurrSample] = useState(url)
     const [seed, setSeed] = useState(1);
     const [currStep, setCurrStep] = useState(-1)
+
+    useEffect(() => {
+        if (!play) {
+            setCurrStep(-1)
+        }
+    }, [play])
     
     useEffect(() => {
         setSavedSteps(track?.steps)
