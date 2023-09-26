@@ -10,10 +10,11 @@ export default function Sequencer({url, sample, saveTrack, track}) {
     const [savedSteps, setSavedSteps] = useState(track?.steps)
     const [currSample, setCurrSample] = useState(url)
     const [seed, setSeed] = useState(1);
-    const [currStep, setCurrStep] = useState(0)
+    const [currStep, setCurrStep] = useState(-1)
     
     useEffect(() => {
         setSavedSteps(track?.steps)
+        setCurrStep(-1)
         return
     }, [track])
     
@@ -56,6 +57,12 @@ export default function Sequencer({url, sample, saveTrack, track}) {
 
     }, [savedSteps])
 
+    useEffect(() => {
+        if (currStep > 15) {
+            setCurrStep(0)
+        }
+    }, [currStep])
+
     function handleToggle(step, state) {
         setSteps({
             ...steps,
@@ -64,12 +71,10 @@ export default function Sequencer({url, sample, saveTrack, track}) {
     }
 
     function handleStepChange() {
-        if (currStep <= 14) {
             setCurrStep((prev) => {return prev + 1})
-        } else {
-            setCurrStep(0)
-        }
     }
+
+    console.log(currStep)
 
     return (
         <>
@@ -83,14 +88,13 @@ export default function Sequencer({url, sample, saveTrack, track}) {
                 let curr
                 currStep === idx ? curr = "active-step" : curr = ""
                 return (
-                    <span className={curr}>
                     <Toggle
                         handleToggle={handleToggle}
                         step={idx} 
                         on={on}
                         key={idx}
+                        curr={curr}
                     />
-                    </span>
                 )
             })}
         </div>

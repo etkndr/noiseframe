@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ReactSwitch from "react-switch"
 import "./Sequencer.css"
 
-export default function Toggle({handleToggle, step, on}) {
+export default function Toggle({handleToggle, step, on, curr}) {
     const [active, setActive] = useState(on)
 
     useEffect(() => {
@@ -31,11 +31,11 @@ export default function Toggle({handleToggle, step, on}) {
 
     return (
         <>
-            <label className="switch">
+            <label className={`switch ${curr}`}>
                 <input type="checkbox"
                 onChange={(e) => returnState(e)}
                 checked={active}/>
-                <span className="slider">
+                <span className={`slider`}>
                     {active && onIcon}
                     {!active && offIcon}
                 </span>

@@ -53,9 +53,9 @@
     margin: 0 5px;
   }
 
-.active-step {
-    border: 5px solid #C8AD55;
-
+.switch.active-step {
+    box-sizing: border-box;
+    border: 2px solid #C8AD55;
 }
   
   /* Hide default HTML checkbox */
