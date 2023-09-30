@@ -26,6 +26,7 @@ export default function InstEditor({loader}) {
     const [currSample, setCurrSample] = useState("")
     const [err, setErr] = useState({})
     const [formVals, setFormVals] = useState({})
+    const [seed, setSeed] = useState(1)
     
     useEffect(() => {
         dispatch(instrumentActions.getInstrument(id))
@@ -121,6 +122,14 @@ export default function InstEditor({loader}) {
                 resetFile.current.type = "file";
             }
         })
+        .then(() => dispatch(sampleActions.getSamples(id)))
+        .then((res) => {
+            const names = {}
+            Object.values(res).forEach((sample, idx) => {
+                names[idx] = sample.name
+            })
+            setFormVals({...names})
+        })
     }
 
     const nameChange = (sampleName, sampleId) => {
@@ -135,6 +144,14 @@ export default function InstEditor({loader}) {
         e.preventDefault()
         dispatch(sampleActions.deleteSample(id))
         .then(() => dispatch(sampleActions.getSamples(inst?.id)))
+        .then((res) => {
+            const names = {}
+            Object.values(res).forEach((sample, idx) => {
+                names[idx] = sample.name
+            })
+            setFormVals({...names})
+        })
+        .then(() => setSeed(Math.random()))
     }
 
     const songFromInst = (title, bpm) => {
@@ -156,6 +173,7 @@ export default function InstEditor({loader}) {
             [idx]: e.target.value
         }))
     }
+    
     if (inst?.user_id !== currUser?.id || !currUser) {
         return "Unauthorized"
     }
@@ -201,8 +219,8 @@ export default function InstEditor({loader}) {
             <Song isPlaying={playing} bpm={120}>
                 {samples?.map((sample, idx) => {
                     return (
-                        <Track steps={["C3"]} mute={currSample !== idx} volume={0.7}>
-                            <Inst sample={sample.url}/>
+                        <Track steps={["C3"]} mute={currSample !== idx} volume={0.7} key={seed*idx}>
+                            <Inst sample={sample.url} key={`inst-${seed*idx}`}/>
                         </Track>
                     )
                 })}
