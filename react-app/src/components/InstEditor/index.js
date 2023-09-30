@@ -108,10 +108,13 @@ export default function InstEditor({loader}) {
         let formData = new FormData()
         formData.append("name", sampleName)
         formData.append("sample", sample)
-        setSampleLoading(true)
+
+        if (sample && sampleName) {
+            setSampleLoading(true)
+        }
 
         dispatch(sampleActions.newSample(id, formData))
-        .then(() => setSampleLoading(false))
+        .then(() => {setSampleLoading(false)})
         .then(() => {
             setSample("")
             setSampleName("")
@@ -181,51 +184,17 @@ export default function InstEditor({loader}) {
     return (
         <>
         <div className="home-left">
-            <div>
+            <div className="title-container">
                 <input className="inst-title" 
                     onChange={(e) => setTitle(e.target.value)} 
                     placeholder="title" 
                     value={title}
                     onBlur={save}/>
-                <span className="dlt-inst" onClick={dltInst}><span class="material-symbols-outlined">delete_forever</span></span>
+                <button className="dlt-inst" onClick={dltInst}>delete instrument</button>
             </div>
-            <div className="inst-samples">
-                {samples?.map((sample, idx) => {
-                    return (
-                        <li key={idx}>
-                            <input 
-                                className="sample-name"
-                                value={formVals[idx]}
-                                onChange={(e) => handleOnChange(e, idx)}
-                                onBlur={(e) => nameChange(e.target.value, sample.id)}
-                                />
-                            <span className="listen" onClick={() => {
-                                if (playing && currSample === idx) {
-                                    setPlaying(false)
-                                } else {
-                                    handleFocus(idx)
-                                }
-                                }}>
-                                {playing && currSample === idx && <span className="play-stop"><span class="material-symbols-outlined">stop_circle</span></span>}
-                                {!playing && <span className="play-stop"><span class="material-symbols-outlined">play_circle</span></span>}
-                                {playing && currSample !== idx && <span className="play-stop"><span class="material-symbols-outlined">play_circle</span></span>}
-                            </span>
-                            <span className="dlt-sample" onClick={(e) => dltSample(e, sample.id)}><span class="material-symbols-outlined">delete_forever</span></span>
-                        </li>
-                    )
-                })}
-                {sampleLoading && "uploading..."}
-            </div>
-            <Song isPlaying={playing} bpm={120}>
-                {samples?.map((sample, idx) => {
-                    return (
-                        <Track steps={["C3"]} mute={currSample !== idx} volume={0.7} key={seed*idx}>
-                            <Inst sample={sample.url} key={`inst-${seed*idx}`}/>
-                        </Track>
-                    )
-                })}
-            </Song>
-            <form className="sample-form" onSubmit={addSample} encType="multipart/form-data">
+            <div className="sample-form">
+            <div className="form-title">upload a new sound</div>
+            <form className="form-inputs" onSubmit={addSample} encType="multipart/form-data">
                 <input className="sample-input" type="text" onChange={(e) => setSampleName(e.target.value)} placeholder="sample name" value={sampleName}/>
                 <input className="sample-input" ref={resetFile} type="file" accept="audio/*" onChange={(e) => {
                     if (e.target.files[0].size > 204800) {
@@ -258,6 +227,43 @@ export default function InstEditor({loader}) {
                 </p>
                 </div>
             </div>
+            </div>
+            <div className="inst-samples">
+                {samples?.map((sample, idx) => {
+                    return (
+                        <li className="sample-detail" key={idx}>
+                            <input 
+                                className="sample-name"
+                                value={formVals[idx]}
+                                onChange={(e) => handleOnChange(e, idx)}
+                                onBlur={(e) => nameChange(e.target.value, sample.id)}
+                                />
+                            <span className="listen" onClick={() => {
+                                if (playing && currSample === idx) {
+                                    setPlaying(false)
+                                } else {
+                                    handleFocus(idx)
+                                }
+                                }}>
+                                {playing && currSample === idx && <span className="play-stop"><span className="material-symbols-outlined">stop_circle</span></span>}
+                                {!playing && <span className="play-stop"><span className="material-symbols-outlined">play_circle</span></span>}
+                                {playing && currSample !== idx && <span className="play-stop"><span className="material-symbols-outlined">play_circle</span></span>}
+                            <span className="dlt-sample" onClick={(e) => dltSample(e, sample.id)}><span className="material-symbols-outlined">delete_forever</span></span>
+                            </span>
+                        </li>
+                    )
+                })}
+                {sampleLoading && "uploading..."}
+            </div>
+            <Song isPlaying={playing} bpm={120}>
+                {samples?.map((sample, idx) => {
+                    return (
+                        <Track steps={["C3"]} mute={currSample !== idx} volume={0.7} key={seed*idx}>
+                            <Inst sample={sample.url} key={`inst-${seed*idx}`}/>
+                        </Track>
+                    )
+                })}
+            </Song>
             </div>
             <div className="home-right">
                 <h3>instructions</h3>
