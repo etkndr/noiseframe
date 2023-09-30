@@ -52,6 +52,11 @@
     height: 24px;
     margin: 0 5px;
   }
+
+.switch.active-step {
+    box-sizing: border-box;
+    border: 2px solid #C8AD55;
+}
   
   /* Hide default HTML checkbox */
   .switch input {

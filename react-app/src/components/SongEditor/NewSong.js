@@ -98,8 +98,8 @@ export default function NewSong() {
             </div>
             </div>
             <div className="err new-song">
-                {Object.values(err).map((error) => {
-                    return <p>{error}</p>
+                {Object.values(err).map((error, idx) => {
+                    return <p key={idx}>{error}</p>
                 })}
             </div>
             <div>

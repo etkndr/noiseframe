@@ -3,17 +3,24 @@ import { Track, Instrument } from "reactronica"
 import Toggle from "./Toggle"
 import "./Sequencer.css"
 
-export default function Sequencer({url, sample, saveTrack, track}) {
+export default function Sequencer({url, sample, saveTrack, track, play}) {
 
     const [steps, setSteps] = useState({})
     const [mute, setMute] = useState(false)
     const [savedSteps, setSavedSteps] = useState(track?.steps)
     const [currSample, setCurrSample] = useState(url)
     const [seed, setSeed] = useState(1);
-    let currStep
+    const [currStep, setCurrStep] = useState(-1)
+
+    useEffect(() => {
+        if (!play) {
+            setCurrStep(-1)
+        }
+    }, [play])
     
     useEffect(() => {
         setSavedSteps(track?.steps)
+        setCurrStep(-1)
         return
     }, [track])
     
@@ -31,10 +38,12 @@ export default function Sequencer({url, sample, saveTrack, track}) {
                 return step
             }
         })
-        
-        saveTrack(track?.id, joinSteps.join(" "))
-    }, [steps])
 
+        if (joinSteps) {
+            saveTrack(track?.id, joinSteps?.join(" "))
+        }
+    }, [steps])
+    
     useEffect(() => {
         if (savedSteps) {
             savedSteps.split(" ").forEach((step, idx) => {
@@ -54,20 +63,24 @@ export default function Sequencer({url, sample, saveTrack, track}) {
 
     }, [savedSteps])
 
+    useEffect(() => {
+        if (currStep > 15) {
+            setCurrStep(0)
+        }
+    }, [currStep])
+
     function handleToggle(step, state) {
-        setSteps((prev) => ({
-            ...prev,
+        setSteps({
+            ...steps,
             [step]: state
-        }))
+        })
     }
 
     function handleStepChange() {
-        if (currStep <= 14) {
-            currStep++
-        } else {
-            currStep = 0
-        }
+            setCurrStep((prev) => {return prev + 1})
     }
+
+    console.log(currStep)
 
     return (
         <>
@@ -77,18 +90,22 @@ export default function Sequencer({url, sample, saveTrack, track}) {
         <div className="seq">
         <div className="seq-row">
             {Object.values(steps)?.map((step, idx) => {
+                const on = step !== null
+                let curr
+                currStep === idx ? curr = "active-step" : curr = ""
                 return (
-                    <Toggle 
-                        handleToggle={handleToggle} 
+                    <Toggle
+                        handleToggle={handleToggle}
                         step={idx} 
-                        on={step !== null}
+                        on={on}
                         key={idx}
+                        curr={curr}
                     />
                 )
             })}
         </div>
             <button className="mute" onClick={() => setMute(!mute)}><span className="muted">{mute && `unmute`}</span> {!mute && `mute`}</button>
-        <Track steps={Object.values(steps)} onStepPlay={handleStepChange} mute={mute}>
+        <Track steps={Object.values(steps)} onStepPlay={handleStepChange} mute={mute} key={`track-${seed}`}>
             <Instrument type="sampler" samples={{"C3": currSample}} key={seed}/>
         </Track>
         </div>
