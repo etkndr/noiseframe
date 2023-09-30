@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
 import classnames from "classnames"
 
-export default function Home() {
+export default function Home({loader}) {
     const history = useHistory()
     const dispatch = useDispatch()
     const songs = useSelector(state => Object.values(state.songs))

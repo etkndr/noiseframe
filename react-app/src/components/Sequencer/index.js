@@ -3,7 +3,7 @@ import { Track, Instrument } from "reactronica"
 import Toggle from "./Toggle"
 import "./Sequencer.css"
 
-export default function Sequencer({url, sample, saveTrack, track, play}) {
+export default function Sequencer({url, sample, saveTrack, track, play, loader}) {
 
     const [steps, setSteps] = useState({})
     const [mute, setMute] = useState(false)
@@ -79,8 +79,6 @@ export default function Sequencer({url, sample, saveTrack, track, play}) {
     function handleStepChange() {
             setCurrStep((prev) => {return prev + 1})
     }
-
-    console.log(currStep)
 
     return (
         <>

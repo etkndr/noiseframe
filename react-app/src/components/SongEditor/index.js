@@ -9,7 +9,7 @@ import {Song} from "reactronica"
 import Sequencer from "../Sequencer"
 import "./Song.css"
 
-export default function SongEditor() {
+export default function SongEditor({loader}) {
     const dispatch = useDispatch()
     const history = useHistory()
     const {id} = useParams()
@@ -19,7 +19,6 @@ export default function SongEditor() {
     const samples = useSelector(state => Object.values(state.samples))
     const tracks = useSelector(state => Object.values(state.tracks))
     const [play, setPlay] = useState(false)
-    
     const [selInst, setSelInst] = useState(null)
     const [title, setTitle] = useState(null)
     const [bpm, setBpm] = useState(null)
@@ -127,6 +126,7 @@ export default function SongEditor() {
                                     saveTrack={saveTrack}
                                     track={currTrack}
                                     play={play}
+                                    loader={loader}
                                     key={idx}
                                 />
                     })}

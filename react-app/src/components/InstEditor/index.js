@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from "react-redux"
 import { Song, Track, Instrument } from "reactronica"
 import * as instrumentActions from "../../store/instruments"
 import * as sampleActions from "../../store/samples"
+import { saveSong } from "../../store/songs"
 import Inst from "./Inst"
 import "./Instrument.css"
 
 
-export default function InstEditor() {
+export default function InstEditor({loader}) {
     const dispatch = useDispatch()
     const history = useHistory()
     const resetFile = useRef(null)
@@ -24,10 +25,18 @@ export default function InstEditor() {
     const [sampleLoading, setSampleLoading] = useState(false)
     const [currSample, setCurrSample] = useState("")
     const [err, setErr] = useState({})
+    const [formVals, setFormVals] = useState({})
     
     useEffect(() => {
         dispatch(instrumentActions.getInstrument(id))
         dispatch(sampleActions.getSamples(id))
+        .then((res) => {
+            const names = {}
+            Object.values(res).forEach((sample, idx) => {
+                names[idx] = sample.name
+            })
+            setFormVals({...names})
+        })
     }, [dispatch])
     
     useEffect(() => {
@@ -114,12 +123,39 @@ export default function InstEditor() {
         })
     }
 
+    const nameChange = (sampleName, sampleId) => {
+        const newName = {
+            name: sampleName
+        }
+        const save = dispatch(sampleActions.editSample(sampleId, newName))
+        .then((res) => console.log(res))
+    }
+
     const dltSample = (e, id) => {
         e.preventDefault()
         dispatch(sampleActions.deleteSample(id))
         .then(() => dispatch(sampleActions.getSamples(inst?.id)))
     }
 
+    const songFromInst = (title, bpm) => {
+        const newSong = {
+            instrument_id: id,
+            title,
+            bpm
+        }
+
+        const save = dispatch(saveSong(newSong))
+        .then((res) => history.push(`/songs/${res.id}`))
+    }
+
+    const handleOnChange = (e, idx) => {
+        e.preventDefault()
+
+        setFormVals((prev) => ({
+            ...prev,
+            [idx]: e.target.value
+        }))
+    }
     if (inst?.user_id !== currUser?.id || !currUser) {
         return "Unauthorized"
     }
@@ -133,26 +169,31 @@ export default function InstEditor() {
                     placeholder="title" 
                     value={title}
                     onBlur={save}/>
+                <span className="dlt-inst" onClick={dltInst}><span class="material-symbols-outlined">delete_forever</span></span>
             </div>
-            <button className="dlt-inst" onClick={dltInst}>delete instrument</button>
             <div className="inst-samples">
                 {samples?.map((sample, idx) => {
                     return (
-                        <li key={idx}>{sample.name}
-                    <button className="listen" onClick={() => {
-                        if (playing && currSample === idx) {
-                            setPlaying(false)
-                        } else {
-                            handleFocus(idx)
-                        }
-                        }}>
-                            {playing && currSample === idx && "stop"}
-                            {!playing && "listen"}
-                            {playing && currSample !== idx && "listen"}
-                    </button>
-                    {/* <button onClick={() => setPlaying(false)}>stop</button> */}
-                    <button onClick={(e) => dltSample(e, sample.id)}>delete</button>
-                    </li>
+                        <li key={idx}>
+                            <input 
+                                className="sample-name"
+                                value={formVals[idx]}
+                                onChange={(e) => handleOnChange(e, idx)}
+                                onBlur={(e) => nameChange(e.target.value, sample.id)}
+                                />
+                            <span className="listen" onClick={() => {
+                                if (playing && currSample === idx) {
+                                    setPlaying(false)
+                                } else {
+                                    handleFocus(idx)
+                                }
+                                }}>
+                                {playing && currSample === idx && <span className="play-stop"><span class="material-symbols-outlined">stop_circle</span></span>}
+                                {!playing && <span className="play-stop"><span class="material-symbols-outlined">play_circle</span></span>}
+                                {playing && currSample !== idx && <span className="play-stop"><span class="material-symbols-outlined">play_circle</span></span>}
+                            </span>
+                            <span className="dlt-sample" onClick={(e) => dltSample(e, sample.id)}><span class="material-symbols-outlined">delete_forever</span></span>
+                        </li>
                     )
                 })}
                 {sampleLoading && "uploading..."}
