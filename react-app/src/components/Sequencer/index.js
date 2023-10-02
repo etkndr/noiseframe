@@ -20,7 +20,6 @@ export default function Sequencer({url, sample, saveTrack, track, play, loader})
     
     useEffect(() => {
         setSavedSteps(track?.steps)
-        setCurrStep(-1)
         return
     }, [track])
     

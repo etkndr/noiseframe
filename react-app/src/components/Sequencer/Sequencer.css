@@ -55,7 +55,8 @@
 
 .switch.active-step {
     box-sizing: border-box;
-    border: 2px solid #33352376;
+    /* border: 2px solid #33352376; */
+    box-shadow: 0 0 5px #ffc400 ;
 }
   
   /* Hide default HTML checkbox */
