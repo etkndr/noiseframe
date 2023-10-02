@@ -157,11 +157,11 @@ export default function InstEditor({loader}) {
         .then(() => setSeed(Math.random()))
     }
 
-    const songFromInst = (title, bpm) => {
+    const songFromInst = () => {
         const newSong = {
             instrument_id: id,
-            title,
-            bpm
+            title: `song from ${title}`,
+            bpm: 120
         }
 
         const save = dispatch(saveSong(newSong))
@@ -190,7 +190,10 @@ export default function InstEditor({loader}) {
                     placeholder="title" 
                     value={title}
                     onBlur={save}/>
-                <button className="dlt-inst" onClick={dltInst}>delete instrument</button>
+            </div>
+            <div className="inst-controls">
+                <div className="inst-to-song" onClick={songFromInst}><span className="material-symbols-outlined">add_circle</span> use in new song</div>
+                <div className="dlt-inst" onClick={dltInst}><span className="material-symbols-outlined">delete_forever</span> delete instrument</div>
             </div>
             <div className="sample-form">
             <div className="form-title">upload a new sound</div>

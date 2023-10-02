@@ -40,9 +40,37 @@
     max-height: 5px;
 }
 
-.dlt-inst {
+.inst-controls {
+    margin: 15px 0;
+    padding-bottom: 5px;
+    font-size: 8pt;
+    color: #646C41;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 98%;
+    border-bottom: 1px solid #646C41;
+}
+
+.dlt-inst span, .inst-to-song span {
+    font-size: 14pt;
+    margin-right: 5px;
+}
+
+.dlt-inst, .inst-to-song {
     margin: 0;
     margin-bottom: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.inst-to-song {
+    margin-right: 20px;
+}
+
+.dlt-inst:hover, .inst-to-song:hover {
+    color: #C8AD55;
 }
 
 .sample-detail, .sample-form {
@@ -53,6 +81,10 @@
     align-items: center;
     justify-content: flex-start;
     width: 95%;
+}
+
+.sample-detail {
+    padding: 5px 10px;
 }
 
 .play-stop {
