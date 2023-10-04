@@ -68,7 +68,7 @@ export default function Home({loader}) {
                         })}
                     </div>
                     <div className="list-btns">
-                        <button className="tooltip" onClick={() => selInst > 0 && history.push(`/instruments/${selInst}`)} disabled={!selInst}>
+                        <button className="tooltip" onClick={() => selInst > 0 && history.push(`/instruments/${selInst}`)} disabled={!selInst} ref={instRef}>
                             {!selInst && <span className="tooltext">select an instrument to edit</span>}
                             edit instrument
                         </button>
@@ -103,7 +103,7 @@ export default function Home({loader}) {
                         })}
                     </div>
                     <div className="list-btns">
-                        <button className="tooltip" onClick={() => selSong > 0 && history.push(`/songs/${selSong}`)} disabled={!selSong}>
+                        <button className="tooltip" onClick={() => selSong > 0 && history.push(`/songs/${selSong}`)} disabled={!selSong} ref={songRef}>
                             {!selSong && <span className="tooltext">select a song to edit</span>}
                             edit song
                         </button>
