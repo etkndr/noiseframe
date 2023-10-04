@@ -192,11 +192,11 @@ export default function InstEditor({loader}) {
                     onBlur={save}/>
             </div>
             <div className="inst-controls">
-                <div className="inst-to-song" onClick={songFromInst}><span className="material-symbols-outlined">add_circle</span> use in new song</div>
+                <div className="inst-to-song" onClick={songFromInst}><span className="material-symbols-outlined">add_circle</span> create song</div>
                 <div className="dlt-inst" onClick={dltInst}><span className="material-symbols-outlined">delete_forever</span> delete instrument</div>
             </div>
             <div className="sample-form">
-            <div className="form-title">upload a new sound</div>
+            <div className="form-title">upload a sound</div>
             <form className="form-inputs" onSubmit={addSample} encType="multipart/form-data">
                 <input className="sample-input" type="text" onChange={(e) => setSampleName(e.target.value)} placeholder="sample name" value={sampleName}/>
                 <input className="sample-input" ref={resetFile} type="file" accept="audio/*" onChange={(e) => {

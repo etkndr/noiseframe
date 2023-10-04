@@ -101,7 +101,10 @@ export default function Sequencer({url, sample, saveTrack, track, play, loader})
                 )
             })}
         </div>
-            <button className="mute" onClick={() => setMute(!mute)}><span className="muted">{mute && `unmute`}</span> {!mute && `mute`}</button>
+            <button className="mute" onClick={() => setMute(!mute)}>
+                <span className="muted">{mute && <span class="material-symbols-outlined">volume_off</span>}</span> 
+                {!mute && <span className="material-symbols-outlined">volume_up</span>}
+            </button>
         <Track steps={Object.values(steps)} onStepPlay={handleStepChange} mute={mute} key={`track-${seed}`}>
             <Instrument type="sampler" samples={{"C3": currSample}} key={seed}/>
         </Track>

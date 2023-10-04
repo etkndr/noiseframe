@@ -107,14 +107,15 @@ export default function SongEditor({loader}) {
                     onChange={(e) => setBpm(e.target.value)} 
                     placeholder="BPM" 
                     name="bpm" 
-                    value={bpm}/> bpm
+                    value={bpm}
+                    onBlur={saveSong}/> bpm
             </div>
-            <div className="song-btns">
+            <div className="inst-controls">
                 {selInst &&
-                    <button className="play-song" onClick={() => setPlay(!play)}>{!play && "play"}{play && "stop"}</button>
+                    <div className="inst-to-song" onClick={() => setPlay(!play)}>{!play && <span className="material-symbols-outlined">play_circle</span>} {!play && "play"}
+                    {play && <span className="material-symbols-outlined">stop_circle</span>} {play && "stop"}</div>
                 }
-                <button onClick={saveSong}>save song</button>
-                <button onClick={dltSong}>delete song</button>
+                <div className="dlt-inst" onClick={dltSong}><span className="material-symbols-outlined">delete_forever</span> delete song</div>
             </div>
             <div>
                 <Song bpm={bpm*2 || 240} isPlaying={play}>
