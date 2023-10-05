@@ -1,5 +1,5 @@
 import { NavLink, useParams, useHistory } from "react-router-dom/cjs/react-router-dom.min"
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import * as songActions from "../../store/songs"
 import { getInstruments } from "../../store/instruments"
@@ -12,7 +12,6 @@ import "./Song.css"
 export default function SongEditor({loader}) {
     const dispatch = useDispatch()
     const history = useHistory()
-    const instRef = useRef(null)
     const {id} = useParams()
     const currUser = useSelector(state => state.session.user)
     const song = useSelector(state => state.songs)
@@ -44,20 +43,6 @@ export default function SongEditor({loader}) {
             dispatch(sampleActions.getSamples(selInst))
         }
     }, [selInst])
-
-    useEffect(() => {
-        function handleClickOutside(event) {
-        if (instRef.current && !instRef.current.contains(event.target)) {
-            setSelInst(null)
-        }
-        }
-        // Bind the event listener
-        document.addEventListener("mousedown", handleClickOutside)
-        return () => {
-        // Unbind the event listener on clean up
-        document.removeEventListener("mousedown", handleClickOutside)
-        };
-    }, [instRef]);
     
     function saveSong(e) {
         e.preventDefault()
@@ -155,7 +140,7 @@ export default function SongEditor({loader}) {
                 <div className="list-title">
                         <h3>change instrument</h3>
                 </div>
-                <div className="list" ref={instRef}>
+                <div className="list">
                     {insts?.map((inst, idx) => {
                         let select = ""
                         if (inst.id === selInst) {
@@ -169,7 +154,7 @@ export default function SongEditor({loader}) {
                 </div>
             </div>
         </div>
-        <button className="song-edit-btn" onClick={() => history.push(`/instruments/${selInst}`)} ref={instRef}>edit instrument</button>
+        <button className="song-edit-btn" onClick={() => history.push(`/instruments/${selInst}`)}>edit instrument</button>
         </div>
         </>
     )
