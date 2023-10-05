@@ -1,5 +1,5 @@
 import { NavLink, useParams, useHistory } from "react-router-dom/cjs/react-router-dom.min"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import * as songActions from "../../store/songs"
 import { getInstruments } from "../../store/instruments"
@@ -9,9 +9,10 @@ import {Song} from "reactronica"
 import Sequencer from "../Sequencer"
 import "./Song.css"
 
-export default function SongEditor() {
+export default function SongEditor({loader}) {
     const dispatch = useDispatch()
     const history = useHistory()
+    const instRef = useRef(null)
     const {id} = useParams()
     const currUser = useSelector(state => state.session.user)
     const song = useSelector(state => state.songs)
@@ -19,7 +20,6 @@ export default function SongEditor() {
     const samples = useSelector(state => Object.values(state.samples))
     const tracks = useSelector(state => Object.values(state.tracks))
     const [play, setPlay] = useState(false)
-    
     const [selInst, setSelInst] = useState(null)
     const [title, setTitle] = useState(null)
     const [bpm, setBpm] = useState(null)
@@ -44,6 +44,20 @@ export default function SongEditor() {
             dispatch(sampleActions.getSamples(selInst))
         }
     }, [selInst])
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+        if (instRef.current && !instRef.current.contains(event.target)) {
+            setSelInst(null)
+        }
+        }
+        // Bind the event listener
+        document.addEventListener("mousedown", handleClickOutside)
+        return () => {
+        // Unbind the event listener on clean up
+        document.removeEventListener("mousedown", handleClickOutside)
+        };
+    }, [instRef]);
     
     function saveSong(e) {
         e.preventDefault()
@@ -108,14 +122,15 @@ export default function SongEditor() {
                     onChange={(e) => setBpm(e.target.value)} 
                     placeholder="BPM" 
                     name="bpm" 
-                    value={bpm}/> bpm
+                    value={bpm}
+                    onBlur={saveSong}/> bpm
             </div>
-            <div className="song-btns">
+            <div className="inst-controls">
                 {selInst &&
-                    <button className="play-song" onClick={() => setPlay(!play)}>{!play && "play"}{play && "stop"}</button>
+                    <div className="inst-to-song" onClick={() => setPlay(!play)}>{!play && <span className="material-symbols-outlined">play_circle</span>} {!play && "play"}
+                    {play && <span className="material-symbols-outlined">stop_circle</span>} {play && "stop"}</div>
                 }
-                <button onClick={saveSong}>save song</button>
-                <button onClick={dltSong}>delete song</button>
+                <div className="dlt-inst" onClick={dltSong}><span className="material-symbols-outlined">delete_forever</span> delete song</div>
             </div>
             <div>
                 <Song bpm={bpm*2 || 240} isPlaying={play}>
@@ -127,6 +142,7 @@ export default function SongEditor() {
                                     saveTrack={saveTrack}
                                     track={currTrack}
                                     play={play}
+                                    loader={loader}
                                     key={idx}
                                 />
                     })}
@@ -139,7 +155,7 @@ export default function SongEditor() {
                 <div className="list-title">
                         <h3>change instrument</h3>
                 </div>
-                <div className="list">
+                <div className="list" ref={instRef}>
                     {insts?.map((inst, idx) => {
                         let select = ""
                         if (inst.id === selInst) {
@@ -153,7 +169,7 @@ export default function SongEditor() {
                 </div>
             </div>
         </div>
-        <button className="song-edit-btn" onClick={() => history.push(`/instruments/${selInst}`)}>edit instrument</button>
+        <button className="song-edit-btn" onClick={() => history.push(`/instruments/${selInst}`)} ref={instRef}>edit instrument</button>
         </div>
         </>
     )

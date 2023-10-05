@@ -14,14 +14,14 @@
 .seq-row {
     margin: 0;
     padding: 10px;
-    width: 100%;
+    width: fit;
     background-color: #c5bea6;
     display: flex;
     align-items: center;
 }
 
 .mute {
-    margin: 0 20px;
+    margin: 0 20px 0 5px;
     width: 60px;
     padding: 0;
     background-color: #646c4100;
@@ -55,7 +55,8 @@
 
 .switch.active-step {
     box-sizing: border-box;
-    border: 2px solid #C8AD55;
+    /* border: 2px solid #33352376; */
+    box-shadow: 0 0 5px #ffc400 ;
 }
   
   /* Hide default HTML checkbox */

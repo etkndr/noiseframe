@@ -2,50 +2,137 @@
     width: 100%;
     padding: 0 20px 0 20px;
 }
+
+.title-container {
+    width: 98%;
+    display: flex;
+    margin: 10px 0;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .inst-title {
     background-color: #E1DAC4;
     border: 0;
     font-size: 12pt;
     font-weight: 800;
     color: #333523;
-    max-width: fit-content;
+    width: 75%;
     padding: 0;
     margin: 0;
-    margin-bottom: 10px;
 }
 
-.sample-form {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-height: 30px;
-    align-items: center;
-}
-
-.sample-input {
-    width: 40%;
-    max-height: 25px;
-    margin: 0;
+.inst-samples {
+    margin: 20px 0;
 }
 
 .err-container {
     width: 100%;
     display: flex;
+    margin-left:10px;
 }
 
 .err {
-    width: 43.5%;
+    width: 42.5%;
     color: red;
     font-size: 8pt;
     font-weight: 400;
     max-height: 5px;
 }
 
-.dlt-inst {
+.inst-controls {
+    margin: 15px 0;
+    padding-bottom: 5px;
+    font-size: 8pt;
+    color: #646C41;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 98%;
+    border-bottom: 1px solid #646C41;
+}
+
+.dlt-inst span, .inst-to-song span {
+    font-size: 14pt;
+    margin-right: 5px;
+}
+
+.dlt-inst, .inst-to-song {
     margin: 0;
     margin-bottom: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.inst-to-song {
+    margin-right: 20px;
+}
+
+.dlt-inst:hover, .inst-to-song:hover {
+    color: #C8AD55;
+}
+
+.sample-detail, .sample-form {
+    background-color: #c5bea6;
+    padding: 0 10px;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 95%;
+}
+
+.sample-detail {
+    padding: 5px 10px;
+}
+
+.play-stop {
+    color: #646C41;
+}
+
+.dlt-sample {
+    cursor: pointer;
+    color: rgb(187, 5, 5);
+}
+
+.form-title {
+    margin: 15px 10px 5px;
+    font-weight: 600;
+    font-size: 11pt;
+}
+
+.sample-form {
+    margin-top: 30px;
+    height: 100px;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.form-inputs {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-bottom: -15px;
 }
 
 .listen {
-    width: 60px;
+    cursor: pointer;
+    display: flex;
+    width: 20%;
+    justify-content: space-around;
+}
+
+.sample-name, .sample-input {
+    border: 0;
+    background-color: #E1DAC4;
+}
+
+.sample-name {
+    width: 85%;
+    margin-left: 10px;
+}
+
+.sample-input {
+    width: 50%;
 }

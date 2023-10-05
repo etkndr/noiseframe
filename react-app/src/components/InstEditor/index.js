@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from "react-redux"
 import { Song, Track, Instrument } from "reactronica"
 import * as instrumentActions from "../../store/instruments"
 import * as sampleActions from "../../store/samples"
+import { saveSong } from "../../store/songs"
 import Inst from "./Inst"
 import "./Instrument.css"
 
 
-export default function InstEditor() {
+export default function InstEditor({loader}) {
     const dispatch = useDispatch()
     const history = useHistory()
     const resetFile = useRef(null)
@@ -24,10 +25,19 @@ export default function InstEditor() {
     const [sampleLoading, setSampleLoading] = useState(false)
     const [currSample, setCurrSample] = useState("")
     const [err, setErr] = useState({})
+    const [formVals, setFormVals] = useState({})
+    const [seed, setSeed] = useState(1)
     
     useEffect(() => {
         dispatch(instrumentActions.getInstrument(id))
         dispatch(sampleActions.getSamples(id))
+        .then((res) => {
+            const names = {}
+            Object.values(res).forEach((sample, idx) => {
+                names[idx] = sample.name
+            })
+            setFormVals({...names})
+        })
     }, [dispatch])
     
     useEffect(() => {
@@ -98,10 +108,13 @@ export default function InstEditor() {
         let formData = new FormData()
         formData.append("name", sampleName)
         formData.append("sample", sample)
-        setSampleLoading(true)
+
+        if (sample && sampleName) {
+            setSampleLoading(true)
+        }
 
         dispatch(sampleActions.newSample(id, formData))
-        .then(() => setSampleLoading(false))
+        .then(() => {setSampleLoading(false)})
         .then(() => {
             setSample("")
             setSampleName("")
@@ -112,14 +125,58 @@ export default function InstEditor() {
                 resetFile.current.type = "file";
             }
         })
+        .then(() => dispatch(sampleActions.getSamples(id)))
+        .then((res) => {
+            const names = {}
+            Object.values(res).forEach((sample, idx) => {
+                names[idx] = sample.name
+            })
+            setFormVals({...names})
+        })
+    }
+
+    const nameChange = (sampleName, sampleId) => {
+        const newName = {
+            name: sampleName
+        }
+        const save = dispatch(sampleActions.editSample(sampleId, newName))
+        .then((res) => console.log(res))
     }
 
     const dltSample = (e, id) => {
         e.preventDefault()
         dispatch(sampleActions.deleteSample(id))
         .then(() => dispatch(sampleActions.getSamples(inst?.id)))
+        .then((res) => {
+            const names = {}
+            Object.values(res).forEach((sample, idx) => {
+                names[idx] = sample.name
+            })
+            setFormVals({...names})
+        })
+        .then(() => setSeed(Math.random()))
     }
 
+    const songFromInst = () => {
+        const newSong = {
+            instrument_id: id,
+            title: `song from ${title}`,
+            bpm: 120
+        }
+
+        const save = dispatch(saveSong(newSong))
+        .then((res) => history.push(`/songs/${res.id}`))
+    }
+
+    const handleOnChange = (e, idx) => {
+        e.preventDefault()
+
+        setFormVals((prev) => ({
+            ...prev,
+            [idx]: e.target.value
+        }))
+    }
+    
     if (inst?.user_id !== currUser?.id || !currUser) {
         return "Unauthorized"
     }
@@ -127,46 +184,20 @@ export default function InstEditor() {
     return (
         <>
         <div className="home-left">
-            <div>
+            <div className="title-container">
                 <input className="inst-title" 
                     onChange={(e) => setTitle(e.target.value)} 
                     placeholder="title" 
                     value={title}
                     onBlur={save}/>
             </div>
-            <button className="dlt-inst" onClick={dltInst}>delete instrument</button>
-            <div className="inst-samples">
-                {samples?.map((sample, idx) => {
-                    return (
-                        <li key={idx}>{sample.name}
-                    <button className="listen" onClick={() => {
-                        if (playing && currSample === idx) {
-                            setPlaying(false)
-                        } else {
-                            handleFocus(idx)
-                        }
-                        }}>
-                            {playing && currSample === idx && "stop"}
-                            {!playing && "listen"}
-                            {playing && currSample !== idx && "listen"}
-                    </button>
-                    {/* <button onClick={() => setPlaying(false)}>stop</button> */}
-                    <button onClick={(e) => dltSample(e, sample.id)}>delete</button>
-                    </li>
-                    )
-                })}
-                {sampleLoading && "uploading..."}
+            <div className="inst-controls">
+                <div className="inst-to-song" onClick={songFromInst}><span className="material-symbols-outlined">add_circle</span> create song</div>
+                <div className="dlt-inst" onClick={dltInst}><span className="material-symbols-outlined">delete_forever</span> delete instrument</div>
             </div>
-            <Song isPlaying={playing} bpm={120}>
-                {samples?.map((sample, idx) => {
-                    return (
-                        <Track steps={["C3"]} mute={currSample !== idx} volume={0.7}>
-                            <Inst sample={sample.url}/>
-                        </Track>
-                    )
-                })}
-            </Song>
-            <form className="sample-form" onSubmit={addSample} encType="multipart/form-data">
+            <div className="sample-form">
+            <div className="form-title">upload a sound</div>
+            <form className="form-inputs" onSubmit={addSample} encType="multipart/form-data">
                 <input className="sample-input" type="text" onChange={(e) => setSampleName(e.target.value)} placeholder="sample name" value={sampleName}/>
                 <input className="sample-input" ref={resetFile} type="file" accept="audio/*" onChange={(e) => {
                     if (e.target.files[0].size > 204800) {
@@ -199,6 +230,43 @@ export default function InstEditor() {
                 </p>
                 </div>
             </div>
+            </div>
+            <div className="inst-samples">
+                {samples?.map((sample, idx) => {
+                    return (
+                        <li className="sample-detail" key={idx}>
+                            <input 
+                                className="sample-name"
+                                value={formVals[idx]}
+                                onChange={(e) => handleOnChange(e, idx)}
+                                onBlur={(e) => nameChange(e.target.value, sample.id)}
+                                />
+                            <span className="listen" onClick={() => {
+                                if (playing && currSample === idx) {
+                                    setPlaying(false)
+                                } else {
+                                    handleFocus(idx)
+                                }
+                                }}>
+                                {playing && currSample === idx && <span className="play-stop"><span className="material-symbols-outlined">stop_circle</span></span>}
+                                {!playing && <span className="play-stop"><span className="material-symbols-outlined">play_circle</span></span>}
+                                {playing && currSample !== idx && <span className="play-stop"><span className="material-symbols-outlined">play_circle</span></span>}
+                            <span className="dlt-sample" onClick={(e) => dltSample(e, sample.id)}><span className="material-symbols-outlined">delete_forever</span></span>
+                            </span>
+                        </li>
+                    )
+                })}
+                {sampleLoading && "uploading..."}
+            </div>
+            <Song isPlaying={playing} bpm={120}>
+                {samples?.map((sample, idx) => {
+                    return (
+                        <Track steps={["C3"]} mute={currSample !== idx} volume={0.7} key={seed*idx}>
+                            <Inst sample={sample.url} key={`inst-${seed*idx}`}/>
+                        </Track>
+                    )
+                })}
+            </Song>
             </div>
             <div className="home-right">
                 <h3>instructions</h3>

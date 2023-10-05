@@ -3,7 +3,7 @@ import { Track, Instrument } from "reactronica"
 import Toggle from "./Toggle"
 import "./Sequencer.css"
 
-export default function Sequencer({url, sample, saveTrack, track, play}) {
+export default function Sequencer({url, sample, saveTrack, track, play, loader}) {
 
     const [steps, setSteps] = useState({})
     const [mute, setMute] = useState(false)
@@ -20,7 +20,6 @@ export default function Sequencer({url, sample, saveTrack, track, play}) {
     
     useEffect(() => {
         setSavedSteps(track?.steps)
-        setCurrStep(-1)
         return
     }, [track])
     
@@ -80,8 +79,6 @@ export default function Sequencer({url, sample, saveTrack, track, play}) {
             setCurrStep((prev) => {return prev + 1})
     }
 
-    console.log(currStep)
-
     return (
         <>
         <div className="sample-name">
@@ -104,7 +101,10 @@ export default function Sequencer({url, sample, saveTrack, track, play}) {
                 )
             })}
         </div>
-            <button className="mute" onClick={() => setMute(!mute)}><span className="muted">{mute && `unmute`}</span> {!mute && `mute`}</button>
+            <button className="mute" onClick={() => setMute(!mute)}>
+                <span className="muted">{mute && <span class="material-symbols-outlined">volume_off</span>}</span> 
+                {!mute && <span className="material-symbols-outlined">volume_up</span>}
+            </button>
         <Track steps={Object.values(steps)} onStepPlay={handleStepChange} mute={mute} key={`track-${seed}`}>
             <Instrument type="sampler" samples={{"C3": currSample}} key={seed}/>
         </Track>

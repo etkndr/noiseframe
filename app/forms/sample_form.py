@@ -8,3 +8,7 @@ class SampleForm(FlaskForm):
     name = StringField("Sample name", validators=[DataRequired()])
     sample = FileField("Sample file", validators=[FileRequired(), FileAllowed(list(ALLOWED_EXTENSIONS))])
     submit = SubmitField("Add sample")
+    
+class SampleNameForm(FlaskForm):
+    name = StringField("Sample name", validators=[DataRequired()])
+    submit = SubmitField("Change name")

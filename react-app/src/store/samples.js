@@ -1,5 +1,6 @@
 const GET_SAMPLES = "samples/GET_SAMPLES"
 const NEW_SAMPLE = "samples/NEW_SAMPLE"
+const EDIT_SAMPLE = "samples/EDIT_SAMPLE"
 const DELETE_SAMPLE = "samples/DELETE_SAMPLE"
 
 function loadSamples(samples) {
@@ -12,6 +13,13 @@ function loadSamples(samples) {
 function addSample(sample) {
     return {
         type: NEW_SAMPLE,
+        sample
+    }
+}
+
+function saveEdit(sample) {
+    return {
+        type: EDIT_SAMPLE,
         sample
     }
 }
@@ -49,6 +57,21 @@ export const newSample = (id, sample) => async dispatch => {
     }
 }
 
+export const editSample = (id, name) => async dispatch => {
+    const res = await fetch(`/api/samples/${id}`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(name)
+    })
+    console.log(name)
+
+    if (res.ok) {
+        const data = await res.json()
+        dispatch(saveEdit(data))
+        return data
+    }
+}
+
 export const deleteSample = (id) => async dispatch => {
     const res = await fetch(`/api/samples/${id}`, {
         method: "DELETE"
@@ -73,6 +96,9 @@ export default function samples(state = initState, action) {
             })
             return sampleState
         case NEW_SAMPLE:
+            newState[action.sample.id] = action.sample
+            return newState
+        case EDIT_SAMPLE:
             newState[action.sample.id] = action.sample
             return newState
         case DELETE_SAMPLE:

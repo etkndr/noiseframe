@@ -52,7 +52,7 @@ function ProfileButton({ user }) {
     {user && (
     <div>
       <button onClick={openMenu}>
-        {user?.username}
+      <span className="material-symbols-outlined">manage_accounts</span>
       </button>
       <ul className={ulClassName} ref={ulRef}>
           <>

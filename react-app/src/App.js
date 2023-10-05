@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Waveform } from "@uiball/loaders"
 import { useDispatch } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import SignupFormPage from "./components/SignupFormPage";
@@ -13,6 +14,7 @@ import NewSong from "./components/SongEditor/NewSong";
 import NewInst from "./components/InstEditor/NewInst"
 
 function App() {
+  const loader = Waveform
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
@@ -25,6 +27,9 @@ function App() {
       <div className="main">
       {isLoaded && (
         <Switch>
+          <Route exact path="/">
+            <LandingPage />
+          </Route>
           <Route path="/login" >
             <LoginFormPage />
           </Route>
@@ -32,19 +37,16 @@ function App() {
             <SignupFormPage />
           </Route>
           <Route path="/home">
-            <Home />
-          </Route>
-          <Route exact path="/">
-            <LandingPage />
+            <Home loader={loader}/>
           </Route>
           <Route path="/songs/:id">
-            <SongEditor />
+            <SongEditor loader={loader}/>
           </Route>
           <Route exact path="/songs">
             <NewSong />
           </Route>
           <Route path="/instruments/:id">
-            <InstEditor />
+            <InstEditor loader={loader}/>
           </Route>
           <Route exact path="/instruments">
             <NewInst />

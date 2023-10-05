@@ -2,13 +2,15 @@ import "./Home.css"
 import * as songActions from "../../store/songs"
 import * as instrumentActions from "../../store/instruments"
 import { useDispatch, useSelector } from "react-redux"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
 import classnames from "classnames"
 
-export default function Home() {
+export default function Home({loader}) {
     const history = useHistory()
     const dispatch = useDispatch()
+    const songRef = useRef(null)
+    const instRef = useRef(null)
     const songs = useSelector(state => Object.values(state.songs))
     const insts = useSelector(state => Object.values(state.instruments))
     const currUser = useSelector(state => state.session.user)
@@ -21,6 +23,23 @@ export default function Home() {
         dispatch(instrumentActions.getInstruments())
     }, [dispatch])
 
+    useEffect(() => {
+        function handleClickOutside(event) {
+        if (instRef.current && !instRef.current.contains(event.target)) {
+            setSelInst(null)
+        }
+        if (songRef.current && !songRef.current.contains(event.target)) {
+            setSelSong(null)
+        }
+        }
+        // Bind the event listener
+        document.addEventListener("mousedown", handleClickOutside)
+        return () => {
+        // Unbind the event listener on clean up
+        document.removeEventListener("mousedown", handleClickOutside)
+        };
+    }, [instRef, songRef]);
+
     if (!currUser) history.push("/")
     
     return (
@@ -31,7 +50,7 @@ export default function Home() {
                     <div className="list-title">
                             <h3>all instruments</h3>
                     </div>
-                    <div className="list">
+                    <div className="list" ref={instRef}>
                         {!insts?.length &&
                             <p>
                                 you haven't created any instruments yet. click the "new instrument" button below to get started.
@@ -49,7 +68,7 @@ export default function Home() {
                         })}
                     </div>
                     <div className="list-btns">
-                        <button className="tooltip" onClick={() => selInst > 0 && history.push(`/instruments/${selInst}`)} disabled={!selInst}>
+                        <button className="tooltip" onClick={() => selInst > 0 && history.push(`/instruments/${selInst}`)} disabled={!selInst} ref={instRef}>
                             {!selInst && <span className="tooltext">select an instrument to edit</span>}
                             edit instrument
                         </button>
@@ -60,7 +79,7 @@ export default function Home() {
                     <div className="list-title">
                         <h3>all songs</h3>
                     </div>
-                    <div className="list">
+                    <div className="list" ref={songRef}>
                         {!songs?.length && (insts?.length > 0) &&
                             <p>
                                 you haven't created any songs yet. click the "new song" button below to get started.
@@ -84,7 +103,7 @@ export default function Home() {
                         })}
                     </div>
                     <div className="list-btns">
-                        <button className="tooltip" onClick={() => selSong > 0 && history.push(`/songs/${selSong}`)} disabled={!selSong}>
+                        <button className="tooltip" onClick={() => selSong > 0 && history.push(`/songs/${selSong}`)} disabled={!selSong} ref={songRef}>
                             {!selSong && <span className="tooltext">select a song to edit</span>}
                             edit song
                         </button>
