@@ -7,6 +7,7 @@ import * as sampleActions from "../../store/samples"
 import * as trackActions from "../../store/tracks"
 import {Song} from "reactronica"
 import Sequencer from "../Sequencer"
+import Loader from "../Loader"
 import "./Song.css"
 
 export default function SongEditor({loader}) {
@@ -23,6 +24,7 @@ export default function SongEditor({loader}) {
     const [title, setTitle] = useState(null)
     const [bpm, setBpm] = useState(null)
     const [seed, setSeed] = useState(1)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         dispatch(getInstruments())
@@ -39,11 +41,13 @@ export default function SongEditor({loader}) {
             dispatch(sampleActions.getSamples(selInst))
             .then(() => dispatch(trackActions.getTracks(id)))
             .then(() => setSeed(Math.random()))
+            .then(() => setLoading(false))
         }
     }, [selInst])
     
     function saveSong(e) {
         e.preventDefault()
+        setLoading(true)
         const newSong = {
             title,
             bpm,
@@ -51,9 +55,7 @@ export default function SongEditor({loader}) {
         }
         const save = dispatch(songActions.editSong(id, newSong))
         .then((res) => {
-            // dispatch(songActions.getSong(id))
-            // dispatch(trackActions.getTracks(id))
-            // dispatch(sampleActions.getSamples(selInst))
+            setLoading(false)
             if (res.ok) console.log("success")
         })
     }
@@ -77,6 +79,7 @@ export default function SongEditor({loader}) {
     function handleSelect(e, instId) {
         e.preventDefault()
         setPlay(false)
+        setLoading(true)
         if (window.confirm("clear patterns and change instrument")) {
         setSelInst(instId)
         const newSong = {
@@ -85,7 +88,7 @@ export default function SongEditor({loader}) {
             instrument_id: instId
         }
         const save = dispatch(songActions.editSong(id, newSong))
-        // .then(() => dispatch(songActions.getSong(id)))
+        .then(() => setLoading(false))
         }
     }
 
@@ -93,9 +96,15 @@ export default function SongEditor({loader}) {
         return "Unauthorized"
     }
 
+    // if (loading) {
+    //     return <Loader/>
+    // }
+
+    // if (!loading) {
     return (
         <>
-        <div className="home-left">
+
+            <div className="home-left">
             <div>
                 <input className="song-title title" 
                     onChange={(e) => setTitle(e.target.value)} 
@@ -122,16 +131,15 @@ export default function SongEditor({loader}) {
                 <Song bpm={bpm*2 || 240} isPlaying={play}>
                     {samples?.map((sample, idx) => {
                         const currTrack = tracks[idx]
-                        console.log(tracks)
                         return <Sequencer 
-                                    url={sample.url}
-                                    sample={sample}  
-                                    saveTrack={saveTrack}
-                                    track={currTrack}
-                                    play={play}
+                        url={sample.url}
+                        sample={sample}  
+                        saveTrack={saveTrack}
+                        track={currTrack}
+                        play={play}
                                     loader={loader}
                                     key={`${idx}-${seed}`}
-                                />
+                                    />
                     })}
                 </Song>
             </div>
@@ -149,9 +157,9 @@ export default function SongEditor({loader}) {
                             select = "select"
                         }
                         return <li 
-                            onClick={(e) => handleSelect(e, inst.id)} 
-                            className={select}
-                            key={idx}>{inst.title}</li>
+                        onClick={(e) => handleSelect(e, inst.id)} 
+                        className={select}
+                        key={idx}>{inst.title}</li>
                     })}
                 </div>
             </div>
@@ -161,3 +169,4 @@ export default function SongEditor({loader}) {
         </>
     )
 }
+// }

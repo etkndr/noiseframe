@@ -6,6 +6,7 @@ import { useEffect, useState, useRef } from "react"
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
 import NewInst from "../InstEditor/NewInst"
 import OpenModalButton from "../OpenModalButton"
+import Loader from "../Loader"
 
 export default function Home({loader}) {
     const history = useHistory()
@@ -16,6 +17,8 @@ export default function Home({loader}) {
     const insts = useSelector(state => Object.values(state.instruments))
     const currUser = useSelector(state => state.session.user)
 
+    const [songLoading, setSongLoading] = useState(true)
+    const [instLoading, setInstLoading] = useState(true)
     const [selSong, setSelSong] = useState("")
     const [selInst, setSelInst] = useState("")
     const [showMenu, setShowMenu] = useState(false);
@@ -44,7 +47,9 @@ export default function Home({loader}) {
 
     useEffect(() => {
         dispatch(songActions.getSongs())
+        .then(() => setSongLoading(false))
         dispatch(instrumentActions.getInstruments())
+        .then(() => setInstLoading(false))
     }, [dispatch])
 
     useEffect(() => {
@@ -56,10 +61,10 @@ export default function Home({loader}) {
             setSelSong(null)
         }
         }
-        // Bind the event listener
+
         document.addEventListener("mousedown", handleClickOutside)
+
         return () => {
-        // Unbind the event listener on clean up
         document.removeEventListener("mousedown", handleClickOutside)
         };
     }, [instRef, songRef]);
@@ -75,51 +80,53 @@ export default function Home({loader}) {
                             <h3>all instruments</h3>
                     </div>
                     <div className="list" ref={instRef}>
-                        {!insts?.length &&
-                            <p>
+                        {instLoading && <Loader/>}
+                            {!insts?.length && !instLoading &&
+                                <p>
                                 you haven't created any instruments yet. click the "new instrument" button below to get started.
-                            </p>
-                        }
-                        {insts?.map((inst, idx) => {
-                            let select = ""
-                            if (inst.id === selInst) {
-                                select = "select"
+                                </p>
                             }
-                            return <li 
+                            {!instLoading && insts?.map((inst, idx) => {
+                                let select = ""
+                                if (inst.id === selInst) {
+                                    select = "select"
+                                }
+                                return <li 
                                 onClick={() => setSelInst(inst.id)} 
                                 className={select}
                                 key={idx}>{inst.title}</li>
-                        })}
-                    </div>
-                    <div className="list-btns">
-                        <button className="tooltip" onClick={() => selInst > 0 && history.push(`/instruments/${selInst}`)} disabled={!selInst} ref={instRef}>
+                            })}
+                            </div>
+                            <div className="list-btns">
+                            <button className="tooltip" onClick={() => selInst > 0 && history.push(`/instruments/${selInst}`)} disabled={!selInst} ref={instRef}>
                             {!selInst && <span className="tooltext">select an instrument to edit</span>}
                             edit instrument
-                        </button>
-                        {/* <button onClick={() => history.push("/instruments")}>new instrument</button> */}
-                        <OpenModalButton
+                            </button>
+                            {/* <button onClick={() => history.push("/instruments")}>new instrument</button> */}
+                            <OpenModalButton
                             buttonText="new instrument"
                             onItemClick={closeMenu}
                             modalComponent={<NewInst />}
-                        />
-                    </div>
-                    </div>
+                            />
+                            </div>
+                            </div>
                 <div className="list-container">
                     <div className="list-title">
                         <h3>all songs</h3>
                     </div>
                     <div className="list" ref={songRef}>
-                        {!songs?.length && (insts?.length > 0) &&
+                        {songLoading && <Loader/>}
+                        {!songLoading && !songs?.length && (insts?.length > 0) &&
                             <p>
                                 you haven't created any songs yet. click the "new song" button below to get started.
                             </p>
                         }
-                        {!songs?.length && !insts?.length &&
+                        {!songLoading && !songs?.length && !insts?.length &&
                             <p>
                                 you haven't created any songs or instruments yet. first, create an instrument by clicking the "new instrument" button below, then come back and create a song.
                             </p>
                         }
-                        {songs?.map((song, idx) => {
+                        {!songLoading && songs?.map((song, idx) => {
                             let select = ""
                             if (song.id === selSong) {
                                 select = "select"
