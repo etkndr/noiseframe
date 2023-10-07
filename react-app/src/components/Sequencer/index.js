@@ -3,7 +3,7 @@ import { Track, Instrument } from "reactronica"
 import Toggle from "./Toggle"
 import "./Sequencer.css"
 
-export default function Sequencer({url, sample, saveTrack, track, play, loader}) {
+export default function Sequencer({url, sample, saveTrack, track, play}) {
     const [steps, setSteps] = useState({})
     const [mute, setMute] = useState(false)
     const [savedSteps, setSavedSteps] = useState(track?.steps)
@@ -85,7 +85,7 @@ export default function Sequencer({url, sample, saveTrack, track, play, loader})
         </div>
         <div className="seq">
         <div className="seq-row">
-            {Object.values(steps)?.map((step, idx) => {
+            {steps && Object.values(steps)?.map((step, idx) => {
                 const on = step !== null
                 let curr
                 currStep === idx ? curr = "active-step" : curr = ""
