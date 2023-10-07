@@ -106,7 +106,7 @@ export default function Home() {
                             <OpenModalButton
                             buttonText="new instrument"
                             onItemClick={closeMenu}
-                            modalComponent={<NewInst />}
+                            modalComponent={<NewInst close={closeMenu} />}
                             />
                             </div>
                             </div>
