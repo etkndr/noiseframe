@@ -6,10 +6,11 @@ import * as instrumentActions from "../../store/instruments"
 import * as sampleActions from "../../store/samples"
 import { saveSong } from "../../store/songs"
 import Inst from "./Inst"
+import Loader from "../Loader"
 import "./Instrument.css"
 
 
-export default function InstEditor({loader}) {
+export default function InstEditor() {
     const dispatch = useDispatch()
     const history = useHistory()
     const resetFile = useRef(null)
@@ -18,6 +19,7 @@ export default function InstEditor({loader}) {
     const inst = useSelector(state => state.instruments[id])
     const samples = useSelector(state => Object.values(state.samples))
 
+    const [loading, setLoading] = useState(true)
     const [playing, setPlaying] = useState(false)
     const [title, setTitle] = useState("loading...")
     const [sample, setSample] = useState("")
@@ -29,6 +31,7 @@ export default function InstEditor({loader}) {
     const [seed, setSeed] = useState(1)
     
     useEffect(() => {
+        setLoading(true)
         dispatch(instrumentActions.getInstrument(id))
         dispatch(sampleActions.getSamples(id))
         .then((res) => {
@@ -38,6 +41,7 @@ export default function InstEditor({loader}) {
             })
             setFormVals({...names})
         })
+        .then(() => setLoading(false))
     }, [dispatch])
     
     useEffect(() => {
@@ -177,7 +181,7 @@ export default function InstEditor({loader}) {
         }))
     }
     
-    if (inst?.user_id !== currUser?.id || !currUser) {
+    if (!loading && currUser && inst && inst?.user_id !== currUser?.id) {
         return "Unauthorized"
     }
 
@@ -232,7 +236,8 @@ export default function InstEditor({loader}) {
             </div>
             </div>
             <div className="inst-samples">
-                {samples?.map((sample, idx) => {
+                {loading && <Loader/>}
+                {!loading && samples?.map((sample, idx) => {
                     return (
                         <li className="sample-detail" key={idx}>
                             <input 

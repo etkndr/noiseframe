@@ -8,7 +8,7 @@ import NewInst from "../InstEditor/NewInst"
 import OpenModalButton from "../OpenModalButton"
 import Loader from "../Loader"
 
-export default function Home({loader}) {
+export default function Home() {
     const history = useHistory()
     const dispatch = useDispatch()
     const songRef = useRef(null)

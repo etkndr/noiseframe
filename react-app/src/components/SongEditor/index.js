@@ -10,7 +10,7 @@ import Sequencer from "../Sequencer"
 import Loader from "../Loader"
 import "./Song.css"
 
-export default function SongEditor({loader}) {
+export default function SongEditor() {
     const dispatch = useDispatch()
     const history = useHistory()
     const {id} = useParams()
@@ -25,18 +25,23 @@ export default function SongEditor({loader}) {
     const [bpm, setBpm] = useState(null)
     const [seed, setSeed] = useState(1)
     const [loading, setLoading] = useState(true)
+    const [instLoading, setInstLoading] = useState(true)
 
     useEffect(() => {
+        setLoading(true)
         dispatch(getInstruments())
+        .then(() => setInstLoading(false))
         dispatch(songActions.getSong(id))
         .then ((res) => {
             setTitle(res.title)
             setBpm(res.bpm)   
             setSelInst(res.instrument_id)
         })
+        .then(() => setLoading(false))
     }, [])
     
     useEffect(() => {
+        setLoading(true)
         if (selInst) {
             dispatch(sampleActions.getSamples(selInst))
             .then(() => dispatch(trackActions.getTracks(id)))
@@ -81,26 +86,21 @@ export default function SongEditor({loader}) {
         setPlay(false)
         setLoading(true)
         if (window.confirm("clear patterns and change instrument")) {
-        setSelInst(instId)
-        const newSong = {
-            title,
-            bpm,
-            instrument_id: instId
-        }
-        const save = dispatch(songActions.editSong(id, newSong))
-        .then(() => setLoading(false))
+            const newSong = {
+                title,
+                bpm,
+                instrument_id: instId
+            }
+            const save = dispatch(songActions.editSong(id, newSong))
+            .then(() => setSelInst(instId))
+            .then(() => setLoading(false))
         }
     }
 
-    if (song?.user_id !== currUser?.id || !currUser) {
+    if (!loading && currUser && song && song?.user_id !== currUser?.id) {
         return "Unauthorized"
     }
 
-    // if (loading) {
-    //     return <Loader/>
-    // }
-
-    // if (!loading) {
     return (
         <>
 
@@ -128,8 +128,9 @@ export default function SongEditor({loader}) {
                 <div className="dlt-inst" onClick={dltSong}><span className="material-symbols-outlined">delete_forever</span> delete song</div>
             </div>
             <div>
+                {loading && <Loader/>}
                 <Song bpm={bpm*2 || 240} isPlaying={play}>
-                    {samples?.map((sample, idx) => {
+                    {!loading && samples?.map((sample, idx) => {
                         const currTrack = tracks[idx]
                         return <Sequencer 
                         url={sample.url}
@@ -137,8 +138,7 @@ export default function SongEditor({loader}) {
                         saveTrack={saveTrack}
                         track={currTrack}
                         play={play}
-                                    loader={loader}
-                                    key={`${idx}-${seed}`}
+                        key={`${idx}-${seed}`}
                                     />
                     })}
                 </Song>
@@ -151,7 +151,8 @@ export default function SongEditor({loader}) {
                         <h3>change instrument</h3>
                 </div>
                 <div className="list">
-                    {insts?.map((inst, idx) => {
+                    {instLoading && <Loader/>}
+                    {!instLoading && insts?.map((inst, idx) => {
                         let select = ""
                         if (inst.id === selInst) {
                             select = "select"
@@ -169,4 +170,3 @@ export default function SongEditor({loader}) {
         </>
     )
 }
-// }
