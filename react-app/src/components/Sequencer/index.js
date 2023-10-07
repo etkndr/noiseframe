@@ -4,7 +4,6 @@ import Toggle from "./Toggle"
 import "./Sequencer.css"
 
 export default function Sequencer({url, sample, saveTrack, track, play, loader}) {
-
     const [steps, setSteps] = useState({})
     const [mute, setMute] = useState(false)
     const [savedSteps, setSavedSteps] = useState(track?.steps)
@@ -38,7 +37,7 @@ export default function Sequencer({url, sample, saveTrack, track, play, loader})
             }
         })
 
-        if (joinSteps) {
+        if (steps && joinSteps.length && track) {
             saveTrack(track?.id, joinSteps?.join(" "))
         }
     }, [steps])
