@@ -4,7 +4,8 @@ import * as instrumentActions from "../../store/instruments"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useState, useRef } from "react"
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
-import classnames from "classnames"
+import NewInst from "../InstEditor/NewInst"
+import OpenModalButton from "../OpenModalButton"
 
 export default function Home({loader}) {
     const history = useHistory()
@@ -17,6 +18,29 @@ export default function Home({loader}) {
 
     const [selSong, setSelSong] = useState("")
     const [selInst, setSelInst] = useState("")
+    const [showMenu, setShowMenu] = useState(false);
+    const ulRef = useRef();
+  
+    const openMenu = () => {
+      if (showMenu) return;
+      setShowMenu(true);
+    };
+
+    const closeMenu = () => setShowMenu(false);
+  
+    useEffect(() => {
+      if (!showMenu) return;
+  
+      const closeMenu = (e) => {
+          if (!ulRef.current.contains(e.target)) {
+            setShowMenu(false);
+          }
+        };
+  
+      document.addEventListener("click", closeMenu);
+  
+      return () => document.removeEventListener("click", closeMenu);
+    }, [showMenu]);
 
     useEffect(() => {
         dispatch(songActions.getSongs())
@@ -72,7 +96,12 @@ export default function Home({loader}) {
                             {!selInst && <span className="tooltext">select an instrument to edit</span>}
                             edit instrument
                         </button>
-                        <button onClick={() => history.push("/instruments")}>new instrument</button>
+                        {/* <button onClick={() => history.push("/instruments")}>new instrument</button> */}
+                        <OpenModalButton
+                            buttonText="new instrument"
+                            onItemClick={closeMenu}
+                            modalComponent={<NewInst />}
+                        />
                     </div>
                     </div>
                 <div className="list-container">

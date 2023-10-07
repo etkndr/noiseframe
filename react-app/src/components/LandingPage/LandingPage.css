@@ -1,0 +1,27 @@
+.welcome {
+    font-size: 12pt;
+    line-height: 20pt;
+}
+
+.welcome a {
+    color: #646C41;
+}
+
+.welcome a:hover {
+    color: #899147;
+}
+
+.home-left.landing {
+    width: 60%;
+    min-width: 60%;
+}
+
+.home-right.landing p {
+    font-size: 12pt;
+    font-weight: 600;
+    text-align: center;
+}
+
+.home-left.landing, .home-right.landing {
+    margin-top: 2%;
+}

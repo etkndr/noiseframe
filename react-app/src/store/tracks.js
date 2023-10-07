@@ -113,6 +113,7 @@ export default function tracks(state = initState, action) {
             action.tracks.forEach((track) => {
                 trackState[track.id] = track
             })
+            console.log(trackState)
             return trackState
         case GET_TRACK:
             newState = {}

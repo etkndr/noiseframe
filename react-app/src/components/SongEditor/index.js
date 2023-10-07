@@ -22,25 +22,23 @@ export default function SongEditor({loader}) {
     const [selInst, setSelInst] = useState(null)
     const [title, setTitle] = useState(null)
     const [bpm, setBpm] = useState(null)
+    const [seed, setSeed] = useState(1)
 
     useEffect(() => {
-        dispatch(songActions.getSong(id))
-    }, [dispatch])
-    
-    useEffect(() => {
-        dispatch(trackActions.getTracks(id))
         dispatch(getInstruments())
-        const getTitle = song?.title
-        const getBpm = song?.bpm
-        const getInst = song?.instrument_id
-        setTitle(getTitle)
-        setBpm(getBpm)   
-        setSelInst(getInst)
-    }, [song])
+        dispatch(songActions.getSong(id))
+        .then ((res) => {
+            setTitle(res.title)
+            setBpm(res.bpm)   
+            setSelInst(res.instrument_id)
+        })
+    }, [])
     
     useEffect(() => {
         if (selInst) {
             dispatch(sampleActions.getSamples(selInst))
+            .then(() => dispatch(trackActions.getTracks(id)))
+            .then(() => setSeed(Math.random()))
         }
     }, [selInst])
     
@@ -52,10 +50,12 @@ export default function SongEditor({loader}) {
             instrument_id: selInst
         }
         const save = dispatch(songActions.editSong(id, newSong))
-        .then((res) => dispatch(songActions.getSong(id)))
-        .then((res) => dispatch(trackActions.getTracks(id)))
-        .then((res) => dispatch(sampleActions.getSamples(selInst)))
-        .then((res) => {if (res.ok) console.log("success")})
+        .then((res) => {
+            // dispatch(songActions.getSong(id))
+            // dispatch(trackActions.getTracks(id))
+            // dispatch(sampleActions.getSamples(selInst))
+            if (res.ok) console.log("success")
+        })
     }
 
     function dltSong(e) {
@@ -85,13 +85,14 @@ export default function SongEditor({loader}) {
             instrument_id: instId
         }
         const save = dispatch(songActions.editSong(id, newSong))
-        .then(() => dispatch(songActions.getSong(id)))
+        // .then(() => dispatch(songActions.getSong(id)))
         }
     }
 
     if (song?.user_id !== currUser?.id || !currUser) {
         return "Unauthorized"
     }
+
     return (
         <>
         <div className="home-left">
@@ -121,6 +122,7 @@ export default function SongEditor({loader}) {
                 <Song bpm={bpm*2 || 240} isPlaying={play}>
                     {samples?.map((sample, idx) => {
                         const currTrack = tracks[idx]
+                        console.log(tracks)
                         return <Sequencer 
                                     url={sample.url}
                                     sample={sample}  
@@ -128,7 +130,7 @@ export default function SongEditor({loader}) {
                                     track={currTrack}
                                     play={play}
                                     loader={loader}
-                                    key={idx}
+                                    key={`${idx}-${seed}`}
                                 />
                     })}
                 </Song>

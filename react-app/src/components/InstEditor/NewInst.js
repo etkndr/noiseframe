@@ -26,6 +26,7 @@ export default function NewInst() {
     return (
         <>
         <div className="inst-form">
+            <h3>new instrument</h3>
             <input onChange={(e) => setTitle(e.target.value)} value={title} placeholder="instrument title"/>
             <button onClick={save}>create instrument</button>
         </div>
