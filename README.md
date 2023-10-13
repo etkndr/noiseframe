@@ -5,10 +5,9 @@
   </a>
 </p>
 
-> [noiseframe](https://noiseframe.onrender.com/) is a tool for sketching out quick musical ideas from user-uploaded sample files. Created, developed, and maintained by Eric Kinder*, noiseframe is continuing to be added to and expanded upon. Check back periodically for new features.
+> [noiseframe](https://noiseframe.onrender.com/) is a tool for sketching out quick musical ideas from user-uploaded sample files. Created, developed, and maintained by Eric Kinder, noiseframe is continuing to be added to and expanded upon. Check back periodically for new features.
 
-
-* Huge thanks to [Kaho Cheung](https://github.com/unkleho) for his [Reactronica](https://reactronica.com) package, which integrates Tone.js with React
+> Huge thanks to [Kaho Cheung](https://github.com/unkleho) for his [Reactronica](https://reactronica.com) package, which integrates Tone.js with React
 
 ## Technologies Used
 
