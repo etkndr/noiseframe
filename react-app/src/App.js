@@ -12,6 +12,7 @@ import InstEditor from "./components/InstEditor";
 import NewSong from "./components/SongEditor/NewSong";
 import NewInst from "./components/InstEditor/NewInst"
 
+
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
