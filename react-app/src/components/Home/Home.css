@@ -40,7 +40,7 @@
     width: 95%;
     height: 70%;
     background-color: #c5bea6;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .list p {

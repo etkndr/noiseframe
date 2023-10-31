@@ -107,36 +107,33 @@ export default function InstEditor() {
         }
         if (sample && sampleName) {
             setErr({})
-        }
 
-        let formData = new FormData()
-        formData.append("name", sampleName)
-        formData.append("sample", sample)
+            let formData = new FormData()
+            formData.append("name", sampleName)
+            formData.append("sample", sample)
+                setSampleLoading(true)
 
-        if (sample && sampleName) {
-            setSampleLoading(true)
-        }
+            dispatch(sampleActions.newSample(id, formData))
+            .then(() => {setSampleLoading(false)})
+            .then(() => {
+                setSample("")
+                setSampleName("")
 
-        dispatch(sampleActions.newSample(id, formData))
-        .then(() => {setSampleLoading(false)})
-        .then(() => {
-            setSample("")
-            setSampleName("")
-
-            if (resetFile.current) {
-                resetFile.current.value = "";
-                resetFile.current.type = "text";
-                resetFile.current.type = "file";
-            }
-        })
-        .then(() => dispatch(sampleActions.getSamples(id)))
-        .then((res) => {
-            const names = {}
-            Object.values(res).forEach((sample, idx) => {
-                names[idx] = sample.name
+                if (resetFile.current) {
+                    resetFile.current.value = "";
+                    resetFile.current.type = "text";
+                    resetFile.current.type = "file";
+                }
             })
-            setFormVals({...names})
-        })
+            .then(() => dispatch(sampleActions.getSamples(id)))
+            .then((res) => {
+                const names = {}
+                Object.values(res).forEach((sample, idx) => {
+                    names[idx] = sample.name
+                })
+                setFormVals({...names})
+            })
+    }
     }
 
     const nameChange = (sampleName, sampleId) => {

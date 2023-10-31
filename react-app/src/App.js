@@ -20,6 +20,7 @@ function App() {
   }, [dispatch]);
 
   return (
+    <>
     <div className="container">
       <Navigation isLoaded={isLoaded} />
       <div className="main">
@@ -53,6 +54,10 @@ function App() {
       )}
       </div>
     </div>
+    <footer>
+      © eric kinder 2023 | <a href="https://github.com/etkndr">github</a> | <a href="https://www.linkedin.com/in/eric-kinder/">linkedin</a>
+    </footer>
+    </>
   );
 }
 
