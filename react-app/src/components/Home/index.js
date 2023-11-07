@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
 import NewInst from "../InstEditor/NewInst"
 import OpenModalButton from "../OpenModalButton"
 import Loader from "../Loader"
+import EditDlt from "./EditDlt"
 
 export default function Home() {
     const history = useHistory()
@@ -69,6 +70,21 @@ export default function Home() {
         };
     }, [instRef, songRef]);
 
+    const dltSong = (songId) => {
+        if (window.confirm("delete instrument and all associated songs?")) {
+            const dlt = dispatch(songActions.deleteSong(songId))
+            .then(() => dispatch(songActions.getSongs()))
+        }
+    }
+
+    function dltInst(instId) {
+        if (window.confirm("delete instrument and all associated songs?")) {
+            const dlt = dispatch(instrumentActions.deleteInstrument(instId))
+            .then(() => dispatch(instrumentActions.getInstruments()))
+            .then(() => dispatch(songActions.getSongs()))
+        }
+    }
+
     if (!currUser) history.push("/")
     
     return (
@@ -94,7 +110,8 @@ export default function Home() {
                                 return <li 
                                 onClick={() => setSelInst(inst.id)} 
                                 className={select}
-                                key={idx}>{inst.title}</li>
+                                key={idx}>{inst.title} 
+                                <EditDlt type="inst" id={inst.id} dltInst={dltInst} instName={inst.title}/></li>
                             })}
                             </div>
                             <div className="list-btns">
@@ -102,11 +119,10 @@ export default function Home() {
                             {!selInst && <span className="tooltext">select an instrument to edit</span>}
                             edit instrument
                             </button>
-                            {/* <button onClick={() => history.push("/instruments")}>new instrument</button> */}
                             <OpenModalButton
-                            buttonText="new instrument"
-                            onItemClick={closeMenu}
-                            modalComponent={<NewInst close={closeMenu} />}
+                                buttonText="new instrument"
+                                onItemClick={closeMenu}
+                                modalComponent={<NewInst close={closeMenu} />}
                             />
                             </div>
                             </div>
