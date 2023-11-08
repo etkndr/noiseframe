@@ -48,23 +48,25 @@
 }
 
 .list li {
-    cursor: pointer;
     color: #E1DAC4;
     background-color: #575e38;
     padding: 5px 10px;
     margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.list li:hover {
+/* .list li:hover {
     background-color: #79834d;
     color: #E1DAC4;
-}
+} */
 
-.list .select, .list .select:hover {
+/* .list .select, .list .select:hover {
     color: #C8AD55;
     font-style: italic;
     background-color: #79834d;
-}
+} */
 
 .list-btns {
     width: 100%;
@@ -99,16 +101,39 @@
     visibility: hidden;
     font-size: 8pt;
     font-weight: 400;
-    background-color: #575e38;
-    color: #c5bea6;
+    background-color: #c5bea6;
+    color: #575e38;
     padding: 5px;
+    border-bottom: 2px solid #383c24;
     border-radius: 6px;
     position:absolute;
     margin-top: -30px;
-    margin-left: -20px;
-    z-index: 1;
+    margin-left: -50px;
+    z-index: 10;
   }
 
   .tooltip:hover .tooltext {
     visibility: visible;
+  }
+
+  .edit-dlt {
+    padding: 0;
+    margin: 0;
+  }
+
+  .edit-dlt button {
+    background: none;
+    border: 0;
+    color:#a6a67a;
+    padding: 0;
+    margin: 0;
+  }
+
+  .edit-dlt button:hover {
+    color: rgb(190, 192, 152);
+  }
+
+  .edit-dlt .material-symbols-outlined {
+    font-size: 12pt;
+    margin: 0 5px;
   }

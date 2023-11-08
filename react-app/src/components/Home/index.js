@@ -103,13 +103,8 @@ export default function Home() {
                                 </p>
                             }
                             {!instLoading && insts?.map((inst, idx) => {
-                                let select = ""
-                                if (inst.id === selInst) {
-                                    select = "select"
-                                }
                                 return <li 
                                 onClick={() => setSelInst(inst.id)} 
-                                className={select}
                                 key={idx}>{inst.title} 
                                 <EditDlt type="inst" id={inst.id} dltInst={dltInst} instName={inst.title}/></li>
                             })}
@@ -143,15 +138,12 @@ export default function Home() {
                             </p>
                         }
                         {!songLoading && songs?.map((song, idx) => {
-                            let select = ""
-                            if (song.id === selSong) {
-                                select = "select"
-                            }
                             return <li 
-                            onClick={() => setSelSong(song.id)} 
-                            className={select}
-                            key={idx}>
-                            {song.title}</li>
+                                onClick={() => setSelSong(song.id)} 
+                                key={idx}>
+                                {song.title}
+                                <EditDlt type="song" id={song.id} dltSong={dltSong} />
+                            </li>
                         })}
                     </div>
                     <div className="list-btns">
