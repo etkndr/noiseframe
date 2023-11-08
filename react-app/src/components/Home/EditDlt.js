@@ -36,7 +36,7 @@ export default function EditDlt({type, id, instName, dltInst, dltSong}) {
         <div className="edit-dlt">
             {type === "inst" && <button className="tooltip" onClick={newSong}>
                 <span className="tooltext">new song from {instName}</span>
-                <span className="material-symbols-outlined">add</span>
+                <span className="material-symbols-outlined">add_circle</span>
             </button>}
 
             <button onClick={editType}><span className="material-symbols-outlined">edit</span></button>

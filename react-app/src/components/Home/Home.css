@@ -57,17 +57,6 @@
     justify-content: space-between;
 }
 
-/* .list li:hover {
-    background-color: #79834d;
-    color: #E1DAC4;
-} */
-
-/* .list .select, .list .select:hover {
-    color: #C8AD55;
-    font-style: italic;
-    background-color: #79834d;
-} */
-
 .list-btns {
     width: 100%;
     display: flex;
@@ -136,4 +125,22 @@
   .edit-dlt .material-symbols-outlined {
     font-size: 12pt;
     margin: 0 5px;
+  }
+
+  .edit-dlt.new-inst {
+    display: flex;
+    justify-content: center;
+    background: none;
+  }
+
+  .edit-dlt.new-inst button {
+    color:#797e62;
+  }
+
+  .edit-dlt.new-inst button:hover {
+    color:#989c86;
+  }
+
+  .edit-dlt.new-inst .material-symbols-outlined {
+    font-size: 18pt;
   }
