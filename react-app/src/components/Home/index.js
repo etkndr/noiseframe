@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
 import NewInst from "../InstEditor/NewInst"
 import OpenModalButton from "../OpenModalButton"
 import Loader from "../Loader"
+import EditDlt from "./EditDlt"
 
 export default function Home() {
     const history = useHistory()
@@ -69,76 +70,89 @@ export default function Home() {
         };
     }, [instRef, songRef]);
 
+    const dltSong = (songId) => {
+        if (window.confirm("delete instrument and all associated songs?")) {
+            const dlt = dispatch(songActions.deleteSong(songId))
+            .then(() => dispatch(songActions.getSongs()))
+        }
+    }
+
+    function dltInst(instId) {
+        if (window.confirm("delete instrument and all associated songs?")) {
+            const dlt = dispatch(instrumentActions.deleteInstrument(instId))
+            .then(() => dispatch(instrumentActions.getInstruments()))
+            .then(() => dispatch(songActions.getSongs()))
+        }
+    }
+
     if (!currUser) history.push("/")
     
     return (
         <>
         <div className="home-left">
             <div className="lists">
-            <div className="list-container">
+                <div className="list-container">
                     <div className="list-title">
-                            <h3>all instruments</h3>
+                            <h3>instruments</h3>
                     </div>
                     <div className="list" ref={instRef}>
                         {instLoading && <Loader/>}
-                            {!insts?.length && !instLoading &&
-                                <p>
-                                you haven't created any instruments yet. click the "new instrument" button below to get started.
-                                </p>
-                            }
-                            {!instLoading && insts?.map((inst, idx) => {
-                                let select = ""
-                                if (inst.id === selInst) {
-                                    select = "select"
-                                }
-                                return <li 
+                        {/* {!insts?.length && !instLoading &&
+                            <p>
+                            you haven't created any instruments yet. click the "new instrument" button below to get started.
+                            </p>
+                        } */}
+                        {!instLoading && insts?.map((inst, idx) => {
+                            return <li 
                                 onClick={() => setSelInst(inst.id)} 
-                                className={select}
-                                key={idx}>{inst.title}</li>
-                            })}
-                            </div>
-                            <div className="list-btns">
-                            <button className="tooltip" onClick={() => selInst > 0 && history.push(`/instruments/${selInst}`)} disabled={!selInst} ref={instRef}>
-                            {!selInst && <span className="tooltext">select an instrument to edit</span>}
-                            edit instrument
-                            </button>
-                            {/* <button onClick={() => history.push("/instruments")}>new instrument</button> */}
+                                key={idx}>{inst.title} 
+                                <EditDlt type="instrument" id={inst.id} dltInst={dltInst} instName={inst.title}/>
+                            </li>
+                        })}
+                        <li className="edit-dlt new-inst">
                             <OpenModalButton
-                            buttonText="new instrument"
-                            onItemClick={closeMenu}
-                            modalComponent={<NewInst close={closeMenu} />}
+                                buttonText={<span className="material-symbols-outlined">add</span>}
+                                onItemClick={closeMenu}
+                                modalComponent={<NewInst close={closeMenu} />}
                             />
-                            </div>
-                            </div>
+                        </li>
+                    </div>
+
+                                {/* <div className="list-btns">
+                                <button className="tooltip" onClick={() => selInst > 0 && history.push(`/instruments/${selInst}`)} disabled={!selInst} ref={instRef}>
+                                {!selInst && <span className="tooltext">select an instrument to edit</span>}
+                                edit instrument
+                                </button>
+                                </div> */}
+
+                </div>
                 <div className="list-container">
                     <div className="list-title">
-                        <h3>all songs</h3>
+                        <h3>songs</h3>
                     </div>
                     <div className="list" ref={songRef}>
                         {songLoading && <Loader/>}
                         {!songLoading && !songs?.length && (insts?.length > 0) &&
                             <p>
-                                you haven't created any songs yet. click the "new song" button below to get started.
+                                you haven't created any songs yet. click the "+" button on an instrument to make one.
                             </p>
                         }
                         {!songLoading && !songs?.length && !insts?.length &&
                             <p>
-                                you haven't created any songs or instruments yet. first, create an instrument by clicking the "new instrument" button below, then come back and create a song.
+                                you haven't created any songs or instruments yet. click the "+" button to the left to make an instrument.
                             </p>
                         }
                         {!songLoading && songs?.map((song, idx) => {
-                            let select = ""
-                            if (song.id === selSong) {
-                                select = "select"
-                            }
                             return <li 
-                            onClick={() => setSelSong(song.id)} 
-                            className={select}
-                            key={idx}>
-                            {song.title}</li>
+                                onClick={() => setSelSong(song.id)} 
+                                key={idx}>
+                                <span onClick={() => history.push(`/songs/${song.id}`)}>{song.title}</span>
+                                <EditDlt type="song" id={song.id} songName={song.title} dltSong={dltSong} />
+                            </li>
                         })}
                     </div>
-                    <div className="list-btns">
+
+                    {/* <div className="list-btns">
                         <button className="tooltip" onClick={() => selSong > 0 && history.push(`/songs/${selSong}`)} disabled={!selSong} ref={songRef}>
                             {!selSong && <span className="tooltext">select a song to edit</span>}
                             edit song
@@ -147,7 +161,8 @@ export default function Home() {
                             {!insts.length && <span className="tooltext">create an instrument first</span>}
                             new song
                         </button>
-                    </div>
+                    </div> */}
+
                 </div>
                 </div>
             </div>
