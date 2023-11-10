@@ -2,14 +2,14 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
 import { useDispatch } from "react-redux"
 import {saveSong} from "../../store/songs"
 
-export default function EditDlt({type, id, instName, dltInst, dltSong}) {
+export default function EditDlt({type, id, instName, songName, dltInst, dltSong}) {
     const history = useHistory()
     const dispatch = useDispatch()
 
     function dltType() {
         if (type === "song") {
             dltSong(id)
-        } if (type === "inst") {
+        } if (type === "instrument") {
             dltInst(id)
         }
     }
@@ -17,7 +17,7 @@ export default function EditDlt({type, id, instName, dltInst, dltSong}) {
     function editType() {
         if (type === "song") {
             history.push(`/songs/${id}`)
-        } if (type === "inst") {
+        } if (type === "instrument") {
             history.push(`/instruments/${id}`)
         }
     }
@@ -34,13 +34,21 @@ export default function EditDlt({type, id, instName, dltInst, dltSong}) {
     return (
         <>
         <div className="edit-dlt">
-            {type === "inst" && <button className="tooltip" onClick={newSong}>
+            {type === "instrument" && <button className="tooltip" onClick={newSong}>
                 <span className="tooltext">new song from {instName}</span>
                 <span className="material-symbols-outlined">add_circle</span>
             </button>}
+            {type === "instrument" && 
+            <button className="tooltip" onClick={editType}>
+                <span className="tooltext">edit {instName}</span>
+                <span className="material-symbols-outlined">edit</span>
+            </button>}
 
-            <button onClick={editType}><span className="material-symbols-outlined">edit</span></button>
-            <button onClick={dltType}><span className="material-symbols-outlined">delete_forever</span></button>
+            <button className="tooltip" onClick={dltType}>
+                {type === "instrument" && <span className="tooltext">delete {instName}</span>}
+                {type === "song" && <span className="tooltext">delete {songName}</span>}
+                <span className="material-symbols-outlined">delete_forever</span>
+            </button>
         </div>
         </>
     )

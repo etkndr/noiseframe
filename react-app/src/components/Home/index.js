@@ -97,16 +97,16 @@ export default function Home() {
                     </div>
                     <div className="list" ref={instRef}>
                         {instLoading && <Loader/>}
-                        {!insts?.length && !instLoading &&
+                        {/* {!insts?.length && !instLoading &&
                             <p>
                             you haven't created any instruments yet. click the "new instrument" button below to get started.
                             </p>
-                        }
+                        } */}
                         {!instLoading && insts?.map((inst, idx) => {
                             return <li 
                                 onClick={() => setSelInst(inst.id)} 
                                 key={idx}>{inst.title} 
-                                <EditDlt type="inst" id={inst.id} dltInst={dltInst} instName={inst.title}/>
+                                <EditDlt type="instrument" id={inst.id} dltInst={dltInst} instName={inst.title}/>
                             </li>
                         })}
                         <li className="edit-dlt new-inst">
@@ -134,7 +134,7 @@ export default function Home() {
                         {songLoading && <Loader/>}
                         {!songLoading && !songs?.length && (insts?.length > 0) &&
                             <p>
-                                you haven't created any songs yet. click the "new song" button on an instrument to make one.
+                                you haven't created any songs yet. click the "+" button on an instrument to make one.
                             </p>
                         }
                         {!songLoading && !songs?.length && !insts?.length &&
@@ -146,8 +146,8 @@ export default function Home() {
                             return <li 
                                 onClick={() => setSelSong(song.id)} 
                                 key={idx}>
-                                {song.title}
-                                <EditDlt type="song" id={song.id} dltSong={dltSong} />
+                                <span onClick={() => history.push(`/songs/${song.id}`)}>{song.title}</span>
+                                <EditDlt type="song" id={song.id} songName={song.title} dltSong={dltSong} />
                             </li>
                         })}
                     </div>

@@ -38,7 +38,7 @@
 
 .list {
     width: 95%;
-    height: 70%;
+    height: 90%;
     background-color: #c5bea6;
     overflow-y: auto;
 }
@@ -55,6 +55,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.list li span {
+    cursor: pointer;
+}
+
+.list li:hover {
+    background-color: #6a7245;
 }
 
 .list-btns {
@@ -139,6 +147,10 @@
 
   .edit-dlt.new-inst button:hover {
     color:#989c86;
+  }
+
+  .edit-dlt.new-inst:hover {
+    background-color: inherit;
   }
 
   .edit-dlt.new-inst .material-symbols-outlined {
