@@ -105,7 +105,7 @@ export default function InstEditor() {
                 2: "please select a file to upload"
             }))
         }
-        if (sample && sampleName) {
+        if (sample && sampleName && !err[3]) {
             setErr({})
 
             let formData = new FormData()
@@ -201,10 +201,16 @@ export default function InstEditor() {
             <form className="form-inputs" onSubmit={addSample} encType="multipart/form-data">
                 <input className="sample-input" type="text" onChange={(e) => setSampleName(e.target.value)} placeholder="sample name" value={sampleName}/>
                 <input className="sample-input" ref={resetFile} type="file" accept="audio/*" onChange={(e) => {
-                    if (e.target.files[0].size > 204800) {
+                    if (samples?.length >= 8) {
                         setErr((prev) => ({
                             ...prev,
-                            3: "maximum file size of 180 kB"
+                            3: "maxiumum of 8 samples per instrument"
+                        }))
+                    }
+                    else if (e.target.files[0].size > 251000) {
+                        setErr((prev) => ({
+                            ...prev,
+                            3: "maximum file size of 250 kB"
                         }))
                     } else {
                         setErr((prev) => ({
@@ -276,7 +282,8 @@ export default function InstEditor() {
                     to load sounds into your instrument, enter a sample name 
                     (the name can be anything you'd like, it's only used to help you identify the sound after uploading).
                     next, select a sound file from your computer and press "upload". allowed file types are *.wav, *.mp3, and *.aif, 
-                    and short sounds such as percussion work best. each sound is automatically saved to the instrument upon upload.
+                    and short sounds such as percussion work best. if your file is too large and is not an mp3, consider converting it.
+                    each sound is automatically saved to the instrument upon upload.
                 </p>
                 <p>
                     good sources for sound files include <a href="http://freesound.org">freesound.org</a> and <a href="http://tidalcycles.org">tidal's</a> <a href="https://github.com/tidalcycles/Dirt-Samples">dirt-samples</a> pack.
