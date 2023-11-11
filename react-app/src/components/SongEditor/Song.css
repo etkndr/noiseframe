@@ -60,3 +60,9 @@
 .lists.editor {
     margin-bottom: -30%;
 }
+
+.list li .select {
+    color: #C8AD55;
+    font-style: italic;
+    cursor: default;
+}
