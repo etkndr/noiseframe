@@ -147,12 +147,8 @@
     color:#797e62;
   }
 
-  .edit-dlt.new-inst button:hover {
-    color:#989c86;
-  }
-
   .edit-dlt.new-inst:hover {
-    background-color: inherit;
+    background-color: #afa993;
   }
 
   .edit-dlt.new-inst .material-symbols-outlined {
