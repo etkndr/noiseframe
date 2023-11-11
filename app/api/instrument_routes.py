@@ -119,7 +119,6 @@ def upload_sample(id):
         sample = form.data["sample"]
         sample.filename = get_unique_filename(sample.filename)
         upload = upload_file_to_s3(sample)
-        print(upload)
 
         if "url" not in upload:
         # if the dictionary doesn't have a url key
@@ -139,7 +138,7 @@ def upload_sample(id):
             track = Track(
                 song_id = song.id,
                 sample_id = new_sample.id,
-                steps = "",
+                steps = "null null null null null null null null null null null null null null null null",
                 volume = -3  
             )
             

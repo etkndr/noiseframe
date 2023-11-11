@@ -8,6 +8,7 @@ import * as trackActions from "../../store/tracks"
 import {Song} from "reactronica"
 import Sequencer from "../Sequencer"
 import Loader from "../Loader"
+import EditDlt from "../Home/EditDlt"
 import "./Song.css"
 
 export default function SongEditor() {
@@ -83,17 +84,19 @@ export default function SongEditor() {
 
     function handleSelect(e, instId) {
         e.preventDefault()
-        setPlay(false)
-        setLoading(true)
-        if (window.confirm("clear patterns and change instrument")) {
-            const newSong = {
-                title,
-                bpm,
-                instrument_id: instId
+        if (selInst !== instId) {
+            if (window.confirm("clear patterns and change instrument")) {
+                setPlay(false)
+                setLoading(true)
+                const newSong = {
+                    title,
+                    bpm,
+                    instrument_id: instId
+                }
+                const save = dispatch(songActions.editSong(id, newSong))
+                .then(() => setSelInst(instId))
+                .then(() => setLoading(false))
             }
-            const save = dispatch(songActions.editSong(id, newSong))
-            .then(() => setSelInst(instId))
-            .then(() => setLoading(false))
         }
     }
 
@@ -130,6 +133,7 @@ export default function SongEditor() {
             <div>
                 {loading && <Loader/>}
                 <Song bpm={bpm*2 || 240} isPlaying={play}>
+                    {!loading && !samples?.length && <p>no samples have been added to this instrument</p>}
                     {!loading && samples?.map((sample, idx) => {
                         const currTrack = tracks[idx]
                         return <Sequencer 
@@ -157,15 +161,13 @@ export default function SongEditor() {
                         if (inst.id === selInst) {
                             select = "select"
                         }
-                        return <li 
-                        onClick={(e) => handleSelect(e, inst.id)} 
-                        className={select}
-                        key={idx}>{inst.title}</li>
+                        return <li key={idx}>
+                            <span className={select} onClick={(e) => handleSelect(e, inst.id)}>{inst.title}</span>
+                            <EditDlt type="song-edit" id={inst.id} instName={inst.title}/></li>
                     })}
                 </div>
             </div>
         </div>
-        <button className="song-edit-btn" onClick={() => history.push(`/instruments/${selInst}`)}>edit instrument</button>
         </div>
         </>
     )
