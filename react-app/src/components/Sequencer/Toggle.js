@@ -32,6 +32,7 @@ export default function Toggle({handleToggle, step, on, curr}) {
     return (
         <>
             <label className={`switch ${curr}`}>
+            {step%4 === 0 && <div className="division">◦</div>}
                 <input type="checkbox"
                 onChange={(e) => returnState(e)}
                 checked={active}/>

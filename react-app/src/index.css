@@ -1,6 +1,7 @@
 * {
     font-family: 'Raleway', sans-serif;
     letter-spacing: .1em;
+    cursor: default;
 }
 
 body {
@@ -27,6 +28,10 @@ footer a {
 
 footer a:hover {
     color:#333523;
+}
+
+input {
+    cursor: text;
 }
 
 .container {
@@ -109,6 +114,7 @@ a {
 
 a:hover {
     color: #51636C;
+    cursor: pointer;
 }
 
 .loader {

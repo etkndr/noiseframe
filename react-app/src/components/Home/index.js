@@ -97,11 +97,6 @@ export default function Home() {
                     </div>
                     <div className="list" ref={instRef}>
                         {instLoading && <Loader/>}
-                        {/* {!insts?.length && !instLoading &&
-                            <p>
-                            you haven't created any instruments yet. click the "new instrument" button below to get started.
-                            </p>
-                        } */}
                         {!instLoading && insts?.map((inst, idx) => {
                             return <li 
                                 onClick={() => setSelInst(inst.id)} 
@@ -117,13 +112,6 @@ export default function Home() {
                             />
                         </li>
                     </div>
-
-                                {/* <div className="list-btns">
-                                <button className="tooltip" onClick={() => selInst > 0 && history.push(`/instruments/${selInst}`)} disabled={!selInst} ref={instRef}>
-                                {!selInst && <span className="tooltext">select an instrument to edit</span>}
-                                edit instrument
-                                </button>
-                                </div> */}
 
                 </div>
                 <div className="list-container">

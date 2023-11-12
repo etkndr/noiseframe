@@ -145,6 +145,7 @@
 
   .edit-dlt.new-inst button {
     color:#797e62;
+    width: 100%;
   }
 
   .edit-dlt.new-inst:hover {

@@ -20,11 +20,13 @@
 }
 
 .song-title.bpm {
+    font-size: 11pt;
     width: 40px;
     margin-bottom: 0;
 }
 
 .bpm {
+    font-size: 10pt;
     display: flex;
     align-items: center;
     margin-bottom: 5px;
@@ -65,4 +67,32 @@
     color: #C8AD55;
     font-style: italic;
     cursor: default;
+}
+
+.song-info {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.left-controls {
+    width: 70%;
+}
+.right-controls {
+    font-size: 8pt;
+    width: fit-content;
+    margin-top: 1.5%;
+    margin-right: 3%;
+    line-height: 5px;
+}
+
+.right-controls p {
+    display: flex;
+    align-items: center;
+}
+
+.right-controls .material-symbols-outlined {
+    font-size: 10pt;
+    margin: 0 5px;
 }

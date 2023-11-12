@@ -1,6 +1,7 @@
 import { NavLink, useParams, useHistory } from "react-router-dom/cjs/react-router-dom.min"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import useKeyPress from "../../hooks/useKeyPress"
 import * as songActions from "../../store/songs"
 import { getInstruments } from "../../store/instruments"
 import * as sampleActions from "../../store/samples"
@@ -27,6 +28,12 @@ export default function SongEditor() {
     const [seed, setSeed] = useState(1)
     const [loading, setLoading] = useState(true)
     const [instLoading, setInstLoading] = useState(true)
+
+    const playKey = useKeyPress("Enter")
+
+    useEffect(() => {
+        setPlay(playKey)
+    })
 
     useEffect(() => {
         setLoading(true)
@@ -108,28 +115,46 @@ export default function SongEditor() {
         <>
 
             <div className="home-left">
-            <div>
-                <input className="song-title title" 
-                    onChange={(e) => setTitle(e.target.value)} 
-                    placeholder="title" 
-                    value={title}
-                    onBlur={saveSong}/>
-            </div>
-            <div className="bpm">
-                <input className="song-title bpm" 
-                    onChange={(e) => setBpm(e.target.value)} 
-                    placeholder="BPM" 
-                    name="bpm" 
-                    value={bpm}
-                    onBlur={saveSong}/> bpm
-            </div>
-            <div className="inst-controls">
-                {selInst &&
-                    <div className="inst-to-song" onClick={() => setPlay(!play)}>{!play && <span className="material-symbols-outlined">play_circle</span>} {!play && "play"}
-                    {play && <span className="material-symbols-outlined">stop_circle</span>} {play && "stop"}</div>
-                }
-                <div className="dlt-inst" onClick={dltSong}><span className="material-symbols-outlined">delete_forever</span> delete song</div>
-            </div>
+            <div className="song-info">
+                <div className="left-controls">
+                        <div>
+                            {title && 
+                                <input className="song-title title" 
+                                onChange={(e) => setTitle(e.target.value)} 
+                                placeholder="title" 
+                                value={title}
+                                onBlur={saveSong}/>
+                            }
+                        </div>
+
+                        <div className="bpm">
+                            {bpm &&
+                            <input className="song-title bpm" 
+                            onChange={(e) => setBpm(e.target.value)} 
+                            placeholder="BPM" 
+                            name="bpm" 
+                            value={bpm}
+                            onBlur={saveSong}/> 
+                        }
+                        bpm
+                        </div>
+                    </div>
+
+                    <div className="right-controls">
+                        <b><u>keyboard shortcuts</u></b> 
+                        <p><i>play/stop:</i> <span className="material-symbols-outlined">keyboard_return</span>enter</p>
+                        <p><i>mute track:</i> <span style={{marginLeft: "5px"}}>1-8</span></p>
+                    </div>
+                </div>
+
+                <div className="inst-controls">
+                        {selInst &&
+                            <div className="inst-to-song" onClick={() => setPlay(!play)}>{!play && <span className="material-symbols-outlined">play_circle</span>} {!play && "play"}
+                            {play && <span className="material-symbols-outlined">stop_circle</span>} {play && "stop"}</div>
+                        }
+                        <div className="dlt-inst" onClick={dltSong}><span className="material-symbols-outlined">delete_forever</span> delete song</div>
+                </div>
+
             <div>
                 {loading && <Loader/>}
                 <Song bpm={bpm*2 || 240} isPlaying={play}>
@@ -137,13 +162,14 @@ export default function SongEditor() {
                     {!loading && samples?.map((sample, idx) => {
                         const currTrack = tracks[idx]
                         return <Sequencer 
-                        url={sample.url}
-                        sample={sample}  
-                        saveTrack={saveTrack}
-                        track={currTrack}
-                        play={play}
-                        key={`${idx}-${seed}`}
-                                    />
+                            url={sample.url}
+                            sample={sample}  
+                            saveTrack={saveTrack}
+                            track={currTrack}
+                            play={play}
+                            idx={idx+1}
+                            key={`${idx}-${seed}`}
+                        />
                     })}
                 </Song>
             </div>
