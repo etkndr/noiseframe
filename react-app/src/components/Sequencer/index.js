@@ -1,15 +1,22 @@
 import { useState, useEffect } from "react"
 import { Track, Instrument } from "reactronica"
 import Toggle from "./Toggle"
+import useKeyPress from "../../hooks/useKeyPress"
 import "./Sequencer.css"
 
-export default function Sequencer({url, sample, saveTrack, track, play}) {
+export default function Sequencer({url, sample, saveTrack, track, play, idx}) {
     const [steps, setSteps] = useState({})
     const [mute, setMute] = useState(false)
     const [savedSteps, setSavedSteps] = useState(track?.steps)
     const [currSample, setCurrSample] = useState(url)
     const [seed, setSeed] = useState(1);
     const [currStep, setCurrStep] = useState(-1)
+
+    const muteKey = useKeyPress(idx.toString())
+
+    useEffect(() => {
+        setMute(muteKey)
+    }, [muteKey]) 
 
     useEffect(() => {
         if (!play) {
@@ -101,7 +108,7 @@ export default function Sequencer({url, sample, saveTrack, track, play}) {
             })}
         </div>
             <button className="mute" onClick={() => setMute(!mute)}>
-                <span className="muted">{mute && <span class="material-symbols-outlined">volume_off</span>}</span> 
+                <span className="muted">{mute && <span className="material-symbols-outlined">volume_off</span>}</span> 
                 {!mute && <span className="material-symbols-outlined">volume_up</span>}
             </button>
         <Track steps={Object.values(steps)} onStepPlay={handleStepChange} mute={mute} key={`track-${seed}`}>
