@@ -88,7 +88,7 @@ export default function Sequencer({url, sample, saveTrack, track, play, idx}) {
     return (
         <>
         <div className="sample-name">
-            {sample?.name}
+            {idx}. {sample?.name}
         </div>
         <div className="seq">
         <div className="seq-row">

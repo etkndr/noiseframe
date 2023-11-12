@@ -13,7 +13,8 @@
 
 .seq-row {
     margin: 0;
-    padding: 10px;
+    padding: 8px;
+    padding-bottom: 14px;
     width: fit;
     background-color: #c5bea6;
     display: flex;
@@ -58,7 +59,7 @@
 .switch.active-step {
     box-sizing: border-box;
     /* border: 2px solid #33352376; */
-    box-shadow: 0 0 5px #ffc400 ;
+    box-shadow: 0 0 5px #fcf7e9 ;
 }
   
   /* Hide default HTML checkbox */
@@ -93,4 +94,13 @@ input:checked + .slider {
   
   input:focus + .slider {
     box-shadow: 0 0 1px #646C41;
+  }
+
+  .division {
+    text-align: center;
+    color: #646c41d6;
+    margin-top: 22px;
+    margin-left: 0px;
+    font-size: 10pt;
+    font-weight: 800;
   }
