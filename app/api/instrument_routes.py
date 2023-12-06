@@ -138,7 +138,7 @@ def upload_sample(id):
             track = Track(
                 song_id = song.id,
                 sample_id = new_sample.id,
-                steps = "null null null null null null null null null null null null null null null null",
+                steps = "null "*15 + "null",
                 volume = -3  
             )
             

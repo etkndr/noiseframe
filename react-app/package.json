@@ -28,8 +28,8 @@
     "tone": "^14.7.77"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "CI=false && react-scripts build",
+    "start": "react-scripts --openssl-legacy-provider start",
+    "build": "CI=false && react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
