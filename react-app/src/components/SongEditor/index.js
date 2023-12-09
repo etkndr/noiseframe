@@ -29,11 +29,12 @@ export default function SongEditor() {
     const [loading, setLoading] = useState(true)
     const [instLoading, setInstLoading] = useState(true)
 
+    
     const playKey = useKeyPress("Enter")
-
+    
     useEffect(() => {
         setPlay(playKey)
-    })
+    }, [playKey])
 
     useEffect(() => {
         setLoading(true)
