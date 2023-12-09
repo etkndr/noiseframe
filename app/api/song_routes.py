@@ -48,7 +48,7 @@ def new_song():
             track = Track(
                 song_id = song.id,
                 sample_id = sample.id,
-                steps = "null null null null null null null null null null null null null null null null",
+                steps = "null "*15 + "null",
                 volume = -3
             )
             
@@ -87,7 +87,7 @@ def edit_song(id):
                 track = Track(
                     song_id = song.id,
                     sample_id = sample.id,
-                    steps = "null null null null null null null null null null null null null null null null",
+                    steps = "null "*15 + "null",
                     volume = -3
                 )
                 
