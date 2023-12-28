@@ -50,30 +50,23 @@ noiseframe was built using the following technologies:
 4. Start shell, migrate and seed your database, and run Flask app
 
    ```bash
-   pipenv shell
-   ```
-   and then
-   ```bash
+   pipenv shell &&
    flask db upgrade &&
    flask seed all &&
    flask run
    ```
 
-5. Now that you have your backend Flask server running. You need to run the React App in development in a different terminal instance.
-
 #### React
-1. In a new terminal, open the react directory
-    ```bash
-    cd react-app
-    ```
 
-2. Install all your dependencies before starting the application.
-    ```bash
+After your backend setup is complete, you can start your React application. Open a new terminal, and enter the following commands:
+
+  ```bash
+    cd react-app/ &&
     npm install &&
     npm start
-    ```
+  ```
 
-3. At this point, the application should be up and running, and will be available in your web browser at http://localhost:3000/
+At this point, the application should be up and running, and will be available in your web browser at http://localhost:3000/
 
 ![image](https://github.com/etkndr/noiseframe/assets/103692901/de55040c-2660-4b0d-adc2-17869b05be41)
 
